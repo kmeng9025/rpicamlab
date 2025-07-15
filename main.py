@@ -16,8 +16,7 @@ while True:
     frame = picam2.capture_array()
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
     diff = cv2.absdiff(previousFrame, gray)
-
-    _, thresh = cv2.threshold(diff, 100, 255, cv2.THRESH_BINARY)
+    _, thresh = cv2.threshold(diff, 10, 255, cv2.THRESH_BINARY)
     dilated = cv2.dilate(thresh, None, iterations=20)
     contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     if(len(contours) > 0):
