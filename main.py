@@ -21,7 +21,7 @@ while True:
     _, thresh = cv2.threshold(diff, 100, 255, cv2.THRESH_BINARY)
     dilated = cv2.dilate(thresh, None, iterations=20)
     contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    if(contours.count > 0):
+    if(contours.count() > 0):
         cv2.putText(frame, "Movement: True", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
     else:
         cv2.putText(frame, "Movement: True", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
