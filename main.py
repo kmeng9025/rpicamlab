@@ -27,7 +27,7 @@ while True:
         lastMovement = datetime.datetime.now()
     else:
         cv2.putText(frame, "Movement: False", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
-        if (datetime.datetime.now()- lastMovement > 10000000):
+        if ((datetime.datetime.now()- lastMovement) > 10000000):
              cv2.putText(frame, "Movement: False", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (255, 0, 0), 2, cv2.LINE_AA)
         
     for contour in contours:
