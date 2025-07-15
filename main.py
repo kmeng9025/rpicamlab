@@ -54,6 +54,8 @@ while True:
                 notMove = False
     
     cv2.imshow("PiCamera2 Preview", frame)
+    frame = cv2.flip(frame,0)
+    out.write(frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     previousFrame = gray.copy()
@@ -61,9 +63,11 @@ while True:
 if(notMove):
     movements.append((lastMovement, datetime.datetime.now(), movement))
 # Clean up
+file = open(str(start.timestamp()), "w")
 out.release()
 picam2.close()
 cv2.destroyAllWindows()
+file.write(movements + "\n" + str((datetime.datetime.now()-start).total_seconds()))
 print(movements)
 print("Total Time in sec: " + str((datetime.datetime.now()-start).total_seconds()))
 
