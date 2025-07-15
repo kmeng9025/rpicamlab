@@ -5,6 +5,7 @@ import datetime
 # try:
 lastMovement = datetime.datetime.now()
 movements = []
+notMove = False
 picam2 = Picamera2()
 picam2.preview_configuration.main.size = (640, 480)
 picam2.preview_configuration.main.format = "RGB888"
@@ -25,10 +26,15 @@ while True:
     if(len(contours) > 0):
         cv2.putText(frame, "Movement: True", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
         lastMovement = datetime.datetime.now()
+        notMove = True
     else:
         cv2.putText(frame, "Movement: False", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
         if ((datetime.datetime.now() - lastMovement).total_seconds() > 10):
-             cv2.putText(frame, "Movement: False", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 2, cv2.LINE_AA)
+            cv2.putText(frame, "Movement: False", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 2, cv2.LINE_AA)
+            if(notMove):
+                movements.append((lastMovement, datetime.datetime.now()))
+                notMove = False
+
         
     for contour in contours:
         if cv2.contourArea(contour) < 100:
@@ -43,6 +49,7 @@ while True:
 # Clean up
 picam2.close()
 cv2.destroyAllWindows()
+print(movements)
 
 # except Exception as e:
 #     print(e)
