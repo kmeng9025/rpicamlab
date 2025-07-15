@@ -25,9 +25,9 @@ out = cv2.VideoWriter(str(start.timestamp()) + ".mp4", fourcc, 30, (1024, 768))
 while True:
     frame = picam2.capture_array()
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-    diff = cv2.absdiff(previousFrame[80:670][300:650], gray[80:670][300:650])
+    diff = cv2.absdiff(previousFrame[80:670, 300:650], gray[80:670, 300:650])
     print(previousFrame)
-    print(gray[80:670][300:600].shape)
+    print(gray[80:670, 300:650].shape)
     print(diff.shape)
     movement += diff.sum()
     if(movement<0):
