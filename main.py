@@ -7,6 +7,7 @@ try:
     picam2.preview_configuration.main.format = "RGB888"
     picam2.configure("preview")
     picam2.start()
+    time.sleep(0.1)
     frame = picam2.capture_array()
     cv2.imshow("PiCamera2 Preview", frame)
     time.sleep(2)
