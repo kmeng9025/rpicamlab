@@ -25,15 +25,15 @@ out = cv2.VideoWriter(str(start.timestamp()) + ".mp4", fourcc, 30, (1024, 768))
 while True:
     frame = picam2.capture_array()
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-    diff = cv2.absdiff(previousFrame[80:670, 300:650], gray[80:670, 300:650])
+    diff = cv2.absdiff(previousFrame[90:670, 310:690], gray[90:670, 310:690])
     # print(previousFrame)
-    # print(gray[80:670, 300:650].shape)
+    # print(gray[90:670, 310:690].shape)
     # print(diff.shape)
     movement += diff.sum()
     if(movement<0):
         print("INTEGER OVERFLOW ARGHHHHHHH")
     _, thresh = cv2.threshold(diff, 50, 255, cv2.THRESH_BINARY)
-    dilated = cv2.dilate(thresh, None, iterations=100)
+    dilated = cv2.dilate(thresh, None, iterations=60)
     contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     validMovement = False
     for contour in contours:
@@ -48,7 +48,7 @@ while True:
         #     validMovement = True
         # else:
         #     continue
-        cv2.rectangle(frame, (x+300, y+80), (x+300+w, y+80+h), (0, 255, 0), 2)
+        cv2.rectangle(frame, (x+310, y+90), (x+310+w, y+90+h), (0, 255, 0), 2)
         validMovement = True
     if(validMovement):
         cv2.putText(frame, "Movement: True", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
