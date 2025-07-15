@@ -2,6 +2,7 @@ from picamera2 import Picamera2
 import cv2
 import time
 import datetime
+import numpy
 # try:
 lastMovement = datetime.datetime.now()
 start = datetime.datetime.now()
@@ -18,12 +19,14 @@ frame = picam2.capture_array()
 cv2.imshow("PiCamera2 Preview", frame)
 time.sleep(2)
 previousFrame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
+previousContours = numpy.zeros(frame.shape, dtype=numpy.uint8)
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 out = cv2.VideoWriter(str(start.timestamp()) + ".mp4", fourcc, 30, (1024, 768))
 while True:
     frame = picam2.capture_array()
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
     diff = cv2.absdiff(previousFrame, gray)
+    movement += diff[80:670][300:650].sum()
     if(movement<0):
         print("INTEGER OVERFLOW ARGHHHHHHH")
     _, thresh = cv2.threshold(diff, 60, 255, cv2.THRESH_BINARY)
@@ -52,7 +55,7 @@ while True:
                 movement = 0
                 notMove = False
     
-    cv2.imshow("PiCamera2 Preview", frame)
+    cv2.imshow("Camera Preview", frame)
     out.write(frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
