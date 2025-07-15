@@ -45,7 +45,7 @@ while True:
         #     validMovement = True
         # else:
         #     continue
-        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+        cv2.rectangle(frame, (x+80, y+300), (x+80+w, y+300+h), (0, 255, 0), 2)
         validMovement = True
     if(validMovement):
         cv2.putText(frame, "Movement: True", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
