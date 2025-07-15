@@ -25,5 +25,6 @@ try:
     picam2.close()
 
 except:
+    print("hi")
     cv2.destroyAllWindows()
     picam2.close()
