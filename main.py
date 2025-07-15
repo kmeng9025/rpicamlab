@@ -58,7 +58,7 @@ if(notMove):
 picam2.close()
 cv2.destroyAllWindows()
 print(movements)
-print("Total Time in sec: " + (start-datetime.datetime.now()).total_seconds)
+print("Total Time in sec: " + str((start-datetime.datetime.now()).total_seconds()))
 
 # except Exception as e:
 #     print(e)
