@@ -9,7 +9,7 @@ movements = []
 notMove = False
 movement = 0
 picam2 = Picamera2()
-picam2.preview_configuration.main.size = (2028, 1520)
+picam2.preview_configuration.main.size = (640, 480)
 picam2.preview_configuration.main.format = "RGB888"
 picam2.configure("preview")
 picam2.start()
@@ -19,7 +19,7 @@ cv2.imshow("PiCamera2 Preview", frame)
 time.sleep(2)
 previousFrame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-out = cv2.VideoWriter("~/Desktop/Videos/rpicamlab", fourcc, 60, (2028, 1520))
+out = cv2.VideoWriter("~/Desktop/Videos/rpicamlab", fourcc, 60, (640, 480))
 while True:
     frame = picam2.capture_array()
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
