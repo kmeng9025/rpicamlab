@@ -16,7 +16,7 @@ picam2.configure("preview")
 picam2.start()
 time.sleep(0.1)
 frame = picam2.capture_array()
-cv2.imshow("PiCamera2 Preview", frame)
+cv2.imshow("Camera Preview", frame)
 time.sleep(2)
 previousFrame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
 previousContours = numpy.zeros(frame.shape, dtype=numpy.uint8)
@@ -40,7 +40,7 @@ while True:
         if (300 < x < 650) and (80 < y < 670):
             cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
             validMovement = True
-        elif(300 < x+w < 730) and (80 < y+h < 780):
+        elif(300 < x+w < 730) and (80 < y+h < 780) and (250 < x < 650) and (35 < y < 670):
             cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
             validMovement = True
         else:
