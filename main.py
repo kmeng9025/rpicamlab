@@ -40,7 +40,7 @@ while True:
         if (300 < x < 650) and (80 < y < 670):
             cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
             validMovement = True
-        elif(310 < x+w < 650) and (90 < y+h < 670):
+        elif(300 < x+w < 730) and (80 < y+h < 730):
             cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
             validMovement = True
         else:
