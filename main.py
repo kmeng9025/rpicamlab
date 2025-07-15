@@ -19,7 +19,7 @@ cv2.imshow("PiCamera2 Preview", frame)
 time.sleep(2)
 previousFrame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-out = cv2.VideoWriter("~/Desktop/Videos/rpicamlab/" + start.timestamp(), fourcc, 60, (1024, 768))
+out = cv2.VideoWriter("~/Desktop/Videos/rpicamlab/" + str(start.timestamp()), fourcc, 60, (1024, 768))
 while True:
     frame = picam2.capture_array()
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
