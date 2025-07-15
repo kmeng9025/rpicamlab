@@ -11,7 +11,7 @@ try:
     frame = picam2.capture_array()
     cv2.imshow("PiCamera2 Preview", frame)
     time.sleep(2)
-    previousFrame = frame
+    previousFrame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
     while True:
         frame = picam2.capture_array()
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
