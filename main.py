@@ -1,7 +1,10 @@
 from picamera2 import Picamera2
 import cv2
 import time
+import datetime
 # try:
+lastMovement = datetime.datetime.now()
+movements = []
 picam2 = Picamera2()
 picam2.preview_configuration.main.size = (640, 480)
 picam2.preview_configuration.main.format = "RGB888"
@@ -21,8 +24,12 @@ while True:
     contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     if(len(contours) > 0):
         cv2.putText(frame, "Movement: True", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
+        lastMovement = datetime.datetime.now()
     else:
         cv2.putText(frame, "Movement: False", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
+        if (datetime.timedelta(datetime.datetime.now(), lastMovement) > 10000000):
+             cv2.putText(frame, "Movement: False", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (255, 0, 0), 2, cv2.LINE_AA)
+        
     for contour in contours:
         if cv2.contourArea(contour) < 100:
             continue
