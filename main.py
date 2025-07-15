@@ -4,6 +4,7 @@ import time
 # try:
     # Initialize camera
 picam2 = Picamera2()
+picam2.close()
 
 picam2.preview_configuration.main.size = (640, 480)
 picam2.preview_configuration.main.format = "RGB888"
@@ -21,8 +22,8 @@ while True:
         break
 
 # Clean up
-cv2.destroyAllWindows()
 picam2.close()
+cv2.destroyAllWindows()
 
 # except:
 #     print("hi")
