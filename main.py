@@ -4,8 +4,10 @@ import time
 import datetime
 # try:
 lastMovement = datetime.datetime.now()
+start = datetime.datetime.now()
 movements = []
 notMove = False
+movement = 0
 picam2 = Picamera2()
 picam2.preview_configuration.main.size = (640, 480)
 picam2.preview_configuration.main.format = "RGB888"
@@ -20,6 +22,10 @@ while True:
     frame = picam2.capture_array()
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
     diff = cv2.absdiff(previousFrame, gray)
+    movement += diff
+    if(movement<0){
+        print("INTEGER OVERFLOW ARGHHHHHHH")
+    }
     _, thresh = cv2.threshold(diff, 30, 255, cv2.THRESH_BINARY)
     dilated = cv2.dilate(thresh, None, iterations=60)
     contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -32,7 +38,8 @@ while True:
         if ((datetime.datetime.now() - lastMovement).total_seconds() > 10):
             cv2.putText(frame, "Movement: False", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 2, cv2.LINE_AA)
             if(notMove):
-                movements.append((lastMovement, datetime.datetime.now()))
+                movements.append((lastMovement, datetime.datetime.now(), movement))
+                movement = 0
                 notMove = False
 
         
@@ -52,6 +59,7 @@ if(notMove):
 picam2.close()
 cv2.destroyAllWindows()
 print(movements)
+print("Total Time in sec: " + (start-datetime.datetime.now()).total_seconds)
 
 # except Exception as e:
 #     print(e)
