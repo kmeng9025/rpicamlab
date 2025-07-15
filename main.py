@@ -5,14 +5,13 @@ import time
 # Initialize camera
 picam2 = Picamera2()
 
-# Configure camera preview
-picam2.preview_configuration.main.size = (640, 480)
-picam2.preview_configuration.main.format = "RGB888"
-picam2.configure("preview")
-
-# Start the camera
+# picam2.preview_configuration.main.size = (640, 480)
+# picam2.preview_configuration.main.format = "RGB888"
 picam2.start()
-time.sleep(1)  # Give the camera time to warm up
+picam2.configure("preview")
+frame = picam2.capture_array()
+cv2.imshow("PiCamera2 Preview", frame)
+time.sleep(2)
 
 while True:
     # Capture a frame
