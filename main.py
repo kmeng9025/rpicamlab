@@ -19,7 +19,7 @@ cv2.imshow("PiCamera2 Preview", frame)
 time.sleep(2)
 previousFrame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-out = cv2.VideoWriter("~/Desktop/Videos/rpicamlab/" + str(start.timestamp()), fourcc, 60, (1024, 768))
+out = cv2.VideoWriter(str(start.timestamp()) + ".mp4", fourcc, 30, (1024, 768))
 while True:
     frame = picam2.capture_array()
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
@@ -54,7 +54,6 @@ while True:
                 notMove = False
     
     cv2.imshow("PiCamera2 Preview", frame)
-    frame = cv2.flip(frame,0)
     out.write(frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
@@ -67,8 +66,9 @@ file = open(str(start.timestamp()), "w")
 out.release()
 picam2.close()
 cv2.destroyAllWindows()
-file.write(movements + "\n" + str((datetime.datetime.now()-start).total_seconds()))
+file.write(str(movements) + "\n" + str((datetime.datetime.now()-start).total_seconds()))
 print(movements)
+file.close()
 print("Total Time in sec: " + str((datetime.datetime.now()-start).total_seconds()))
 
 # except Exception as e:
