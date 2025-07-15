@@ -30,7 +30,17 @@ while True:
     _, thresh = cv2.threshold(diff, 60, 255, cv2.THRESH_BINARY)
     dilated = cv2.dilate(thresh, None, iterations=60)
     contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    if(len(contours) > 0):
+    validMovement = False
+    for contour in contours:
+        if cv2.contourArea(contour) < 100:
+            continue
+        (x, y, w, h) = cv2.boundingRect(contour)
+        if (300 < x < 725) and (80 < y < 700):
+            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+            validMovement = True
+        else:
+            continue
+    if(validMovement):
         cv2.putText(frame, "Movement: True", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
         lastMovement = datetime.datetime.now()
         notMove = True
@@ -42,14 +52,7 @@ while True:
                 movements.append((lastMovement, datetime.datetime.now(), movement))
                 movement = 0
                 notMove = False
-
-        
-    for contour in contours:
-        if cv2.contourArea(contour) < 100:
-            continue
-        (x, y, w, h) = cv2.boundingRect(contour)
-        if (300 < x < 725) and (80 < y < 700):
-            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+    
     cv2.imshow("PiCamera2 Preview", frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
