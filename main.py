@@ -23,9 +23,8 @@ while True:
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
     diff = cv2.absdiff(previousFrame, gray)
     movement += diff
-    if(movement<0){
+    if(movement<0):
         print("INTEGER OVERFLOW ARGHHHHHHH")
-    }
     _, thresh = cv2.threshold(diff, 30, 255, cv2.THRESH_BINARY)
     dilated = cv2.dilate(thresh, None, iterations=60)
     contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
