@@ -24,7 +24,6 @@ while True:
     frame = picam2.capture_array()
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
     diff = cv2.absdiff(previousFrame, gray)
-    movement += diff.sum()
     if(movement<0):
         print("INTEGER OVERFLOW ARGHHHHHHH")
     _, thresh = cv2.threshold(diff, 60, 255, cv2.THRESH_BINARY)
