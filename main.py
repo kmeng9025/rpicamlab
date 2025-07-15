@@ -26,6 +26,9 @@ while True:
     frame = picam2.capture_array()
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
     diff = cv2.absdiff(previousFrame[80:670][300:650], gray[80:670][300:650])
+    print(previousFrame.shape)
+    print(gray.shape)
+    print(diff.shape)
     movement += diff.sum()
     if(movement<0):
         print("INTEGER OVERFLOW ARGHHHHHHH")
