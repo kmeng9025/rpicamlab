@@ -26,7 +26,7 @@ while True:
     frame = picam2.capture_array()
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
     diff = cv2.absdiff(previousFrame[80:670][300:650], gray[80:670][300:650])
-    print(previousFrame.shape)
+    print(previousFrame[80:670][300:650].shape)
     print(gray.shape)
     print(diff.shape)
     movement += diff.sum()
