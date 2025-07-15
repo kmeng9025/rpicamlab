@@ -62,7 +62,7 @@ while True:
 if(notMove):
     movements.append((lastMovement, datetime.datetime.now(), movement))
 # Clean up
-file = open(str(start.timestamp()), "w")
+file = open(str(start.date()) + str(start.time()) + ".txt", "w")
 out.release()
 picam2.close()
 cv2.destroyAllWindows()
