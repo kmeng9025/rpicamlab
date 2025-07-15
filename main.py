@@ -38,7 +38,7 @@ try:
     picam2.close()
     cv2.destroyAllWindows()
 
-except:
-    print("hi")
+except Exception as e:
+    print(e)
     cv2.destroyAllWindows()
     picam2.close()
