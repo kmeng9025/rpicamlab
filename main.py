@@ -19,7 +19,7 @@ cv2.imshow("PiCamera2 Preview", frame)
 time.sleep(2)
 previousFrame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-out = cv2.VideoWriter("~/Desktop/Videos/rpicamlab", fourcc, 60, (640, 480))
+out = cv2.VideoWriter("~/Desktop/Videos/rpicamlab/" + str(), fourcc, 60, (1024, 768))
 while True:
     frame = picam2.capture_array()
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
@@ -27,7 +27,7 @@ while True:
     movement += diff.sum()
     if(movement<0):
         print("INTEGER OVERFLOW ARGHHHHHHH")
-    _, thresh = cv2.threshold(diff, 30, 255, cv2.THRESH_BINARY)
+    _, thresh = cv2.threshold(diff, 60, 255, cv2.THRESH_BINARY)
     dilated = cv2.dilate(thresh, None, iterations=60)
     contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     if(len(contours) > 0):
