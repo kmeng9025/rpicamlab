@@ -25,8 +25,8 @@ out = cv2.VideoWriter(str(start.timestamp()) + ".mp4", fourcc, 30, (1024, 768))
 while True:
     frame = picam2.capture_array()
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-    diff = cv2.absdiff(previousFrame, gray)
-    movement += diff[80:670][300:650].sum()
+    diff = cv2.absdiff(previousFrame[80:670][300:650], gray[80:670][300:650])
+    movement += diff.sum()
     if(movement<0):
         print("INTEGER OVERFLOW ARGHHHHHHH")
     _, thresh = cv2.threshold(diff, 50, 255, cv2.THRESH_BINARY)
@@ -37,14 +37,15 @@ while True:
         if cv2.contourArea(contour) < 100:
             continue
         (x, y, w, h) = cv2.boundingRect(contour)
-        if (300 < x < 650) and (80 < y < 670):
-            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-            validMovement = True
-        elif(300 < x+w < 730) and (80 < y+h < 780) and (250 < x < 650) and (35 < y < 670):
-            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-            validMovement = True
-        else:
-            continue
+        # if (300 < x < 650) and (80 < y < 670):
+        #     cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+        #     validMovement = True
+        # elif(300 < x+w < 730) and (80 < y+h < 780) and (250 < x < 650) and (35 < y < 670):
+        #     cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+        #     validMovement = True
+        # else:
+        #     continue
+        validMovement = True
     if(validMovement):
         cv2.putText(frame, "Movement: True", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
         lastMovement = datetime.datetime.now()
