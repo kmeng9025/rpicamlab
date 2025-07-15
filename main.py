@@ -53,7 +53,7 @@ while True:
     previousFrame = gray.copy()
 
 if(notMove):
-    movements.append((lastMovement, datetime.datetime.now(), diff))
+    movements.append((lastMovement, datetime.datetime.now(), movement))
 # Clean up
 picam2.close()
 cv2.destroyAllWindows()
