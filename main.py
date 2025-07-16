@@ -62,7 +62,7 @@ while True:
                 movements.append((lastMovement, datetime.datetime.now(), movement))
                 movement = 0
                 notMove = False
-    
+    cv2.putText(frame, start.timestamp(), (450, 10), cv2.FONT_HERSHEY_COMPLEX, 5, (0, 0, 0), 3, cv2.LINE_AA)
     cv2.imshow("Camera Preview", frame)
     out.write(frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -72,11 +72,11 @@ while True:
 if(notMove):
     movements.append((lastMovement, datetime.datetime.now(), movement))
 # Clean up
-file = open(str(start.date()) + str(start.time()) + ".txt", "w")
+file = open("./data/" + start.timestamp() + ".txt", "w")
 out.release()
 picam2.close()
 cv2.destroyAllWindows()
-file.write("./data/" + str(movements) + "\n" + str((datetime.datetime.now()-start).total_seconds()))
+file.write(str(movements) + "\n" + str((datetime.datetime.now()-start).total_seconds()))
 print(movements)
 file.close()
 print("Total Time in sec: " + str((datetime.datetime.now()-start).total_seconds()))
