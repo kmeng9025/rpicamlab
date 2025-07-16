@@ -113,7 +113,7 @@ def main():
             #     validMovement = True
             # else:
             #     continue
-            cv2.rectangle(frame, (int(x), int(y)), (int(x) + int(w), int(y) + int(h)) (0, 255, 0), 2)
+            cv2.rectangle(frame, (x+310, y+90), (x+310+w, y+90+h), (0, 255, 0), 2)
             miceFound = True
         if(miceFound):
             cv2.putText(frame, "Mouse Detected: True", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
