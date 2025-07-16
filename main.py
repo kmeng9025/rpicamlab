@@ -102,7 +102,7 @@ def main():
         contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         miceFound = False
         for contour in contours:
-            if cv2.contourArea(contour) < 500:
+            if cv2.contourArea(contour) < 800:
                 continue
             (x, y, w, h) = cv2.boundingRect(contour)
             # if (300 < x < 650) and (80 < y < 670):
