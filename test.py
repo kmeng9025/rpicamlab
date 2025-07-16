@@ -48,7 +48,7 @@ def main():
             #     validMovement = True
             # else:
             #     continue
-            cv2.circle(frame, (x+285, y+60), r, (0, 255, 0), 2)
+            cv2.circle(frame, (int(x)+285, int(y)+60), r, (0, 255, 0), 2)
             miceFound = True
         if(miceFound):
             cv2.putText(frame, "Mouse Detected: True", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
