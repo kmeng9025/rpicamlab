@@ -103,7 +103,7 @@ def main():
         for contour in contours:
             if cv2.contourArea(contour) < 500:
                 continue
-            ((x, y), r) = cv2.minEnclosingCircle(contour)
+            (x, y, w, h) = cv2.boundingRect(contour)
             # if (300 < x < 650) and (80 < y < 670):
             #     cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
             #     validMovement = True
@@ -112,7 +112,7 @@ def main():
             #     validMovement = True
             # else:
             #     continue
-            cv2.circle(frame, (int(x)+285, int(y)+60), int(r), (0, 255, 0), 2)
+            cv2.rectangle(frame, (int(x), int(y)), (int(x) + int(w), int(y) + int(h)) (0, 255, 0), 2)
             miceFound = True
         if(miceFound):
             cv2.putText(frame, "Mouse Detected: True", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
