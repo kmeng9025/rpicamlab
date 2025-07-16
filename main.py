@@ -158,6 +158,9 @@ def increase_brightness(img, value=30):
     v[v > lim] = 255
     v[v <= lim] += value
 
+    h[h > lim] = 255
+    h[h <= lim] += value
+
     final_hsv = cv2.merge((h, s, v))
     img = cv2.cvtColor(final_hsv, cv2.COLOR_HSV2BGR)
     return img
