@@ -41,7 +41,7 @@ def main():
         for contour in contours:
             if cv2.contourArea(contour) < 100:
                 continue
-            (x, y, w, h) = cv2.boundingRect(contour)
+            (x, y, w, h) = cv2.minEnclosingCircle(contour)
             # if (300 < x < 650) and (80 < y < 670):
             #     cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
             #     validMovement = True
@@ -50,7 +50,7 @@ def main():
             #     validMovement = True
             # else:
             #     continue
-            cv2.rectangle(frame, (x+310, y+90), (x+310+w, y+90+h), (0, 255, 0), 2)
+            cv2.circle(frame, (x+310, y+90), (x+310+w, y+90+h), (0, 255, 0), 2)
             validMovement = True
         if(validMovement):
             cv2.putText(frame, "Movement: True", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
