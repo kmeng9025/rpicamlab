@@ -144,10 +144,10 @@ def main():
 if __name__ == "__main__":
     # test.main()
     
-    script_thread = threading.Thread(target=main)
-    # Start the thread
-    script_thread.start()
-
+    # script_thread = threading.Thread(target=main)
+    # # Start the thread
+    # script_thread.start()
+    main()
     # script_thread2 = threading.Thread(target=test.main)
     # # Start the thread
     # script_thread2.start()
