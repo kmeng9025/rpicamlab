@@ -33,9 +33,9 @@ def main():
         # if(movement<0):
         #     print("INTEGER OVERFLOW ARGHHHHHHH")
         _, thresh = cv2.threshold(gray[60:720, 285:690], 40, 255, cv2.THRESH_BINARY_INV)
-        dilated = cv2.dilate(thresh, None, iterations=2)
+        dilated = cv2.dilate(thresh, None, iterations=5)
         contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        validMovement = False
+        miceFound = False
         for contour in contours:
             if cv2.contourArea(contour) < 100:
                 continue
@@ -49,11 +49,11 @@ def main():
             # else:
             #     continue
             cv2.rectangle(frame, (x+285, y+60), (x+285+w, y+60+h), (0, 255, 0), 2)
-            validMovement = True
-        if(validMovement):
+            miceFound = True
+        if(miceFound):
             cv2.putText(frame, "Mouse Detected: True", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
-            lastMovement = datetime.datetime.now()
-            notMove = True
+            # lastMovement = datetime.datetime.now()
+            # notMove = True
         else:
             cv2.putText(frame, "Mouse Detected: False", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 2, cv2.LINE_AA)
             # if ((datetime.datetime.now() - lastMovement).total_seconds() > 10):
