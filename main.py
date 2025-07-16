@@ -86,9 +86,10 @@ def main():
 
 
         frame = theframe.copy()
-        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
-        frame[:, :][2] += 100
-        frame = cv2.cvtColor(frame, cv2.COLOR_HSV2RGB)
+        # frame = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
+        # frame[:, :][2] += 100
+        # frame = cv2.cvtColor(frame, cv2.COLOR_HSV2RGB)
+        increase_brightness(frame, value=30)
         # frame = picam2.capture_array()
         # cap.set(cv2.CAP_PROP_POS_FRAMES, i)
         # _, frame = cap.read()
@@ -148,6 +149,18 @@ def main():
     file.close()
     print("Total Time in sec: " + str((datetime.datetime.now()-start).total_seconds()))
     out2.release()
+
+def increase_brightness(img, value=30):
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    h, s, v = cv2.split(hsv)
+
+    lim = 255 - value
+    v[v > lim] = 255
+    v[v <= lim] += value
+
+    final_hsv = cv2.merge((h, s, v))
+    img = cv2.cvtColor(final_hsv, cv2.COLOR_HSV2BGR)
+    return img
 # except Exception as e:
 #     print(e)
 #     cv2.destroyAllWindows()
