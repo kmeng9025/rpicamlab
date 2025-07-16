@@ -21,7 +21,7 @@ time.sleep(2)
 previousFrame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
 previousContours = numpy.zeros(frame.shape, dtype=numpy.uint8)
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-out = cv2.VideoWriter("./data/" + str(start.timestamp()) + ".mp4", fourcc, 30, (1024, 768))
+out = cv2.VideoWriter("./data/" + str(start.date()) + " " + str(start.time())[:-7] + ".mp4", fourcc, 30, (1024, 768))
 while True:
     frame = picam2.capture_array()
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
@@ -72,7 +72,7 @@ while True:
 if(notMove):
     movements.append((lastMovement, datetime.datetime.now(), movement))
 # Clean up
-file = open("./data/" + start.timestamp() + ".txt", "w")
+file = open("./data/" + str(start.date()) + " " + str(start.now().time())[:-7] + ".txt", "w")
 out.release()
 picam2.close()
 cv2.destroyAllWindows()
