@@ -31,7 +31,8 @@ def main():
     fourcccc = cv2.VideoWriter_fourcc(*'mp4v')
     out2 = cv2.VideoWriter("./data/micedetection" + str(start.date()) + " " + str(start.time())[:-7] + ".mp4", fourcccc, 30, (1024, 768))
     while True:
-        frame = picam2.capture_array()
+        theframe = picam2.capture_array()
+        frame = theframe.copy()
         outraw.write(frame)
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
         diff = cv2.absdiff(previousFrame[90:670, 310:690], gray[90:670, 310:690])
@@ -84,7 +85,7 @@ def main():
         #TEST
 
 
-
+        frame = theframe.copy()
         # frame = picam2.capture_array()
         # cap.set(cv2.CAP_PROP_POS_FRAMES, i)
         # _, frame = cap.read()
