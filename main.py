@@ -148,6 +148,6 @@ if __name__ == "__main__":
     # Start the thread
     script_thread.start()
 
-    script_thread2 = threading.Thread(target=test.main)
-    # Start the thread
-    script_thread2.start()
+    # script_thread2 = threading.Thread(target=test.main)
+    # # Start the thread
+    # script_thread2.start()
