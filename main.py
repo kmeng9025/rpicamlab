@@ -97,7 +97,7 @@ def main():
         # movement += diff.sum()
         # if(movement<0):
         #     print("INTEGER OVERFLOW ARGHHHHHHH")
-        _, thresh = cv2.threshold(gray[60:720, 285:690], 20, 255, cv2.THRESH_BINARY_INV)
+        _, thresh = cv2.threshold(gray[60:720, 285:690], 40, 255, cv2.THRESH_BINARY_INV)
         dilated = cv2.dilate(thresh, None, iterations=1)
         contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         miceFound = False
