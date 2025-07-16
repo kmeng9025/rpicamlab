@@ -55,8 +55,9 @@ while True:
         lastMovement = datetime.datetime.now()
         notMove = True
     else:
-        cv2.putText(frame, "Movement: False", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 2, cv2.LINE_AA)
+        cv2.putText(frame, "Movement: False", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
         if ((datetime.datetime.now() - lastMovement).total_seconds() > 10):
+            cv2.putText(frame, "Movement: False", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 2, cv2.LINE_AA)
             if(notMove):
                 movements.append((lastMovement, datetime.datetime.now(), movement))
                 movement = 0
