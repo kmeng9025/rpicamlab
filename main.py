@@ -28,6 +28,8 @@ def main():
     out = cv2.VideoWriter("./data/" + str(start.date()) + " " + str(start.time())[:-7] + ".mp4", fourcc, 30, (1024, 768))
     fourccc = cv2.VideoWriter_fourcc(*'mp4v')
     outraw = cv2.VideoWriter("./data/raw" + str(start.date()) + " " + str(start.time())[:-7] + ".mp4", fourccc, 30, (1024, 768))
+    fourcccc = cv2.VideoWriter_fourcc(*'mp4v')
+    out2 = cv2.VideoWriter("./data/micedetection" + str(start.date()) + " " + str(start.time())[:-7] + ".mp4", fourcccc, 30, (1024, 768))
     while True:
         frame = picam2.capture_array()
         outraw.write(frame)
@@ -76,6 +78,52 @@ def main():
             break
         previousFrame = gray.copy()
 
+        # frame = picam2.capture_array()
+        # cap.set(cv2.CAP_PROP_POS_FRAMES, i)
+        # _, frame = cap.read()
+        gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
+        # diff = cv2.absdiff(previousFrame[90:670, 310:690], gray[90:670, 310:690])
+        # print(previousFrame)
+        # print(gray[90:670, 310:690].shape)
+        # print(diff.shape)
+        # movement += diff.sum()
+        # if(movement<0):
+        #     print("INTEGER OVERFLOW ARGHHHHHHH")
+        _, thresh = cv2.threshold(gray[60:720, 285:690], 50, 255, cv2.THRESH_BINARY_INV)
+        dilated = cv2.dilate(thresh, None, iterations=10)
+        contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        miceFound = False
+        for contour in contours:
+            if cv2.contourArea(contour) < 100:
+                continue
+            ((x, y), r) = cv2.minEnclosingCircle(contour)
+            # if (300 < x < 650) and (80 < y < 670):
+            #     cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+            #     validMovement = True
+            # elif(300 < x+w < 730) and (80 < y+h < 780) and (250 < x < 650) and (35 < y < 670):
+            #     cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+            #     validMovement = True
+            # else:
+            #     continue
+            cv2.circle(frame, (int(x)+285, int(y)+60), int(r), (0, 255, 0), 2)
+            miceFound = True
+        if(miceFound):
+            cv2.putText(frame, "Mouse Detected: True", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
+            # lastMovement = datetime.datetime.now()
+            # notMove = True
+        else:
+            cv2.putText(frame, "Mouse Detected: False", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 2, cv2.LINE_AA)
+            # if ((datetime.datetime.now() - lastMovement).total_seconds() > 10):
+            #     if(notMove):
+            #         movements.append((lastMovement, datetime.datetime.now(), movement))
+            #         movement = 0
+            #         notMove = False
+        cv2.putText(frame, str(datetime.datetime.now().date()) + " " + str(datetime.datetime.now().time())[:-7], (230, 50), cv2.FONT_HERSHEY_PLAIN, 3, (255, 255, 255), 3, cv2.LINE_AA)
+        cv2.imshow("Camera Preview test", frame)
+        out2.write(frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
     if(notMove):
         movements.append((lastMovement, datetime.datetime.now(), movement))
     # Clean up
@@ -88,7 +136,7 @@ def main():
     print(movements)
     file.close()
     print("Total Time in sec: " + str((datetime.datetime.now()-start).total_seconds()))
-
+    out2.release()
 # except Exception as e:
 #     print(e)
 #     cv2.destroyAllWindows()
