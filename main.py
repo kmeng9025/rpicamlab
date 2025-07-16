@@ -89,7 +89,7 @@ def main():
         # frame = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
         # frame[:, :][2] += 100
         # frame = cv2.cvtColor(frame, cv2.COLOR_HSV2RGB)
-        increase_brightness(frame, value=30)
+        frame = increase_brightness(frame, value=30)
         # frame = picam2.capture_array()
         # cap.set(cv2.CAP_PROP_POS_FRAMES, i)
         # _, frame = cap.read()
