@@ -100,4 +100,6 @@ if __name__ == "__main__":
     # Start the thread
     script_thread.start()
 
-    subprocess.run(["python3", "test.py"])
+    script_thread2 = threading.Thread(target=test.main)
+    # Start the thread
+    script_thread2.start()
