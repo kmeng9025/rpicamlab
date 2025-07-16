@@ -1,4 +1,4 @@
-from picamera2 import Picamera2
+# from picamera2 import Picamera2
 import cv2
 import time
 import datetime
@@ -24,8 +24,11 @@ def main():
     previousContours = numpy.zeros(frame.shape, dtype=numpy.uint8)
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     out = cv2.VideoWriter("./data/" + str(start.date()) + " " + str(start.time())[:-7] + ".mp4", fourcc, 30, (1024, 768))
+    fourccc = cv2.VideoWriter_fourcc(*'mp4v')
+    outraw = cv2.VideoWriter("./data/raw" + str(start.date()) + " " + str(start.time())[:-7] + ".mp4", fourccc, 30, (1024, 768))
     while True:
         frame = picam2.capture_array()
+        outraw.write(frame)
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
         diff = cv2.absdiff(previousFrame[90:670, 310:690], gray[90:670, 310:690])
         # print(previousFrame)
@@ -41,7 +44,7 @@ def main():
         for contour in contours:
             if cv2.contourArea(contour) < 100:
                 continue
-            (x, y, w, h) = cv2.boundingRect(contour)
+            # (x, y, w, h) = cv2.boundingRect(contour)
             # if (300 < x < 650) and (80 < y < 670):
             #     cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
             #     validMovement = True
@@ -76,6 +79,7 @@ def main():
     # Clean up
     file = open("./data/" + str(start.date()) + " " + str(start.now().time())[:-7] + ".txt", "w")
     out.release()
+    outraw.release()
     picam2.close()
     cv2.destroyAllWindows()
     file.write(str(movements) + "\n" + str((datetime.datetime.now()-start).total_seconds()))
@@ -88,4 +92,5 @@ def main():
 #     cv2.destroyAllWindows()
 #     picam2.close()
 if __name__ == "__main__":
-    test.main()
+    # test.main()
+    main()
