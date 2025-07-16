@@ -32,7 +32,7 @@ def main():
         # movement += diff.sum()
         # if(movement<0):
         #     print("INTEGER OVERFLOW ARGHHHHHHH")
-        _, thresh = cv2.threshold(gray[90:670, 310:690], 200, 255, cv2.THRESH_BINARY_INV)
+        _, thresh = cv2.threshold(gray[90:670, 310:690], 50, 255, cv2.THRESH_BINARY_INV)
         dilated = cv2.dilate(thresh, None, iterations=60)
         contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         validMovement = False
