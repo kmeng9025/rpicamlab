@@ -4,6 +4,8 @@ import time
 import datetime
 import numpy
 import test
+import threading
+import subprocess
 # try:
 def main():
     lastMovement = datetime.datetime.now()
@@ -93,4 +95,9 @@ def main():
 #     picam2.close()
 if __name__ == "__main__":
     # test.main()
-    main()
+    
+    script_thread = threading.Thread(target=main)
+    # Start the thread
+    script_thread.start()
+
+    subprocess.run(["python3", "test.py"])
