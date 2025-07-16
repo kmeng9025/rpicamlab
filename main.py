@@ -96,12 +96,12 @@ def main():
         # movement += diff.sum()
         # if(movement<0):
         #     print("INTEGER OVERFLOW ARGHHHHHHH")
-        _, thresh = cv2.threshold(gray[60:720, 285:690], 10, 255, cv2.THRESH_BINARY_INV)
-        dilated = cv2.dilate(thresh, None, iterations=10)
+        _, thresh = cv2.threshold(gray[60:720, 285:690], 50, 255, cv2.THRESH_BINARY_INV)
+        dilated = cv2.dilate(thresh, None, iterations=0)
         contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         miceFound = False
         for contour in contours:
-            if cv2.contourArea(contour) < 100:
+            if cv2.contourArea(contour) < 500:
                 continue
             ((x, y), r) = cv2.minEnclosingCircle(contour)
             # if (300 < x < 650) and (80 < y < 670):
