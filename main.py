@@ -44,7 +44,7 @@ def main():
         for contour in contours:
             if cv2.contourArea(contour) < 100:
                 continue
-            # (x, y, w, h) = cv2.boundingRect(contour)
+            (x, y, w, h) = cv2.boundingRect(contour)
             # if (300 < x < 650) and (80 < y < 670):
             #     cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
             #     validMovement = True
