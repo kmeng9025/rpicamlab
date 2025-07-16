@@ -62,7 +62,7 @@ while True:
                 movements.append((lastMovement, datetime.datetime.now(), movement))
                 movement = 0
                 notMove = False
-    cv2.putText(frame, str(datetime.datetime.now().timestamp()), (450, 30), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0), 3, cv2.LINE_AA)
+    cv2.putText(frame, str(datetime.datetime.now().date()) + " " + str(datetime.datetime.now().time()), (450, 30), cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 0), 3, cv2.LINE_AA)
     cv2.imshow("Camera Preview", frame)
     out.write(frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
