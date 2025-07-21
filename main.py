@@ -1,182 +1,135 @@
-from picamera2 import Picamera2
 import cv2
 import time
 import datetime
 import numpy
-import test
-import threading
-import subprocess
-# try:
-def main():
-    lastMovement = datetime.datetime.now()
-    start = datetime.datetime.now()
-    movements = []
-    notMove = False
-    movement = 0
-    picam2 = Picamera2()
-    picam2.preview_configuration.main.size = (1024, 768)
-    picam2.preview_configuration.main.format = "RGB888"
-    picam2.configure("preview")
-    picam2.start()
-    time.sleep(0.1)
-    frame = picam2.capture_array()
-    cv2.imshow("Camera Preview", frame)
-    time.sleep(2)
-    previousFrame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-    previousContours = numpy.zeros(frame.shape, dtype=numpy.uint8)
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    out = cv2.VideoWriter("./data/" + str(start.date()) + " " + str(start.time())[:-7] + ".mp4", fourcc, 30, (1024, 768))
+import copy
+
+fromFile = True
+videoPath = "3WMice.mp4"
+currentFrame = 0
+
+if not fromFile:
+    from picamera2 import Picamera2
+
+xd, yd = 200, 0
+wd, hd = 600, 768
+
+def main():   
+    if(fromFile):
+        for i in range(total_frames):
+            logic()
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+    else:
+        while True:
+            logic()
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+
+    if(not fromFile):
+        file = open("./data/" + str(start.date()) + " " + str(start.now().time())[:-7] + ".txt", "w")
+        outraw.release()
+        cam.close()
+        cv2.destroyAllWindows()
+        file.close()
+        print("Total Time in sec: " + str((datetime.datetime.now()-start).total_seconds()))
+        out2.release()
+
+
+def logic():
+    theframe = getFrame()
+    frameBlack = copy.deepcopy(theframe)
+    frameWhite = copy.deepcopy(theframe)
+    frameBoth = copy.deepcopy(theframe)
+    
+    grayBlack = cv2.cvtColor(frameBlack, cv2.COLOR_RGB2GRAY)
+    grayWhite = cv2.cvtColor(frameWhite, cv2.COLOR_RGB2GRAY)
+    # equalized = cv2.equalizeHist(grayWhite)
+    # final = cv2.convertScaleAbs(equalized, alpha=1.)
+
+    _, threshBlack = cv2.threshold(grayBlack[yd:yd+hd, xd:xd+wd], 40, 255, cv2.THRESH_BINARY_INV)
+    _, threshWhite = cv2.threshold(grayWhite[yd:yd+hd, xd:xd+wd], 150, 255, cv2.THRESH_BINARY)
+    
+    cv2.imshow("hi", threshWhite)
+
+    annotatedBlack = annotateFrame(threshBlack, frameBlack, True)
+    annotatedWhite = annotateFrame(threshWhite, frameWhite, False)
+
+    annotatedCombined = annotateFrame(threshBlack, frameBoth, True)
+    annotatedCombined = annotateFrame(threshWhite, annotatedCombined, False)
+
+    cv2.imshow("Camera Preview Black", annotatedBlack)
+    cv2.imshow("Camera Preview White", annotatedWhite)
+    cv2.imshow("Camera Preview Combined", annotatedCombined)
+
+    if(not fromFile):
+        out2.write(annotatedCombined)
+    
+
+def getFrame():
+    global currentFrame
+    if(fromFile):
+        cam.set(cv2.CAP_PROP_POS_FRAMES, currentFrame)
+        currentFrame += 1
+        _, frame = cam.read()
+        return frame
+    else:
+        frame = cam.capture_array()
+        outraw.write(frame)
+        return frame
+    
+
+def annotateFrame(thresh, frame, black):
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (35, 35))
+
+    opened = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel)
+    dilated = cv2.dilate(opened, None, iterations=1)
+    contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    miceFound = False
+    for contour in contours:
+        if cv2.contourArea(contour) < 5000:
+            continue
+        (x, y, w, h) = cv2.boundingRect(contour)
+        
+        cv2.rectangle(frame, (x+xd, y+yd), (x+xd+w, y+yd+h), (0, 255, 0), 2)
+        miceFound = True
+
+    if black:
+        color = "Black"
+        location = (10, 20)
+    else:
+        color = "White"
+        location = (frame.shape[0]-70, 20)
+
+    if(miceFound):
+        cv2.putText(frame, color + " Mouse Detected: True", location, cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
+    else:
+        cv2.putText(frame, color + " Mouse Detected: False " + str(len(contours)), location, cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 2, cv2.LINE_AA)
+
+    cv2.putText(frame, str(datetime.datetime.now().date()) + " " + str(datetime.datetime.now().time())[:-7], (230, 50), cv2.FONT_HERSHEY_PLAIN, 3, (255, 255, 255), 3, cv2.LINE_AA)
+
+    return frame
+
+
+start = datetime.datetime.now()
+
+if(fromFile):
+    cam = cv2.VideoCapture(videoPath)
+    total_frames = int(cam.get(cv2.CAP_PROP_FRAME_COUNT))
+
+else:
+    cam = Picamera2()
+    cam.preview_configuration.main.size = (1024, 768)
+    cam.preview_configuration.main.format = "RGB888"
+    cam.configure("preview")
+    cam.start()
+    time.sleep(0.5)
     fourccc = cv2.VideoWriter_fourcc(*'mp4v')
     outraw = cv2.VideoWriter("./data/raw" + str(start.date()) + " " + str(start.time())[:-7] + ".mp4", fourccc, 30, (1024, 768))
     fourcccc = cv2.VideoWriter_fourcc(*'mp4v')
     out2 = cv2.VideoWriter("./data/micedetection" + str(start.date()) + " " + str(start.time())[:-7] + ".mp4", fourcccc, 30, (1024, 768))
-    while True:
-        theframe = picam2.capture_array()
-        frame = theframe.copy()
-        outraw.write(frame)
-        gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-        diff = cv2.absdiff(previousFrame[90:670, 310:690], gray[90:670, 310:690])
-        # print(previousFrame)
-        # print(gray[90:670, 310:690].shape)
-        # print(diff.shape)
-        movement += diff.sum()
-        if(movement<0):
-            print("INTEGER OVERFLOW ARGHHHHHHH")
-        _, thresh = cv2.threshold(diff, 80, 255, cv2.THRESH_BINARY)
-        dilated = cv2.dilate(thresh, None, iterations=60)
-        contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        validMovement = False
-        for contour in contours:
-            if cv2.contourArea(contour) < 100:
-                continue
-            (x, y, w, h) = cv2.boundingRect(contour)
-            # if (300 < x < 650) and (80 < y < 670):
-            #     cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-            #     validMovement = True
-            # elif(300 < x+w < 730) and (80 < y+h < 780) and (250 < x < 650) and (35 < y < 670):
-            #     cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-            #     validMovement = True
-            # else:
-            #     continue
-            cv2.rectangle(frame, (x+310, y+90), (x+310+w, y+90+h), (0, 255, 0), 2)
-            validMovement = True
-        if(validMovement):
-            cv2.putText(frame, "Movement: True", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
-            lastMovement = datetime.datetime.now()
-            notMove = True
-        else:
-            cv2.putText(frame, "Movement: False", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
-            if ((datetime.datetime.now() - lastMovement).total_seconds() > 10):
-                cv2.putText(frame, "Movement: False", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 2, cv2.LINE_AA)
-                if(notMove):
-                    movements.append((lastMovement, datetime.datetime.now(), movement))
-                    movement = 0
-                    notMove = False
-        cv2.putText(frame, str(datetime.datetime.now().date()) + " " + str(datetime.datetime.now().time())[:-7], (230, 50), cv2.FONT_HERSHEY_PLAIN, 3, (255, 255, 255), 3, cv2.LINE_AA)
-        out.write(frame)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-        previousFrame = gray.copy()
 
 
 
-
-        #TEST
-
-
-        frame = theframe.copy()
-        # frame = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
-        # frame[:, :][2] += 100
-        # frame = cv2.cvtColor(frame, cv2.COLOR_HSV2RGB)
-        # frame = increase_brightness(frame, value=255)
-        # frame = cv2.convertScaleAbs(frame, alpha=1.5, beta=0)
-        # frame = picam2.capture_array()
-        # cap.set(cv2.CAP_PROP_POS_FRAMES, i)
-        # _, frame = cap.read()
-        gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-        # diff = cv2.absdiff(previousFrame[90:670, 310:690], gray[90:670, 310:690])
-        # print(previousFrame)
-        # print(gray[90:670, 310:690].shape)
-        # print(diff.shape)
-        # movement += diff.sum()
-        # if(movement<0):
-        #     print("INTEGER OVERFLOW ARGHHHHHHH")
-        # print()
-        _, thresh = cv2.threshold(gray[60:720, 285:690], 40, 255, cv2.THRESH_BINARY_INV)
-        dilated = cv2.dilate(thresh, None, iterations=0)
-        contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        miceFound = False
-        for contour in contours:
-            if cv2.contourArea(contour) < 800:
-                continue
-            (x, y, w, h) = cv2.boundingRect(contour)
-            # if (300 < x < 650) and (80 < y < 670):
-            #     cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-            #     validMovement = True
-            # elif(300 < x+w < 730) and (80 < y+h < 780) and (250 < x < 650) and (35 < y < 670):
-            #     cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-            #     validMovement = True
-            # else:
-            #     continue
-            cv2.rectangle(frame, (x+285, y+60), (x+285+w, y+60+h), (0, 255, 0), 2)
-            miceFound = True
-        if(miceFound):
-            cv2.putText(frame, "Mouse Detected: True", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2, cv2.LINE_AA)
-            # lastMovement = datetime.datetime.now()
-            # notMove = True
-        else:
-            cv2.putText(frame, "Mouse Detected: False", (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 2, cv2.LINE_AA)
-            # if ((datetime.datetime.now() - lastMovement).total_seconds() > 10):
-            #     if(notMove):
-            #         movements.append((lastMovement, datetime.datetime.now(), movement))
-            #         movement = 0
-            #         notMove = False
-        cv2.putText(frame, str(datetime.datetime.now().date()) + " " + str(datetime.datetime.now().time())[:-7], (230, 50), cv2.FONT_HERSHEY_PLAIN, 3, (255, 255, 255), 3, cv2.LINE_AA)
-        cv2.imshow("Camera Preview test", gray)
-        cv2.imshow("Camera Preview", frame)
-        out2.write(frame)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-    if(notMove):
-        movements.append((lastMovement, datetime.datetime.now(), movement))
-    # Clean up
-    file = open("./data/" + str(start.date()) + " " + str(start.now().time())[:-7] + ".txt", "w")
-    out.release()
-    outraw.release()
-    picam2.close()
-    cv2.destroyAllWindows()
-    file.write(str(movements) + "\n" + str((datetime.datetime.now()-start).total_seconds()))
-    print(movements)
-    file.close()
-    print("Total Time in sec: " + str((datetime.datetime.now()-start).total_seconds()))
-    out2.release()
-
-def increase_brightness(img, value=30):
-    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-    h, s, v = cv2.split(hsv)
-
-    lim = 255 - value
-    v[v > lim] = 255
-    v[v <= lim] += value
-
-    h[h > lim] = 255
-    h[h <= lim] += value
-
-    final_hsv = cv2.merge((h, s, v))
-    img = cv2.cvtColor(final_hsv, cv2.COLOR_HSV2BGR)
-    return img
-# except Exception as e:
-#     print(e)
-#     cv2.destroyAllWindows()
-#     picam2.close()
 if __name__ == "__main__":
-    # test.main()
-    
-    # script_thread = threading.Thread(target=main)
-    # # Start the thread
-    # script_thread.start()
     main()
-    # script_thread2 = threading.Thread(target=test.main)
-    # # Start the thread
-    # script_thread2.start()
