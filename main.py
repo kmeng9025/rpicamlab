@@ -3,11 +3,16 @@ import time
 import datetime
 import numpy
 import copy
+import platform
 
-fromFile = True
-videoPath = "3WMice.mp4"
-currentFrame = 0
-
+if platform.system() == "Windows":
+    fromFile = True
+    videoPath = "3WMice.mp4"
+    currentFrame = 0
+else:
+    fromFile = False
+    # videoPath = "3WMice.mp4"
+    # currentFrame = 0
 if not fromFile:
     from picamera2 import Picamera2
 
