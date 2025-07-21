@@ -44,31 +44,28 @@ def main():
 def logic():
     theframe = getFrame()
     frameBlack = copy.deepcopy(theframe)
-    frameWhite = copy.deepcopy(theframe)
-    frameBoth = copy.deepcopy(theframe)
+    # frameWhite = copy.deepcopy(theframe)
+    # frameBoth = copy.deepcopy(theframe)
     
     grayBlack = cv2.cvtColor(frameBlack, cv2.COLOR_RGB2GRAY)
-    grayWhite = cv2.cvtColor(frameWhite, cv2.COLOR_RGB2GRAY)
-    # equalized = cv2.equalizeHist(grayWhite)
-    # final = cv2.convertScaleAbs(equalized, alpha=1.)
+    # grayWhite = cv2.cvtColor(frameWhite, cv2.COLOR_RGB2GRAY)
 
     _, threshBlack = cv2.threshold(grayBlack[yd:yd+hd, xd:xd+wd], 40, 255, cv2.THRESH_BINARY_INV)
-    _, threshWhite = cv2.threshold(grayWhite[yd:yd+hd, xd:xd+wd], 150, 255, cv2.THRESH_BINARY)
+    # _, threshWhite = cv2.threshold(grayWhite[yd:yd+hd, xd:xd+wd], 150, 255, cv2.THRESH_BINARY)
     
-    cv2.imshow("hi", threshWhite)
-
     annotatedBlack = annotateFrame(threshBlack, frameBlack, True)
-    annotatedWhite = annotateFrame(threshWhite, frameWhite, False)
+    # annotatedWhite = annotateFrame(threshWhite, frameWhite, False)
 
-    annotatedCombined = annotateFrame(threshBlack, frameBoth, True)
-    annotatedCombined = annotateFrame(threshWhite, annotatedCombined, False)
+    # annotatedCombined = annotateFrame(threshBlack, frameBoth, True)
+    # annotatedCombined = annotateFrame(threshWhite, annotatedCombined, False)
 
     cv2.imshow("Camera Preview Black", annotatedBlack)
-    cv2.imshow("Camera Preview White", annotatedWhite)
-    cv2.imshow("Camera Preview Combined", annotatedCombined)
+    # cv2.imshow("Camera Preview White", annotatedWhite)
+    # cv2.imshow("Camera Preview Combined", annotatedCombined)
 
     if(not fromFile):
-        out2.write(annotatedCombined)
+        out2.write(annotatedBlack)
+        # out2.write(annotatedCombined)
     
 
 def getFrame():
