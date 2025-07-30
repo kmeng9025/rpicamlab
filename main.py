@@ -121,7 +121,7 @@ if(fromFile):
 
 else:
     cam = Picamera2()
-    cam.preview_configuration.main.size = (1024, 768)
+    cam.preview_configuration.main.size = (3280, 2464)
     cam.preview_configuration.main.format = "RGB888"
     cam.configure("preview")
     cam.start()
