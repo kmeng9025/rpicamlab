@@ -10,9 +10,9 @@ import cv2
 # subprocess.run("ifconfig")
 def main():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind(("192.168.4.1", 5000))
+    server_socket.bind(("192.168.4.1", 7000))
     server_socket.listen(10)
-    current_port = 5001
+    current_port = 7001
     while True:
         client_socket, client_address = server_socket.accept()
         while (is_port_in_use(current_port)):

@@ -59,8 +59,8 @@ num_frames_to_extract = 1000
 
 # Crop coordinates
 # [60:720, 285:690]
-x, y = 200, 0
-w, h = 600, 768
+x, y = 615, 0
+w, h = 2050, 2464
 
 # === Create output folder ===
 os.makedirs(output_dir, exist_ok=True)
