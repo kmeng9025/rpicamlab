@@ -2,7 +2,7 @@
 sudo su
 containsFive=cat /sys/firmware/devicetree/base/model | grep -a "Raspberry Pi 5"
 if [${#containsFive} -gt 0]; then
-    sudo su
+    echo hi
     cd ~/Documents
     git clone https://github.com/kmeng9025/rpicamlab.git
     cd ./rpicamlab
