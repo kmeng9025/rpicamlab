@@ -7,7 +7,7 @@ import cv2
 import datetime
 
 get_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-get_socket.connect(("", 7000))
+get_socket.connect(("192.168.4.1", 7000))
 port = int(get_socket.recv(65535).decode())
 get_socket.close()
 START_RECORDING = 1
