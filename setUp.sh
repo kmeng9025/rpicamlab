@@ -23,3 +23,4 @@ else
     chmod +x ./startCameraPi.sh
     ./startCameraPi.sh
 fi
+exit
