@@ -10,11 +10,13 @@ import re
 print("Camera Program Started")
 print("Scanning for Network")
 host_ssid = "rpicamlab"
+ssids = []
 while host_ssid not in ssids:
     result = subprocess.check_output(["sudo", "iwlist", "wlan0", "scan"], encoding="utf-8")
     ssids = re.findall(r'ESSID:"(.*?)"', result)
 print("Host Network Found")
 print("Connecting to Host Network")
+connected_ssid = ""
 while connected_ssid != host_ssid:
     connected_ssid = subprocess.check_output(["iwgetid", "-r"], encoding="utf-8").strip()
 print("Creating Socket")
