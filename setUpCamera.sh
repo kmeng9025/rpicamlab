@@ -1,8 +1,8 @@
 #!/bin/bash
-sudo su
+# sudo su
 cd ~/Documents
 git clone https://github.com/kmeng9025/rpicamlab.git
-echo "country=US
+sudo echo "country=US
 network={
     ssid="rpicamlab"
     psk="rpicamlab"
@@ -10,5 +10,5 @@ network={
 }" > /etc/wpa_supplicant/wpa_supplicant.conf
 cd ./rpicamlab
 git pull
-chmod +x ./startCameraPi.sh
-./startCameraPi.sh
+sudo chmod +x ./startCameraPi.sh
+sudo ./startCameraPi.sh
