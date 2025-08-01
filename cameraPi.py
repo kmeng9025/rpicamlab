@@ -33,11 +33,11 @@ if(connected_ssid != host_ssid):
             print("Trying to Connect")
             print("Setting SSID")
             subprocess.run([
-                "sudo", "wpa_cli", "set_network", network_id, "ssid", f'"{host_ssid}"'
+                "sudo", "wpa_cli", "set_network", network_id, "ssid", f'\"{host_ssid}\"'
             ], check=True)
             print("Setting Password")
             subprocess.run([
-                "sudo", "wpa_cli", "set_network", network_id, "psk", f'"{host_password}"'
+                "sudo", "wpa_cli", "set_network", network_id, "psk", f'\"{host_password}\"'
             ], check=True)
             print("Enabling Network")
             subprocess.run(["sudo", "wpa_cli", "enable_network", network_id], check=True)
