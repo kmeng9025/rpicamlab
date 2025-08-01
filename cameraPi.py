@@ -22,6 +22,7 @@ try:
 except subprocess.CalledProcessError as e:
     connected_ssid = ""
 if(connected_ssid != host_ssid):
+    print("Disconnecting from Current Network")
     subprocess.run(["sudo", "wpa_cli", "disconnect"], check=True)
     network_id = subprocess.check_output(
         ["sudo", "wpa_cli", "add_network"], text=True
@@ -45,7 +46,7 @@ if(connected_ssid != host_ssid):
             print("Saving Configuration")
             subprocess.run(["sudo", "wpa_cli", "save_config"], check=True)
             print(f"Connected to Wi-Fi network: {host_ssid}")
-            break
+            connected_ssid = subprocess.check_output(["iwgetid", "-r"], encoding="utf-8").strip()
         except subprocess.CalledProcessError as e:
             subprocess.run(["sudo", "wpa_cli", "disconnect"], check=True)
             print("Could not Connect, Trying Again...")
