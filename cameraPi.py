@@ -22,6 +22,7 @@ try:
 except subprocess.CalledProcessError as e:
     connected_ssid = ""
 if(connected_ssid != host_ssid):
+    subprocess.run(["sudo", "wpa_cli", "disconnect"], check=True)
     network_id = subprocess.check_output(
         ["sudo", "wpa_cli", "add_network"], text=True
     ).strip()
@@ -46,6 +47,7 @@ if(connected_ssid != host_ssid):
             print(f"Connected to Wi-Fi network: {host_ssid}")
             break
         except subprocess.CalledProcessError as e:
+            subprocess.run(["sudo", "wpa_cli", "disconnect"], check=True)
             print("Could not Connect, Trying Again...")
 print("Creating Socket")
 get_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
