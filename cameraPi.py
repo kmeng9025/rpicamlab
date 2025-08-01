@@ -21,14 +21,31 @@ try:
     connected_ssid = subprocess.check_output(["iwgetid", "-r"], encoding="utf-8").strip()
 except subprocess.CalledProcessError as e:
     connected_ssid = ""
-while connected_ssid != host_ssid:
-    try:
-        print("Trying to Connect")
-        subprocess.run(["nmcli", "device", "wifi", "connect", host_ssid, "password", host_password], check=True)
-        print("Getting Connection")
-        connected_ssid = subprocess.check_output(["iwgetid", "-r"], encoding="utf-8").strip()
-    except subprocess.CalledProcessError as e:
-        pass
+if(connected_ssid != host_ssid):
+    network_id = subprocess.check_output(
+        ["sudo", "wpa_cli", "add_network"], text=True
+    ).strip()
+    print(f"Network ID: {network_id}")
+    while True:
+        try:
+            print("Trying to Connect")
+            print("Setting SSID")
+            subprocess.run([
+                "sudo", "wpa_cli", "set_network", network_id, "ssid", f'"{host_ssid}"'
+            ], check=True)
+            print("Setting Password")
+            subprocess.run([
+                "sudo", "wpa_cli", "set_network", network_id, "psk", f'"{host_password}"'
+            ], check=True)
+            print("Enabling Network")
+            subprocess.run(["sudo", "wpa_cli", "enable_network", network_id], check=True)
+            print("Selecting Network")
+            subprocess.run(["sudo", "wpa_cli", "select_network", network_id], check=True)
+            print("Saving Configuration")
+            subprocess.run(["sudo", "wpa_cli", "save_config"], check=True)
+            print(f"Connected to Wi-Fi network: {host_ssid}")
+        except subprocess.CalledProcessError as e:
+            print("Could not Connect, Trying Again...")
 print("Creating Socket")
 get_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print("Connecting to Host for Port")
