@@ -22,30 +22,31 @@ try:
 except subprocess.CalledProcessError as e:
     connected_ssid = ""
 if(connected_ssid != host_ssid):
-    print("Disconnecting from Current Network")
-    subprocess.run(["sudo", "wpa_cli", "disconnect"], check=True)
-    network_id = subprocess.check_output(
-        ["sudo", "wpa_cli", "add_network"], text=True
-    ).strip()
-    print(f"Network ID: {network_id}")
+    # print("Disconnecting from Current Network")
+    # subprocess.run(["sudo", "wpa_cli", "disconnect"], check=True)
+    # network_id = subprocess.check_output(
+    #     ["sudo", "wpa_cli", "add_network"], text=True
+    # ).strip()
+    # print(f"Network ID: {network_id}")
     while True:
         try:
             print("Trying to Connect")
-            print("Setting SSID")
-            subprocess.run([
-                "sudo", "wpa_cli", "set_network", network_id, "ssid", f'\"{host_ssid}\"'
-            ], check=True)
-            print("Setting Password")
-            subprocess.run([
-                "sudo", "wpa_cli", "set_network", network_id, "psk", f'\"{host_password}\"'
-            ], check=True)
-            print("Enabling Network")
-            subprocess.run(["sudo", "wpa_cli", "enable_network", network_id], check=True)
-            print("Selecting Network")
-            subprocess.run(["sudo", "wpa_cli", "select_network", network_id], check=True)
-            print("Saving Configuration")
-            subprocess.run(["sudo", "wpa_cli", "save_config"], check=True)
-            print(f"Connected to Wi-Fi network: {host_ssid}")
+            subprocess.run("nmcli device wifi connect \"rpicamlab\" password \"rpicamlab\"", shell=True)
+            # print("Setting SSID")
+            # subprocess.run([
+            #     "sudo", "wpa_cli", "set_network", network_id, "ssid", f'\"{host_ssid}\"'
+            # ], check=True)
+            # print("Setting Password")
+            # subprocess.run([
+            #     "sudo", "wpa_cli", "set_network", network_id, "psk", f'\"{host_password}\"'
+            # ], check=True)
+            # print("Enabling Network")
+            # subprocess.run(["sudo", "wpa_cli", "enable_network", network_id], check=True)
+            # print("Selecting Network")
+            # subprocess.run(["sudo", "wpa_cli", "select_network", network_id], check=True)
+            # print("Saving Configuration")
+            # subprocess.run(["sudo", "wpa_cli", "save_config"], check=True)
+            # print(f"Connected to Wi-Fi network: {host_ssid}")
             connected_ssid = subprocess.check_output(["iwgetid", "-r"], encoding="utf-8").strip()
         except subprocess.CalledProcessError as e:
             subprocess.run(["sudo", "wpa_cli", "disconnect"], check=True)
