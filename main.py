@@ -123,11 +123,11 @@ else:
     cam = Picamera2()
     # cam.preview_configuration.main.size = (3280, 2464)
     # cam.preview_configuration.main.format = "RGB888"
-    cam.create_video_configuration(
+    video_config = cam.create_video_configuration(
         main={"size": (3280, 2464), "format": "RGB888"},  # You can change resolution
         controls={"FrameDurationLimits": (100000, 100000)}
     )
-    cam.configure("preview")
+    cam.configure(video_config)
     cam.start()
     time.sleep(0.5)
     fourccc = cv2.VideoWriter_fourcc(*'mp4v')
