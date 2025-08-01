@@ -17,10 +17,12 @@ while host_ssid not in ssids:
     ssids = re.findall(r'ESSID:"(.*?)"', result)
 print("Host Network Found")
 print("Connecting to Host Network")
-connected_ssid = ""
+connected_ssid = subprocess.check_output(["iwgetid", "-r"], encoding="utf-8").strip()
 while connected_ssid != host_ssid:
     try:
+        print("Trying to Connect")
         subprocess.run(["nmcli", "device", "wifi", "connect", host_ssid, "password", host_password], check=True)
+        print("Getting Connection")
         connected_ssid = subprocess.check_output(["iwgetid", "-r"], encoding="utf-8").strip()
     except subprocess.CalledProcessError as e:
         pass
