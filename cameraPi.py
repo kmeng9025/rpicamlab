@@ -10,6 +10,7 @@ import re
 print("Camera Program Started")
 print("Scanning for Network")
 host_ssid = "rpicamlab"
+host_password = "rpicamlab"
 ssids = []
 while host_ssid not in ssids:
     result = subprocess.check_output(["sudo", "iwlist", "wlan0", "scan"], encoding="utf-8")
@@ -19,6 +20,7 @@ print("Connecting to Host Network")
 connected_ssid = ""
 while connected_ssid != host_ssid:
     try:
+        subprocess.run(["nmcli", "device", "wifi", "connect", host_ssid, "password", host_password], check=True)
         connected_ssid = subprocess.check_output(["iwgetid", "-r"], encoding="utf-8").strip()
     except subprocess.CalledProcessError as e:
         pass
