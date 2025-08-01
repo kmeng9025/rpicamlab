@@ -17,7 +17,10 @@ while host_ssid not in ssids:
     ssids = re.findall(r'ESSID:"(.*?)"', result)
 print("Host Network Found")
 print("Connecting to Host Network")
-connected_ssid = subprocess.check_output(["iwgetid", "-r"], encoding="utf-8").strip()
+try:
+    connected_ssid = subprocess.check_output(["iwgetid", "-r"], encoding="utf-8").strip()
+except subprocess.CalledProcessError as e:
+    connected_ssid = ""
 while connected_ssid != host_ssid:
     try:
         print("Trying to Connect")
