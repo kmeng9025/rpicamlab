@@ -44,6 +44,7 @@ if(connected_ssid != host_ssid):
             print("Saving Configuration")
             subprocess.run(["sudo", "wpa_cli", "save_config"], check=True)
             print(f"Connected to Wi-Fi network: {host_ssid}")
+            break
         except subprocess.CalledProcessError as e:
             print("Could not Connect, Trying Again...")
 print("Creating Socket")
