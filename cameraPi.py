@@ -18,7 +18,10 @@ print("Host Network Found")
 print("Connecting to Host Network")
 connected_ssid = ""
 while connected_ssid != host_ssid:
-    connected_ssid = subprocess.check_output(["iwgetid", "-r"], encoding="utf-8").strip()
+    try:
+        connected_ssid = subprocess.check_output(["iwgetid", "-r"], encoding="utf-8").strip()
+    except subprocess.CalledProcessError as e:
+        pass
 print("Creating Socket")
 get_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print("Connecting to Host for Port")
