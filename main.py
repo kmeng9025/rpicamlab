@@ -16,8 +16,8 @@ else:
 if not fromFile:
     from picamera2 import Picamera2
 
-xd, yd = 615, 0
-wd, hd = 2050, 2464
+xd, yd = 410, 0
+wd, hd = 2460, 2464
 
 def main():   
     if(fromFile):
