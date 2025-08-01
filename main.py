@@ -123,13 +123,17 @@ else:
     cam = Picamera2()
     cam.preview_configuration.main.size = (3280, 2464)
     cam.preview_configuration.main.format = "RGB888"
+    cam.create_video_configuration(
+        main={"size": (1920, 1080), "format": "YUV420"},  # You can change resolution
+        controls={"FrameDurationLimits": (100000, 100000)}
+    )
     cam.configure("preview")
     cam.start()
     time.sleep(0.5)
     fourccc = cv2.VideoWriter_fourcc(*'mp4v')
-    outraw = cv2.VideoWriter("./data/raw" + str(start.date()) + " " + str(start.time())[:-7] + ".mp4", fourccc, 30, (3280, 2464))
+    outraw = cv2.VideoWriter("./data/raw" + str(start.date()) + " " + str(start.time())[:-7] + ".mp4", fourccc, 10, (3280, 2464))
     fourcccc = cv2.VideoWriter_fourcc(*'mp4v')
-    out2 = cv2.VideoWriter("./data/micedetection" + str(start.date()) + " " + str(start.time())[:-7] + ".mp4", fourcccc, 30, (3280, 2464))
+    out2 = cv2.VideoWriter("./data/micedetection" + str(start.date()) + " " + str(start.time())[:-7] + ".mp4", fourcccc, 10, (3280, 2464))
 
 
 
