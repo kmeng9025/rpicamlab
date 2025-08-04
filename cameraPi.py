@@ -51,7 +51,7 @@ if(connected_ssid != host_ssid):
                 "ipv4.dns", "8.8.8.8"
             ], check=True)
 
-            subprocess.run(["sudo", "nmcli", "connection", "up", "myhotspot"], check=True)
+            subprocess.run(["sudo", "nmcli", "connection", "up", "static_rpicamlab"], check=True)
 
             # print("Setting SSID")
             # subprocess.run([
