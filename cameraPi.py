@@ -70,7 +70,7 @@ if(connected_ssid != host_ssid):
             # print(f"Connected to Wi-Fi network: {host_ssid}")
             connected_ssid = subprocess.check_output(["sudo", "iwgetid", "-r"], encoding="utf-8").strip()
         except subprocess.CalledProcessError as e:
-            connected_ssid = subprocess.check_output(["sudo", "iwgetid", "-r"], encoding="utf-8").strip()
+            # connected_ssid = subprocess.check_output(["sudo", "iwgetid", "-r"], encoding="utf-8").strip()
             if(connected_ssid != "" and connected_ssid != host_ssid):
                 subprocess.run(["sudo", "nmcli", "device", "disconnect", "wlan0"], check=True)
             print("Could not Connect, Trying Again...")
