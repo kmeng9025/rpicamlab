@@ -35,7 +35,8 @@ if(connected_ssid != host_ssid):
         try:
             print("Trying to Connect")
             # subprocess.run("nmcli device wifi connect \"rpicamlab\" password \"rpicamlab\"", shell=True)
-            subprocess.run(["sudo", "nmcli", "dev", "wifi", "connect", host_ssid, "password", host_password], check=True)
+            subprocess.run(["nmcli", "dev", "wifi", "connect", host_ssid, "password", host_password, "wifi-sec.key-mgmt", "wpa-psk"], check=True)
+
             # print("Setting SSID")
             # subprocess.run([
             #     "sudo", "wpa_cli", "set_network", network_id, "ssid", f'\"{host_ssid}\"'
