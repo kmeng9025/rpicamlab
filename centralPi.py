@@ -58,7 +58,7 @@ def open_port(port):
         print(port, "Data Received")
         print(port, "Data Length:", len(data))
         frame_data += data
-        if(data.decode()[-3:] == "end"):
+        if(data.decode()[-3:] == "e"):
             print(port, "Received End of Frame")
             print(port, "Decoding Frame")
             np_data = numpy.frombuffer(frame_data, dtype=numpy.uint8)
@@ -69,7 +69,7 @@ def open_port(port):
             else:
                 print(port, "Dropped Frame")
             frame_data = b""
-        elif(data.decode() == "close"):
+        elif(data.decode() == "c"):
             print(port, "Received Request To Close Streaming Port")
             print(port, "Closing Port")
             client_socket.close()

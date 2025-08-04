@@ -34,7 +34,7 @@ if(connected_ssid != host_ssid):
         try:
             print("Trying to Connect")
             # subprocess.run("nmcli device wifi connect \"rpicamlab\" password \"rpicamlab\"", shell=True)
-            subprocess.run(["sudo", "nmcli", "dev", "wifi", "connect", host_ssid, "password", "rpicamlab"], check=True)
+            subprocess.run(["sudo", "nmcli", "dev", "wifi", "connect", host_ssid, "password", host_password], check=True)
             # print("Setting SSID")
             # subprocess.run([
             #     "sudo", "wpa_cli", "set_network", network_id, "ssid", f'\"{host_ssid}\"'
@@ -97,15 +97,22 @@ while GPIO.input(3) == GPIO.HIGH:
     # 0.75 1944 324 2268
     frame = frame[0:1944, 324:2268]
     print("Encoding")
-    encoded = cv2.imencode(".jpg", frame)
-    encoded += b"end"
+    _, encoded = cv2.imencode(".jpg", frame)
+    encoded_bytes = encoded.tobytes() + b"e"
     print("Sending\n")
-    for i in range(0, len(encoded), 60000):
-        data_socket.sendto(encoded[i:60000], ("192.168.4.1", port))
-    if(blinking_time.second-datetime.datetime.now().second > 1):
+    for i in range(0, len(encoded_bytes), 60000):
+        data_socket.sendto(encoded_bytes[i:i+60000], ("192.168.4.1", port))
+    if((datetime.datetime.now()-blinking_time).total_seconds() > 1):
         if(led_on):
             subprocess.run("echo 0 | sudo tee /sys/class/leds/ACT/brightness", shell=True)
             led_on = False
+            blinking_time = datetime.datetime.now()
         else:
             subprocess.run("echo 1 | sudo tee /sys/class/leds/ACT/brightness", shell=True)
             led_on = True
+            blinking_time = datetime.datetime.now()
+data_socket.sendto("c", ("192.168.4.1", port))
+cam.stop()
+cam.close()
+data_socket.close()
+GPIO.cleanup()
