@@ -19,7 +19,7 @@ while host_ssid not in ssids:
 print("Host Network Found")
 print("Connecting to Host Network")
 try:
-    connected_ssid = subprocess.check_output(["iwgetid", "-r"], encoding="utf-8").strip()
+    connected_ssid = subprocess.check_output(["sudo", "iwgetid", "-r"], encoding="utf-8").strip()
 except subprocess.CalledProcessError as e:
     connected_ssid = ""
 if(connected_ssid != host_ssid):
@@ -30,12 +30,12 @@ if(connected_ssid != host_ssid):
     # ).strip()
     # # print(f"Network ID: {network_id}")
     # subprocess.run(["nmcli", "dev", "disconnect"], check=True)
-    subprocess.run(["nmcli", "device", "disconnect", "wlan0"], check=True)
+    subprocess.run(["sudo", "nmcli", "device", "disconnect", "wlan0"], check=True)
     while connected_ssid != host_ssid:
         try:
             print("Trying to Connect")
             # subprocess.run("nmcli device wifi connect \"rpicamlab\" password \"rpicamlab\"", shell=True)
-            subprocess.run(["nmcli", "dev", "wifi", "connect", host_ssid, "password", host_password, "wifi-sec.key-mgmt", "wpa-psk"], check=True)
+            subprocess.run(["sudo", "nmcli", "dev", "wifi", "connect", host_ssid, "password", host_password, "wifi-sec.key-mgmt", "wpa-psk"], check=True)
 
             # print("Setting SSID")
             # subprocess.run([
@@ -52,9 +52,9 @@ if(connected_ssid != host_ssid):
             # print("Saving Configuration")
             # subprocess.run(["sudo", "wpa_cli", "save_config"], check=True)
             # print(f"Connected to Wi-Fi network: {host_ssid}")
-            connected_ssid = subprocess.check_output(["iwgetid", "-r"], encoding="utf-8").strip()
+            connected_ssid = subprocess.check_output(["sudo", "iwgetid", "-r"], encoding="utf-8").strip()
         except subprocess.CalledProcessError as e:
-            subprocess.run(["nmcli", "device", "disconnect", "wlan0"], check=True)
+            subprocess.run(["sudo", "nmcli", "device", "disconnect", "wlan0"], check=True)
             print("Could not Connect, Trying Again...")
 print("Creating Socket")
 get_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
