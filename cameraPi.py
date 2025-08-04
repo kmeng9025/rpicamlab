@@ -12,7 +12,7 @@ print("Scanning for Network")
 host_ssid = "rpicamlab"
 host_password = "rpicamlab"
 ssids = []
-Host_IP = "192.168.4.1"
+Host_IP = "10.42.0.1"
 while host_ssid not in ssids:
     result = subprocess.check_output(["sudo", "iwlist", "wlan0", "scan"], encoding="utf-8")
     ssids = re.findall(r'ESSID:"(.*?)"', result)
@@ -37,7 +37,19 @@ if(connected_ssid != host_ssid):
             print("Trying to Connect")
             # subprocess.run("nmcli device wifi connect \"rpicamlab\" password \"rpicamlab\"", shell=True)
             # subprocess.run(["sudo", "nmcli", "dev", "wifi", "connect", host_ssid, "password", host_password, "wifi-sec.key-mgmt", "wpa-psk"], check=True)
-            subprocess.run(["sudo", "nmcli", "connection", "add", "type", "wifi", "ifname", "wlan0", "con-name", "myhotspot", "ssid", host_ssid, "wifi-sec.key-mgmt", "wpa-psk", "wifi-sec.psk", host_password], check=True)
+            subprocess.run([
+                "sudo", "nmcli", "connection", "add",
+                "type", "wifi",
+                "ifname", "wlan0",
+                "con-name", "static_rpicamlab",
+                "ssid", host_ssid,
+                "wifi-sec.key-mgmt", "wpa-psk",
+                "wifi-sec.psk", host_password,
+                "ipv4.method", "manual",
+                "ipv4.addresses", "10.42.0.10/24",
+                "ipv4.gateway", "10.42.0.1",
+                "ipv4.dns", "8.8.8.8"
+            ], check=True)
 
             subprocess.run(["sudo", "nmcli", "connection", "up", "myhotspot"], check=True)
 
