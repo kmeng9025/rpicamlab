@@ -2,4 +2,4 @@
 *.png
 *.jpg
 # /Clean Mouse.v11i.coco-segmentation/augmented_dataset_adaptive_final
-/cropped_frames
+# /cropped_frames
