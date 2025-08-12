@@ -36,22 +36,22 @@ if(connected_ssid != host_ssid):
         try:
             print("Trying to Connect")
             # subprocess.run("nmcli device wifi connect \"rpicamlab\" password \"rpicamlab\"", shell=True)
-            # subprocess.run(["sudo", "nmcli", "dev", "wifi", "connect", host_ssid, "password", host_password, "wifi-sec.key-mgmt", "wpa-psk"], check=True)
-            subprocess.run([
-                "sudo", "nmcli", "connection", "add",
-                "type", "wifi",
-                "ifname", "wlan0",
-                "con-name", "static_rpicamlab",
-                "ssid", host_ssid,
-                "wifi-sec.key-mgmt", "wpa-psk",
-                "wifi-sec.psk", host_password,
-                "ipv4.method", "manual",
-                "ipv4.addresses", "10.42.0.10/24",
-                "ipv4.gateway", "10.42.0.1",
-                "ipv4.dns", "8.8.8.8"
-            ], check=True)
+            subprocess.run(["sudo", "nmcli", "dev", "wifi", "connect", host_ssid, "password", host_password], check=True)
+            # subprocess.run([
+            #     "sudo", "nmcli", "connection", "add",
+            #     "type", "wifi",
+            #     "ifname", "wlan0",
+            #     "con-name", "static_rpicamlab",
+            #     "ssid", host_ssid,
+            #     "wifi-sec.key-mgmt", "wpa-psk",
+            #     "wifi-sec.psk", host_password,
+            #     "ipv4.method", "manual",
+            #     "ipv4.addresses", "10.42.0.10/24",
+            #     "ipv4.gateway", "10.42.0.1",
+            #     "ipv4.dns", "8.8.8.8"
+            # ], check=True)
 
-            subprocess.run(["sudo", "nmcli", "connection", "up", "static_rpicamlab"], check=True)
+            # subprocess.run(["sudo", "nmcli", "connection", "up", "static_rpicamlab"], check=True)
 
             # print("Setting SSID")
             # subprocess.run([
@@ -136,3 +136,4 @@ cam.stop()
 cam.close()
 data_socket.close()
 GPIO.cleanup()
+subprocess.run(["sudo", "nmcli", "connection", "delete", "static_rpicamlab"], check=False)
