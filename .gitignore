@@ -1,5 +1,5 @@
 *.mp4
 *.png
-*.jpg
+# *.jpg
 # /Clean Mouse.v11i.coco-segmentation/augmented_dataset_adaptive_final
 # /cropped_frames
