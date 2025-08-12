@@ -1,7 +1,7 @@
 *.mp4
 # *.png
 # /cropped_frames/video1
-/cropped_frames/video2
+# /cropped_frames/video2
 /cropped_frames/video3
 /cropped_frames/video4
 /cropped_frames/video5
