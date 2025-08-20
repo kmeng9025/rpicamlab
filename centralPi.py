@@ -14,13 +14,15 @@ queue = {}
 
 
 def main():
-    threading.Thread(target=listen_for_exit).start()
+    # threading.Thread(target=listen_for_exit).start()
     threading.Thread(target=listener).start()
     while True:
         for i in queue.keys():
             if(queue[i] != []):
                 cv2.imshow(i + " stream", queue[i][0])
                 queue[i].pop(0)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            clean_up()
 
 
 def listener():
@@ -61,10 +63,9 @@ def listener():
         print("Started Streaming Thread")
 
 
-def listen_for_exit():
-    while True:
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            clean_up()
+# def listen_for_exit():
+#     while True:
+        
 
 
 def clean_up():
@@ -101,7 +102,7 @@ def open_port(port):
             print(port, "Data Received")
             print(port, "Data Length:", len(data))
             if not data:
-                continue
+                print("bad")
             frame_data.extend(data)
             if frame_data.endswith(b"end"):
                 print(port, "Received End of Frame")
@@ -125,10 +126,10 @@ def open_port(port):
                 used_ports.remove(client_socket)
                 print(port, "Closed Port")
                 break
-            elif(len(data) < 1024):
-                frame_data = bytearray()
-                dropped = True
-                print(port, "Dropped Frame")
+            # elif(len(data) < 1024):
+            #     frame_data = bytearray()
+            #     dropped = True
+            #     print(port, "Dropped Frame")
     except:
         print("Port disconnected")
 
