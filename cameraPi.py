@@ -117,11 +117,11 @@ while GPIO.input(3) == GPIO.HIGH:
     # 0.75 1944 324 2268
     # frame = frame[0:1944, 324:2268]
     print("Encoding")
-    _, encoded = cv2.imencode(".jpg", frame)
-    encoded_bytes = encoded.tobytes() + b"e"
+    _, encoded = cv2.imencode(".jpg", cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
+    encoded_bytes = encoded.tobytes() + b"end"
     print("Sending\n")
-    for i in range(0, len(encoded_bytes), 60000):
-        data_socket.sendto(encoded_bytes[i:i+60000], (Host_IP, port))
+    for i in range(0, len(encoded_bytes), 1024):
+        data_socket.sendto(encoded_bytes[i:i+1024], (Host_IP, port))
     if((datetime.datetime.now()-blinking_time).total_seconds() > 1):
         if(led_on):
             subprocess.run("echo 0 | sudo tee /sys/class/leds/ACT/brightness", shell=True)

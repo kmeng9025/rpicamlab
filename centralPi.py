@@ -7,7 +7,11 @@ import numpy
 import cv2
 
 
+used_ports = []
+server_socket = None
+
 def main():
+    global server_socket
     binding_socket = 7000
     print("Creating Assigning Socket")
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -18,6 +22,7 @@ def main():
     server_socket.listen(10)
     current_port = binding_socket + 1
     print("Starting Listener")
+    threading.Thread(target=listen_for_exit).start()
     while True:
         print("Waiting for Camera Pi")
         client_socket, client_address = server_socket.accept()
@@ -42,48 +47,86 @@ def main():
         print("Started Streaming Thread")
 
 
+def listen_for_exit():
+    while True:
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            clean_up()
+
+
+def clean_up():
+    print("CLEANING UP")
+    try:
+        server_socket.close()
+    except:
+        pass
+    for i in used_ports:
+        try:
+            i.close()
+        except:
+            pass
+
+
 def open_port(port):
+    global used_ports
     print(port, "In New Streaming Thread Port")
     print(port, "Creating UDP Streaming Socket")
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    used_ports.append(client_socket)
     print(port, "Created UDP Streaming socket")
     print(port, "Binding Streaming Socket to Port")
-    client_socket.bind(("10.42.0.1", port))
+    client_socket.bind(("0.0.0.0", port))
     print(port, "Binded Streaming to Port")
-    frame_data = b""
+    frame_data = bytearray()
     print(port, "Starting Receiving Loop")
-    while True:
-        print(port, "Waiting for Data")
-        data, adr = client_socket.recvfrom(65535)
-        print(port, "Data Received")
-        print(port, "Data Length:", len(data))
-        frame_data += data
-        if(data.decode()[-3:] == "e"):
-            print(port, "Received End of Frame")
-            print(port, "Decoding Frame")
-            np_data = numpy.frombuffer(frame_data, dtype=numpy.uint8)
-            image = cv2.imdecode(np_data, cv2.IMREAD_COLOR_RGB)
-            if (image is not None):
-                print(port, "Frame Is Good")
-                cv2.imshow(str(port) + " stream", image)
-            else:
+    dropped = False
+    try:
+        while True:
+            print(port, "Waiting for Data")
+            data, adr = client_socket.recvfrom(1024)
+            print(port, "Data Received")
+            print(port, "Data Length:", len(data))
+            if not data:
+                continue
+            frame_data.extend(data)
+            if frame_data.endswith(b"end"):
+                print(port, "Received End of Frame")
+                print(port, "Decoding Frame")
+                if dropped:
+                    frame_data = bytearray()
+                    dropped = False
+                    continue
+                np_data = numpy.frombuffer(frame_data.removesuffix(b"end"), dtype=numpy.uint8)
+                image = cv2.imdecode(np_data, cv2.IMREAD_COLOR)
+                if (image is not None):
+                    print(port, "Frame Is Good")
+                    cv2.imshow(str(port) + " stream", image)
+                else:
+                    print(port, "Dropped Frame")
+                frame_data = bytearray()
+            elif (frame_data.endswith(b"c") and len(frame_data) == 1):
+                print(port, "Received Request To Close Streaming Port")
+                print(port, "Closing Port")
+                client_socket.close()
+                used_ports.remove(client_socket)
+                print(port, "Closed Port")
+                break
+            elif(len(data) < 1024):
+                frame_data = bytearray()
+                dropped = True
                 print(port, "Dropped Frame")
-            frame_data = b""
-        elif(data.decode() == "c"):
-            print(port, "Received Request To Close Streaming Port")
-            print(port, "Closing Port")
-            client_socket.close()
-            print(port, "Closed Port")
-            break
-        elif(len(data) < 60000):
-            frame_data = b""
-            print(port, "Dropped Frame")
+    except:
+        print("Port disconnected")
 
 
 def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         try:
-            s.bind(("127.0.0.1", port))
+            s.bind(("0.0.0.0", port))
+        except socket.error as e:
+            return True
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+        try:
+            s.bind(("0.0.0.0", port))
             return False
         except socket.error as e:
             return True
