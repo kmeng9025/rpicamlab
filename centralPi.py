@@ -98,7 +98,7 @@ def open_port(port):
                     dropped = False
                     continue
                 np_data = numpy.frombuffer(frame_data.removesuffix(b"end"), dtype=numpy.uint8)
-                image = cv2.imdecode(np_data)
+                image = cv2.imdecode(np_data, cv2.IMREAD_COLOR)
                 if (image is not None):
                     print(port, "Frame Is Good")
                     cv2.imshow(str(port) + " stream", image)
