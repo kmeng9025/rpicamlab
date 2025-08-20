@@ -48,7 +48,7 @@ def open_port(port):
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     print(port, "Created UDP Streaming socket")
     print(port, "Binding Streaming Socket to Port")
-    client_socket.bind(("192.168.4.1", port))
+    client_socket.bind(("10.42.0.1", port))
     print(port, "Binded Streaming to Port")
     frame_data = b""
     print(port, "Starting Receiving Loop")
