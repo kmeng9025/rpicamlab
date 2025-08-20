@@ -98,7 +98,7 @@ def open_port(port):
                     dropped = False
                     continue
                 np_data = numpy.frombuffer(frame_data.removesuffix(b"end"), dtype=numpy.uint8)
-                image = cv2.imdecode(np_data, cv2.IMREAD_COLOR)
+                image = cv2.imdecode(np_data)
                 if (image is not None):
                     print(port, "Frame Is Good")
                     cv2.imshow(str(port) + " stream", image)
@@ -112,10 +112,10 @@ def open_port(port):
                 used_ports.remove(client_socket)
                 print(port, "Closed Port")
                 break
-            elif(len(data) < 1024):
-                frame_data = bytearray()
-                dropped = True
-                print(port, "Dropped Frame")
+            # elif(len(data) < 1024):
+            #     frame_data = bytearray()
+            #     dropped = True
+            #     print(port, "Dropped Frame")
     except:
         print("Port disconnected")
 
