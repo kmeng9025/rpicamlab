@@ -40,10 +40,11 @@ def main():
         client_socket.close()
         print("Closed Camera Pi Assigning Socket")
         print("Creating New Thread for Port:", current_port)
-        client_thread = threading.Thread(target=open_port, args=(current_port,))
+        # client_thread = threading.Thread(target=open_port, args=(current_port,))
+        open_port()
         print("Created New Thread for Streaming")
         print("Starting Streaming Thread")
-        client_thread.start()
+        # client_thread.start()
         print("Started Streaming Thread")
 
 
