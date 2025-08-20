@@ -14,6 +14,16 @@ queue = {}
 
 
 def main():
+    threading.Thread(target=listen_for_exit).start()
+    threading.Thread(target=listener).start()
+    while True:
+        for i in queue.keys():
+            if(queue[i] != []):
+                cv2.imshow(i + " stream", queue[i][0])
+                queue[i].pop(0)
+
+
+def listener():
     global server_socket
     binding_socket = 7000
     print("Creating Assigning Socket")
@@ -26,16 +36,6 @@ def main():
     server_socket.listen(10)
     current_port = binding_socket + 1
     print("Starting Listener")
-    threading.Thread(target=listen_for_exit).start()
-    threading.Thread(target=listener).start()
-    while True:
-        for i in queue.keys():
-            if(queue[i] != []):
-                cv2.imshow(i + " stream", queue[i][0])
-                queue[i].pop(0)
-
-
-def listener():
     while True:
         print("Waiting for Camera Pi")
         client_socket, client_address = server_socket.accept()
