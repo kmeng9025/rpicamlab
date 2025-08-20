@@ -17,12 +17,13 @@ def main():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     print("Assigning Socket Created")
     print("Binding Socket to Port", binding_socket)
+    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server_socket.bind(("", binding_socket))
     print("Binded Socket")
     server_socket.listen(10)
     current_port = binding_socket + 1
     print("Starting Listener")
-    threading.Thread(target=listen_for_exit).start()
+    # threading.Thread(target=listen_for_exit).start()
     while True:
         print("Waiting for Camera Pi")
         client_socket, client_address = server_socket.accept()

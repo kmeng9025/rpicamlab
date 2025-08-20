@@ -13,67 +13,77 @@ host_ssid = "rpicamlab"
 host_password = "rpicamlab"
 ssids = []
 Host_IP = "10.42.0.1"
-while host_ssid not in ssids:
-    result = subprocess.check_output(["sudo", "iwlist", "wlan0", "scan"], encoding="utf-8")
-    ssids = re.findall(r'ESSID:"(.*?)"', result)
-print("Host Network Found")
-print("Connecting to Host Network")
-try:
-    connected_ssid = subprocess.check_output(["sudo", "iwgetid", "-r"], encoding="utf-8").strip()
-except subprocess.CalledProcessError as e:
-    connected_ssid = ""
-if(connected_ssid != host_ssid):
-    # print("Disconnecting from Current Network")
-    # subprocess.run(["sudo", "wpa_cli", "disconnect"], check=True)
-    # network_id = subprocess.check_output(
-    #     ["sudo", "wpa_cli", "add_network"], text=True
-    # ).strip()
-    # # print(f"Network ID: {network_id}")
-    # subprocess.run(["nmcli", "dev", "disconnect"], check=True)
-    while connected_ssid != host_ssid:
-        if(connected_ssid != ""):
-            subprocess.run(["sudo", "nmcli", "device", "disconnect", "wlan0"], check=True)
-        try:
-            print("Trying to Connect")
-            # subprocess.run("nmcli device wifi connect \"rpicamlab\" password \"rpicamlab\"", shell=True)
-            subprocess.run(["sudo", "nmcli", "dev", "wifi", "connect", host_ssid, "password", host_password], check=True)
-            # subprocess.run([
-            #     "sudo", "nmcli", "connection", "add",
-            #     "type", "wifi",
-            #     "ifname", "wlan0",
-            #     "con-name", "static_rpicamlab",
-            #     "ssid", host_ssid,
-            #     "wifi-sec.key-mgmt", "wpa-psk",
-            #     "wifi-sec.psk", host_password,
-            #     "ipv4.method", "manual",
-            #     "ipv4.addresses", "10.42.0.10/24",
-            #     "ipv4.gateway", "10.42.0.1",
-            #     "ipv4.dns", "8.8.8.8"
-            # ], check=True)
+while True:
+    if subprocess.check_output(["sudo", "iwgetid", "-r"], encoding="utf-8").strip() == host_ssid:
+        print(f"Connected to {host_ssid}")
+        break
+    # Ask NM to connect (it will rescan if needed)
+    subprocess.run(["sudo","nmcli","-w","20","dev","wifi","connect", host_ssid, "password", host_password],
+                    check=False)
+    time.sleep(1)
 
-            # subprocess.run(["sudo", "nmcli", "connection", "up", "static_rpicamlab"], check=True)
 
-            # print("Setting SSID")
-            # subprocess.run([
-            #     "sudo", "wpa_cli", "set_network", network_id, "ssid", f'\"{host_ssid}\"'
-            # ], check=True)
-            # print("Setting Password")
-            # subprocess.run([
-            #     "sudo", "wpa_cli", "set_network", network_id, "psk", f'\"{host_password}\"'
-            # ], check=True)
-            # print("Enabling Network")
-            # subprocess.run(["sudo", "wpa_cli", "enable_network", network_id], check=True)
-            # print("Selecting Network")
-            # subprocess.run(["sudo", "wpa_cli", "select_network", network_id], check=True)
-            # print("Saving Configuration")
-            # subprocess.run(["sudo", "wpa_cli", "save_config"], check=True)
-            # print(f"Connected to Wi-Fi network: {host_ssid}")
-            connected_ssid = subprocess.check_output(["sudo", "iwgetid", "-r"], encoding="utf-8").strip()
-        except subprocess.CalledProcessError as e:
-            # connected_ssid = subprocess.check_output(["sudo", "iwgetid", "-r"], encoding="utf-8").strip()
-            if(connected_ssid != "" and connected_ssid != host_ssid):
-                subprocess.run(["sudo", "nmcli", "device", "disconnect", "wlan0"], check=True)
-            print("Could not Connect, Trying Again...")
+# while host_ssid not in ssids:
+#     result = subprocess.check_output(["sudo", "iwlist", "wlan0", "scan"], encoding="utf-8")
+#     ssids = re.findall(r'ESSID:"(.*?)"', result)
+# print("Host Network Found")
+# print("Connecting to Host Network")
+# try:
+#     connected_ssid = subprocess.check_output(["sudo", "iwgetid", "-r"], encoding="utf-8").strip()
+# except subprocess.CalledProcessError as e:
+#     connected_ssid = ""
+# if(connected_ssid != host_ssid):
+#     # print("Disconnecting from Current Network")
+#     # subprocess.run(["sudo", "wpa_cli", "disconnect"], check=True)
+#     # network_id = subprocess.check_output(
+#     #     ["sudo", "wpa_cli", "add_network"], text=True
+#     # ).strip()
+#     # # print(f"Network ID: {network_id}")
+#     # subprocess.run(["nmcli", "dev", "disconnect"], check=True)
+#     while connected_ssid != host_ssid:
+#         if(connected_ssid != ""):
+#             subprocess.run(["sudo", "nmcli", "device", "disconnect", "wlan0"], check=True)
+#         try:
+#             print("Trying to Connect")
+#             # subprocess.run("nmcli device wifi connect \"rpicamlab\" password \"rpicamlab\"", shell=True)
+#             subprocess.run(["sudo", "nmcli", "dev", "wifi", "connect", host_ssid, "password", host_password], check=True)
+#             # subprocess.run([
+#             #     "sudo", "nmcli", "connection", "add",
+#             #     "type", "wifi",
+#             #     "ifname", "wlan0",
+#             #     "con-name", "static_rpicamlab",
+#             #     "ssid", host_ssid,
+#             #     "wifi-sec.key-mgmt", "wpa-psk",
+#             #     "wifi-sec.psk", host_password,
+#             #     "ipv4.method", "manual",
+#             #     "ipv4.addresses", "10.42.0.10/24",
+#             #     "ipv4.gateway", "10.42.0.1",
+#             #     "ipv4.dns", "8.8.8.8"
+#             # ], check=True)
+
+#             # subprocess.run(["sudo", "nmcli", "connection", "up", "static_rpicamlab"], check=True)
+
+#             # print("Setting SSID")
+#             # subprocess.run([
+#             #     "sudo", "wpa_cli", "set_network", network_id, "ssid", f'\"{host_ssid}\"'
+#             # ], check=True)
+#             # print("Setting Password")
+#             # subprocess.run([
+#             #     "sudo", "wpa_cli", "set_network", network_id, "psk", f'\"{host_password}\"'
+#             # ], check=True)
+#             # print("Enabling Network")
+#             # subprocess.run(["sudo", "wpa_cli", "enable_network", network_id], check=True)
+#             # print("Selecting Network")
+#             # subprocess.run(["sudo", "wpa_cli", "select_network", network_id], check=True)
+#             # print("Saving Configuration")
+#             # subprocess.run(["sudo", "wpa_cli", "save_config"], check=True)
+#             # print(f"Connected to Wi-Fi network: {host_ssid}")
+#             connected_ssid = subprocess.check_output(["sudo", "iwgetid", "-r"], encoding="utf-8").strip()
+#         except subprocess.CalledProcessError as e:
+#             # connected_ssid = subprocess.check_output(["sudo", "iwgetid", "-r"], encoding="utf-8").strip()
+#             if(connected_ssid != "" and connected_ssid != host_ssid):
+#                 subprocess.run(["sudo", "nmcli", "device", "disconnect", "wlan0"], check=True)
+#             print("Could not Connect, Trying Again...")
 print("Creating Socket")
 get_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print("Connecting to Host for Port")
