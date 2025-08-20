@@ -90,8 +90,8 @@ print("Creating Camera")
 cam = Picamera2()
 print("Camera Created")
 print("Configuring Camera")
-# cam.preview_configuration.main.size = (3280, 2464)
-cam.preview_configuration.main.size = (2592, 1944)
+cam.preview_configuration.main.size = (3280, 2464)
+# cam.preview_configuration.main.size = (2592, 1944)
 cam.preview_configuration.main.format = "RGB888"
 cam.configure("preview")
 print("Camera Configured")
@@ -112,10 +112,10 @@ subprocess.run("echo 1 | sudo tee /sys/class/leds/ACT/brightness", shell=True)
 while GPIO.input(3) == GPIO.HIGH:
     print("Capturing")
     frame = cam.capture_array()
-    # frame = frame[0:2464, 410:2870] 
+    frame = frame[0:2464, 410:2870] 
     # 0.75 2460 410 2870
     # 0.75 1944 324 2268
-    frame = frame[0:1944, 324:2268]
+    # frame = frame[0:1944, 324:2268]
     print("Encoding")
     _, encoded = cv2.imencode(".jpg", frame)
     encoded_bytes = encoded.tobytes() + b"e"
