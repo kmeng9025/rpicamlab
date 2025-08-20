@@ -93,7 +93,7 @@ def open_port(port):
     frame_data = bytearray()
     print(port, "Starting Receiving Loop")
     dropped = False
-    queue[port] = []
+    queue[str(port)] = []
     try:
         while True:
             print(port, "Waiting for Data")
@@ -114,7 +114,7 @@ def open_port(port):
                 image = cv2.imdecode(np_data, cv2.IMREAD_COLOR)
                 if (image is not None):
                     print(port, "Frame Is Good")
-                    queue[port].append(image)
+                    queue[str(port)].append(image)
                 else:
                     print(port, "Dropped Frame")
                 frame_data = bytearray()
@@ -125,10 +125,10 @@ def open_port(port):
                 used_ports.remove(client_socket)
                 print(port, "Closed Port")
                 break
-            # elif(len(data) < 1024):
-            #     frame_data = bytearray()
-            #     dropped = True
-            #     print(port, "Dropped Frame")
+            elif(len(data) < 1024):
+                frame_data = bytearray()
+                dropped = True
+                print(port, "Dropped Frame")
     except:
         print("Port disconnected")
 
