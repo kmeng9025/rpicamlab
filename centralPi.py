@@ -10,6 +10,9 @@ import cv2
 used_ports = []
 server_socket = None
 
+queue = {}
+
+
 def main():
     global server_socket
     binding_socket = 7000
@@ -23,7 +26,16 @@ def main():
     server_socket.listen(10)
     current_port = binding_socket + 1
     print("Starting Listener")
-    # threading.Thread(target=listen_for_exit).start()
+    threading.Thread(target=listen_for_exit).start()
+    threading.Thread(target=listener).start()
+    while True:
+        for i in queue.keys():
+            if(queue[i] != []):
+                cv2.imshow(i + " stream", queue[i][0])
+                queue[i].pop(0)
+
+
+def listener():
     while True:
         print("Waiting for Camera Pi")
         client_socket, client_address = server_socket.accept()
@@ -41,11 +53,11 @@ def main():
         client_socket.close()
         print("Closed Camera Pi Assigning Socket")
         print("Creating New Thread for Port:", current_port)
-        # client_thread = threading.Thread(target=open_port, args=(current_port,))
-        open_port(current_port)
+        client_thread = threading.Thread(target=open_port, args=(current_port,))
+        # open_port(current_port)
         print("Created New Thread for Streaming")
         print("Starting Streaming Thread")
-        # client_thread.start()
+        client_thread.start()
         print("Started Streaming Thread")
 
 
@@ -81,6 +93,7 @@ def open_port(port):
     frame_data = bytearray()
     print(port, "Starting Receiving Loop")
     dropped = False
+    queue[port] = []
     try:
         while True:
             print(port, "Waiting for Data")
@@ -101,7 +114,7 @@ def open_port(port):
                 image = cv2.imdecode(np_data, cv2.IMREAD_COLOR)
                 if (image is not None):
                     print(port, "Frame Is Good")
-                    cv2.imshow(str(port) + " stream", image)
+                    queue[port].append(image)
                 else:
                     print(port, "Dropped Frame")
                 frame_data = bytearray()
