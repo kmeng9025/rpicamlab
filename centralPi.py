@@ -79,6 +79,7 @@ def clean_up():
             i.close()
         except:
             pass
+    exit(0)
 
 
 def open_port(port):
