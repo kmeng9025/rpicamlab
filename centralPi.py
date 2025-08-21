@@ -182,7 +182,7 @@ def clean_up():
 
 def clear_window():
     for widget in root_window.winfo_children():
-        widget.destroy()
+        widget.pack_forget()
 
 
 def open_port(port, client_address):
