@@ -42,6 +42,7 @@ def initialize_main_window():
     start_all_camera.place(x=10, y=50)
     stop_all_camera = tkinter.Button(root_window, text="Stop All Cameras", command=stop_all_cameras)
     stop_all_camera.place(x=10, y=80)
+    print(buttons.keys())
     for i in buttons.keys():
         # color = "green" if used_ports[i[0]][2] else "red"
         # buttons[i].config(background=color)
@@ -63,7 +64,7 @@ def periodic_main_window():
     for i in change_buttons:
         if(i[2]):
             color = "green" if used_ports[i[0]][2] else "red"
-            button = tkinter.Button(root_window, text=i[1], background=color, command=partial(camera_clicked, i[0], i[1]))
+            button = tkinter.Button(root_window, text=i[1], background=color, highlightbackground=color, command=partial(camera_clicked, i[0], i[1]))
             buttons[i[0]] = button
             button.pack()
             change_buttons.pop(0)
@@ -213,16 +214,16 @@ def open_port(port, client_address):
     queue[port] = []
     try:
         while not stop:
-            print(port, "Waiting for Data")
+            # print(port, "Waiting for Data")
             data, adr = client_socket.recvfrom(1400)
-            print(port, "Data Received")
-            print(port, "Data Length:", len(data))
+            # print(port, "Data Received")
+            # print(port, "Data Length:", len(data))
             if not data:
                 print("bad")
             frame_data.extend(data)
             if frame_data.endswith(b"end"):
-                print(port, "Received End of Frame")
-                print(port, "Decoding Frame")
+                # print(port, "Received End of Frame")
+                # print(port, "Decoding Frame")
                 if dropped:
                     frame_data = bytearray()
                     dropped = False
