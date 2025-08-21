@@ -22,13 +22,14 @@ def main():
             if subprocess.check_output(["sudo", "iwgetid", "-r"], encoding="utf-8").strip() == host_ssid:
                 print(f"Connected to {host_ssid}")
                 break
+            subprocess.run(["nmcli", "dev", "disconnect", "wlan0"], check=False)
+            subprocess.run(["nmcli", "dev", "wifi", "rescan"], check=False)
+            subprocess.run(["sudo","nmcli","dev","wifi","connect", host_ssid, "password", host_password],
+                            check=False)
         except:
             print("Not Connected")
         # Ask NM to connect (it will rescan if needed)
-        subprocess.run(["nmcli", "dev", "disconnect", "wlan0"], check=False)
-        subprocess.run(["nmcli", "dev", "wifi", "rescan"], check=False)
-        subprocess.run(["sudo","nmcli","dev","wifi","connect", host_ssid, "password", host_password],
-                        check=False)
+        
         time.sleep(1)
 
     print("Creating Socket")

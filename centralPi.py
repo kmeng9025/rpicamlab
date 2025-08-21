@@ -175,7 +175,7 @@ def open_port(port, client_address):
             ret, frame = cap.read()
             if ret:
                 # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                cv2.imshow(frame)
+                cv2.imshow("hi", frame)
                 # if(streaming_cameras.count(port) != 0):
                     # queue[port].append(frame)
             # print(port, "Waiting for Data")
