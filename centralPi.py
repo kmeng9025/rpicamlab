@@ -62,7 +62,7 @@ def camera_clicked(port, name):
 def start_video(port):
     global video_label
     video_label = tkinter.Label(root_window)
-    video_label.place()
+    video_label.place(x=0, y=0)
     # cv2.imshow(" stream", queue[i][-1])
     streaming_cameras.append(port)
     display_video(port)
