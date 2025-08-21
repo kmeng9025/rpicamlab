@@ -38,8 +38,9 @@ def initialize_main_window():
 def periodic_main_window():
     for i in change_buttons:
         try:
-            tkinter.Button(root_window, text=i[0], command=partial(camera_clicked, i[0], i[1]))
-            buttons.append(change_buttons[i])
+            button = tkinter.Button(root_window, text=i[0], command=partial(camera_clicked, i[0], i[1]))
+            buttons.append(button)
+            button.pack()
         except:
             print(i)
 
