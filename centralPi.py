@@ -5,6 +5,8 @@ import os
 import errno
 import numpy
 import cv2
+import tkinter
+from PIL import Image, ImageTk
 
 
 used_ports = []
@@ -12,18 +14,32 @@ server_socket = None
 stop = False
 
 queue = {}
-
+root_window = tkinter.Tk()
+root_window.title("Stream")
+video_label = tkinter.Label(root_window)
+video_label.pack()
 
 def main():
     # threading.Thread(target=listen_for_exit).start()
     threading.Thread(target=listener).start()
-    while True:
-        for i in queue.keys():
-            if(queue[i] != []):
-                cv2.imshow(i + " stream", queue[i][0])
-                queue[i].pop(0)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            clean_up()
+    root_window.mainloop()
+    display_video()
+        
+
+
+def display_video():
+    for i in queue.keys():
+        if(queue[i] != []):
+            image = Image.fromarray(queue[i][-1])
+            image_tk = ImageTk.PhotoImage(image=image)
+            video_label.config(image=image_tk)
+            video_label.image = image_tk
+            # cv2.imshow(i + " stream", queue[i][-1])
+            queue[i].pop(-1)
+            queue[i] = []
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        clean_up()
+    root_window.after(10, display_video)
 
 
 def listener():
