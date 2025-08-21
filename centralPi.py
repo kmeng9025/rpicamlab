@@ -87,6 +87,8 @@ def camera_clicked(port, name):
     startCamera.pack()
     stopCamera = tkinter.Button(root_window, text="Stop Camera", command=partial(stop_camera, port))
     stopCamera.pack()
+    back = tkinter.Button(root_window, text="Back", command=initialize_main_window)
+    back.pack()
 
 def start_camera(port):
     used_ports[port][1].send(b"start")
