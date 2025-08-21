@@ -10,9 +10,11 @@ import threading
 
 print("Camera Program Started")
 print("Scanning for Network")
+port = 0
 def main():
     global streaming
     global stream
+    global port
     host_ssid = "rpicamlab"
     host_password = "rpicamlab"
     ssids = []
@@ -148,11 +150,11 @@ def check_stop():
         data = command_socket.recv(65535).decode()
         if data == "start":
             print("Received Command to Start Recording")
-            stream = start_stream()
+            stream = start_stream("10.42.0.1", port)
             recording = True
         elif data == "stop":
             print("Received Command to Stop Recording")
-            stream.close()
+            stream.kill()
             recording = False
         else:
             print("Received Command to Stop Program")
