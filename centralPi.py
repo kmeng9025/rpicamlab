@@ -144,13 +144,13 @@ def clean_up():
 
 def open_port(port, client_address):
     global used_ports
-    print(port, "In New Streaming Thread Port")
-    print(port, "Creating UDP Streaming Socket")
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    print(port, "Created UDP Streaming socket")
-    print(port, "Binding Streaming Socket to Port")
-    client_socket.bind(("0.0.0.0", port))
-    print(port, "Binded Streaming to Port")
+    # print(port, "In New Streaming Thread Port")
+    # print(port, "Creating UDP Streaming Socket")
+    # client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # print(port, "Created UDP Streaming socket")
+    # print(port, "Binding Streaming Socket to Port")
+    # client_socket.bind(("0.0.0.0", port))
+    # print(port, "Binded Streaming to Port")
     # print("Binding to Camera Command Port")
     command_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # print("Binded to Camera Command Port")
