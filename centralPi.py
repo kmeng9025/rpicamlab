@@ -24,7 +24,7 @@ def main():
     threading.Thread(target=listener).start()
     root_window.mainloop()
     initialize_main_window()
-    display_video()
+    # display_video()
         
 
 def initialize_main_window():
