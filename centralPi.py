@@ -170,37 +170,43 @@ def open_port(port, client_address):
     dropped = False
     queue[port] = []
     try:
+        cap = cv2.VideoCapture("udp://0.0.0.0:" + str(port))
         while not stop:
-            print(port, "Waiting for Data")
-            data, adr = client_socket.recvfrom(1400)
-            print(port, "Data Received")
-            print(port, "Data Length:", len(data))
-            if not data:
-                print("bad")
-            frame_data.extend(data)
-            if frame_data.endswith(b"end"):
-                print(port, "Received End of Frame")
-                print(port, "Decoding Frame")
-                if dropped:
-                    frame_data = bytearray()
-                    dropped = False
-                    continue
-                np_data = numpy.frombuffer(frame_data.removesuffix(b"end"), dtype=numpy.uint8)
-                image = cv2.imdecode(np_data, cv2.IMREAD_COLOR)
-                if (image is not None):
-                    print(port, "Frame Is Good")
-                    if(streaming_cameras.count(port) != 0):
-                        queue[port].append(image)
-                else:
-                    print(port, "Dropped Frame")
-                frame_data = bytearray()
-            elif (frame_data.endswith(b"c") and len(frame_data) == 1):
-                print(port, "Received Request To Close Streaming Port")
-                print(port, "Closing Port")
-                client_socket.close()
-                used_ports.pop(port)
-                print(port, "Closed Port")
-                break
+            ret, frame = cap.read()
+            if ret:
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                if(streaming_cameras.count(port) != 0):
+                    queue[port].append(frame)
+            # print(port, "Waiting for Data")
+            # data, adr = client_socket.recvfrom(1400)
+            # print(port, "Data Received")
+            # print(port, "Data Length:", len(data))
+            # if not data:
+            #     print("bad")
+            # frame_data.extend(data)
+            # if frame_data.endswith(b"end"):
+            #     print(port, "Received End of Frame")
+            #     print(port, "Decoding Frame")
+            #     if dropped:
+            #         frame_data = bytearray()
+            #         dropped = False
+            #         continue
+            #     np_data = numpy.frombuffer(frame_data.removesuffix(b"end"), dtype=numpy.uint8)
+            #     image = cv2.imdecode(np_data, cv2.IMREAD_COLOR)
+            #     if (image is not None):
+            #         print(port, "Frame Is Good")
+            #         if(streaming_cameras.count(port) != 0):
+            #             queue[port].append(image)
+            #     else:
+            #         print(port, "Dropped Frame")
+            #     frame_data = bytearray()
+            # elif (frame_data.endswith(b"c") and len(frame_data) == 1):
+            #     print(port, "Received Request To Close Streaming Port")
+            #     print(port, "Closing Port")
+            #     client_socket.close()
+            #     used_ports.pop(port)
+            #     print(port, "Closed Port")
+            #     break
     except:
         print("Port disconnected")
     used_ports[port] = ""
