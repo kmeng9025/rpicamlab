@@ -255,7 +255,7 @@ def open_port(port, client_address):
                 break
     except:
         print("Port disconnected")
-    used_ports.pop(port)
+    # used_ports.pop(port)
     change_buttons.append([port, name, False])
     command_socket.send(b"stop")
     command_socket.close()
