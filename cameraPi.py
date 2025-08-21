@@ -68,7 +68,7 @@ def main():
                 # 0.75 1944 324 2268
                 frame = frame[0:1944, 324:2268]
                 print("Encoding")
-                _, encoded = cv2.imencode(".jpg", cv2.cvtColor(frame, cv2.COLOR_RGB2BGR), 75)
+                _, encoded = cv2.imencode(".jpg", cv2.cvtColor(frame, cv2.COLOR_RGB2BGR),  [int(cv2.IMWRITE_JPEG_QUALITY), 75])
                 encoded_bytes = encoded.tobytes() + b"end"
                 print("Sending\n")
                 for i in range(0, len(encoded_bytes), 1400):
