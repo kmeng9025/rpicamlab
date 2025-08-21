@@ -166,7 +166,8 @@ def open_port(port, client_address):
     print("DEBUGGING, SENDING START IMMEDIATELY")
     try:
         command_socket.send(b"start")
-    except
+    except:
+        print("HASUHKH")
     # frame_data = bytearray()
     # print(port, "Starting Receiving Loop")
     # dropped = False
