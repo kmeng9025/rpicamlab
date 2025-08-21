@@ -172,7 +172,9 @@ def open_port(port, client_address):
     # frame_data = bytearray()
     # print(port, "Starting Receiving Loop")
     # dropped = False
+    print("hisdasdf")
     queue[port] = []
+    print("dgfhjd")
     try:
         cap = cv2.VideoCapture("udp://0.0.0.0:" + str(port))
         print("hisd")
