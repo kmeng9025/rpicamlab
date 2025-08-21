@@ -236,11 +236,14 @@ def open_port(port, client_address):
     print(port, "Starting Receiving Loop")
     dropped = False
     queue[port] = []
-    client_socket.settimeout(lambda: 0 if stop else None)
+    client_socket.settimeout(5)
     try:
         while not stop:
             # print(port, "Waiting for Data")
-            data, adr = client_socket.recvfrom(1400)
+            try:
+                data, adr = client_socket.recvfrom(1400)
+            except:
+                continue
             # print(port, "Data Received")
             # print(port, "Data Length:", len(data))
             if not data:
