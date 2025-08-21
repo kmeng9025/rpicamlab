@@ -118,6 +118,8 @@ def check_stop():
         else:
             print("Received Command to Stop Program")
             stop = True
+            time.sleep(0.5)
+            exit(0)
 
 # while True:
 # while GPIO.input(3) != GPIO.HIGH:

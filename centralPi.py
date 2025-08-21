@@ -42,7 +42,7 @@ def initialize_main_window():
 
 def periodic_main_window():
     for i in change_buttons:
-        if(i[3]):
+        if(i[2]):
             button = tkinter.Button(root_window, text=i[1], command=partial(camera_clicked, i[0], i[1]))
             buttons[i[0]] = button
             button.pack()
