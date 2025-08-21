@@ -44,6 +44,7 @@ def initialize_main_window():
     stop_all_camera.place(x=10, y=80)
     print(buttons.keys())
     for i in buttons.keys():
+        i = buttons[i]
         color = "green" if used_ports[i[0]][2] else "red"
         tkinter.Button(root_window, text=buttons[i], background=color, highlightbackground=color, command=partial(camera_clicked, i[0], i[1]))
         buttons[i].pack()
