@@ -13,9 +13,11 @@ import time
 
 used_ports = {}
 change_buttons = []
-buttons = []
+buttons = {}
 server_socket = None
 stop = False
+window = "m"
+streaming_cameras = []
 
 queue = {}
 root_window = tkinter.Tk()
@@ -33,39 +35,46 @@ def main():
 def initialize_main_window():
     text_camera = tkinter.Label(root_window, text="Cameras")
     text_camera.place(x=10, y=30)
+    for i in buttons.keys():
+        buttons[i].pack()
     periodic_main_window()
 
 
 def periodic_main_window():
     for i in change_buttons:
-        try:
-            button = tkinter.Button(root_window, text=i[0], command=partial(camera_clicked, i[0], i[1]))
-            buttons.append(button)
+        if(i[3]):
+            button = tkinter.Button(root_window, text=i[1], command=partial(camera_clicked, i[0], i[1]))
+            buttons[i[0]] = button
             button.pack()
             change_buttons.pop(0)
-        except:
-            print(i)
-    root_window.after(10, periodic_main_window)
-
+        else:
+            buttons.pop(i[0])
+    if window == "m":
+        root_window.after(10, periodic_main_window)
+    
 
 def camera_clicked(port, name):
     print("Camera clicked", port, name)
+    root_window.title("Camera", name)
+    buttonStream = tkinter.Button(root_window, text="Stream camera", command=partial(start_video, port))
 
 
-def display_video():
-    for i in queue.keys():
-        if(queue[i] != []):
-            image = Image.fromarray(queue[i][-1])
-            image_tk = ImageTk.PhotoImage(image=image)
-            # video_label = tkinter.Label(root_window)
-            # video_label.place()
-            # video_label.config(image=image_tk)
-            # video_label.image = image_tk
-            # cv2.imshow(i + " stream", queue[i][-1])
-            queue[i].pop(-1)
-            queue[i] = []
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        clean_up()
+def start_video(port):
+    global video_label
+    video_label = tkinter.Label(root_window)
+    video_label.place()
+    # cv2.imshow(" stream", queue[i][-1])
+    streaming_cameras.append(port)
+    display_video(port)
+
+
+def display_video(port):
+    image = Image.fromarray(queue[port][-1])
+    image_tk = ImageTk.PhotoImage(image=image)
+    video_label.config(image=image_tk)
+    video_label.image = image_tk
+    queue[port].pop(-1)
+    queue[port] = []
     root_window.after(10, display_video)
 
 
@@ -171,7 +180,8 @@ def open_port(port, client_address):
                 image = cv2.imdecode(np_data, cv2.IMREAD_COLOR)
                 if (image is not None):
                     print(port, "Frame Is Good")
-                    queue[str(port)].append(image)
+                    if(streaming_cameras.count(port) != 0):
+                        queue[str(port)].append(image)
                 else:
                     print(port, "Dropped Frame")
                 frame_data = bytearray()
