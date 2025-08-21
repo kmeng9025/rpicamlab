@@ -56,6 +56,7 @@ def periodic_main_window():
 
 def camera_clicked(port, name):
     global window
+    clear_window()
     print("Camera clicked", port, name)
     window = "c"
     root_window.title("Camera " + str(name))
@@ -148,6 +149,7 @@ def clean_up():
 def clear_window():
     for widget in root_window.winfo_children():
         widget.destroy()
+
 
 def open_port(port, client_address):
     global used_ports
