@@ -63,8 +63,8 @@ def main():
     try:
         while not stop:
             if (streaming):
-                stream[0].stop()
-                stream[1].stop()
+                stream.stop()
+                # stream[1].stop()
                 streaming = False
             while recording:
                 if (not streaming):
@@ -106,29 +106,18 @@ def start_stream(central_ip, port):
     global streaming
     streaming = True
     cmd = [
-        "rpicam-vid",
-        "-t", "0",
-        "--inline",
-        "--width", "3280",
-        "--height", "2464",
-        "--framerate", "20",
-        "--codec", "h264",
-        "-o", "-",  # output to stdout
+        "bash", "-c",
+        f"rpicam-vid -t 0 --inline --codec h264 --width 3280 --height 2464 --framerate 30 -o - "
+        f"| ffmpeg -re -ar 44100 -ac 2 -f h264 -i - "
+        f"-c:v copy -f mpegts udp://{central_ip}:{port}"
     ]
-    ffmpeg_cmd = [
-        "ffmpeg",
-        "-re",
-        "-i", "-",
-        "-c", "copy",
-        "-f", "mpegts",
-        f"udp://{central_ip}:{port}"
-    ]
+    
 
     # pipe libcamera into ffmpeg
     libcamera = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    ffmpeg = subprocess.Popen(ffmpeg_cmd, stdin=libcamera.stdout)
+    # ffmpeg = subprocess.Popen(ffmpeg_cmd, stdin=libcamera.stdout)
 
-    return libcamera, ffmpeg
+    return libcamera
 
 
 
