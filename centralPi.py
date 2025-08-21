@@ -164,7 +164,9 @@ def open_port(port, client_address):
     change_buttons.append((port, name, True))
     print("Name Received")
     print("DEBUGGING, SENDING START IMMEDIATELY")
-    command_socket.send(b"start")
+    try:
+        command_socket.send(b"start")
+    except
     # frame_data = bytearray()
     # print(port, "Starting Receiving Loop")
     # dropped = False

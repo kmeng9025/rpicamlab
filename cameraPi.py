@@ -121,7 +121,7 @@ def start_stream(ip, port):
         "-c:v", "h264_v4l2m2m",
         "-b:v", "2M",
         "-f", "mpegts",
-        f"udp://{ip}:{port}?pkt_size=1316"
+        f"udp://{ip}:{str(port)}?pkt_size=1316"
     ]
     return subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
