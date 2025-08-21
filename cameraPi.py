@@ -54,7 +54,7 @@ def main():
     cam.start()
     print("Camera Started")
     time.sleep(0.5)
-    threading.Thread(target=check_stop)
+    threading.Thread(target=check_stop).start()
     blinking_time = datetime.datetime.now()
     led_on = True
     subprocess.run("echo 1 | sudo tee /sys/class/leds/ACT/brightness", shell=True)

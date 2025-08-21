@@ -94,7 +94,7 @@ def listener():
         print("Found Available Port:", current_port)
         print("Assigning Available Port:", current_port)
         client_socket.send(str(current_port).encode())
-        name = client_socket.recv(65535).decode()
+        # name = client_socket.recv(65535).decode()
         print("Assigned Available Port")
         print("Closing Camera Pi Assigning Socket")
         client_socket.close()
@@ -124,7 +124,7 @@ def clean_up():
     exit(0)
 
 
-def open_port(port, client_address, name):
+def open_port(port, client_address):
     global used_ports
     print(port, "In New Streaming Thread Port")
     print(port, "Creating UDP Streaming Socket")
@@ -133,15 +133,15 @@ def open_port(port, client_address, name):
     print(port, "Binding Streaming Socket to Port")
     client_socket.bind(("0.0.0.0", port))
     print(port, "Binded Streaming to Port")
-    print("Binding to Camera Command Port")
+    # print("Binding to Camera Command Port")
     command_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    print("Binded to Camera Command Port")
-    print("Connecting to Host for Port")
+    # print("Binded to Camera Command Port")
+    print("Connecting to Client")
     time.sleep(1)
     command_socket.connect((client_address[0], 7000))
     print("Connected to Client Command Port")
     print("Receiving Name from Client")
-    # name = command_socket.recv(65535).decode()
+    name = command_socket.recv(65535).decode()
     used_ports[port] = (name)
     change_buttons.append((port, name))
     print("Name Received")
