@@ -9,21 +9,21 @@ import tkinter
 from PIL import Image, ImageTk
 
 
-used_ports = []
+used_ports = {}
 server_socket = None
 stop = False
 
 queue = {}
 root_window = tkinter.Tk()
 root_window.title("Camera Control")
-video_label = tkinter.Label(root_window)
-video_label.place()
+# video_label = tkinter.Label(root_window)
+# video_label.place()
 
 def main():
     # threading.Thread(target=listen_for_exit).start()
     threading.Thread(target=listener).start()
-    root_window.mainloop()
     initialize_main_window()
+    root_window.mainloop()
     # display_video()
         
 
@@ -120,7 +120,7 @@ def open_port(port, client_address):
     command_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     print("Binded to Camera Command Port")
     print("Connecting to Host for Port")
-    command_socket.connect((client_address, 7000))
+    command_socket.connect((client_address[0], 7000))
     print("Connected to Client Command Port")
     print("Receiving Name from Client")
     name = command_socket.recv(65535).decode()
