@@ -27,7 +27,7 @@ def on_close():
     clean_up()
     kill_all_cameras()
     root_window.destroy()
-    exit()
+    exit(0)
 root_window.protocol("WM_DELETE_WINDOW", on_close)
 
 def main():
@@ -203,8 +203,6 @@ def clean_up():
         server_socket.close()
     except:
         pass
-    exit(0)
-
 
 def clear_window():
     for widget in root_window.winfo_children():
@@ -238,6 +236,7 @@ def open_port(port, client_address):
     print(port, "Starting Receiving Loop")
     dropped = False
     queue[port] = []
+    client_socket.settimeout(5)
     try:
         while not stop:
             # print(port, "Waiting for Data")
