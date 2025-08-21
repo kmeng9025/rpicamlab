@@ -23,6 +23,12 @@ queue = {}
 root_window = tkinter.Tk()
 root_window.title("Camera Control")
 root_window.geometry("600x600")
+def on_close():
+    clean_up()
+    kill_all_cameras()
+    root_window.destroy()
+    exit()
+root_window.protocol("WM_DELETE_WINDOW", on_close)
 
 def main():
     # threading.Thread(target=listen_for_exit).start()
@@ -58,6 +64,13 @@ def start_all_cameras():
         used_ports[i][1].send(b"start")
         used_ports[i][2] = True
     initialize_main_window()
+
+def kill_all_cameras():
+    for i in used_ports.keys():
+        try:
+            used_ports[i][1].send(b"stop")
+        except:
+            continue
 
 def stop_all_cameras():
     for i in used_ports.keys():
