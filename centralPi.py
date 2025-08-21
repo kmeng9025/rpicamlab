@@ -8,6 +8,7 @@ import cv2
 import tkinter
 from PIL import Image, ImageTk
 from functools import partial
+import time
 
 
 used_ports = {}
@@ -93,12 +94,13 @@ def listener():
         print("Found Available Port:", current_port)
         print("Assigning Available Port:", current_port)
         client_socket.send(str(current_port).encode())
+        name = client_socket.recv(65535).decode()
         print("Assigned Available Port")
         print("Closing Camera Pi Assigning Socket")
         client_socket.close()
         print("Closed Camera Pi Assigning Socket")
         print("Creating New Thread for Port:", current_port)
-        client_thread = threading.Thread(target=open_port, args=(current_port, client_address))
+        client_thread = threading.Thread(target=open_port, args=(current_port, client_address, name))
         # open_port(current_port)
         print("Created New Thread for Streaming")
         print("Starting Streaming Thread")
@@ -122,7 +124,7 @@ def clean_up():
     exit(0)
 
 
-def open_port(port, client_address):
+def open_port(port, client_address, name):
     global used_ports
     print(port, "In New Streaming Thread Port")
     print(port, "Creating UDP Streaming Socket")
@@ -135,10 +137,11 @@ def open_port(port, client_address):
     command_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     print("Binded to Camera Command Port")
     print("Connecting to Host for Port")
+    time.sleep(1)
     command_socket.connect((client_address[0], 7000))
     print("Connected to Client Command Port")
     print("Receiving Name from Client")
-    name = command_socket.recv(65535).decode()
+    # name = command_socket.recv(65535).decode()
     used_ports[port] = (name)
     change_buttons.append((port, name))
     print("Name Received")
