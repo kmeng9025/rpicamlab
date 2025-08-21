@@ -20,6 +20,8 @@ def main():
             print(f"Connected to {host_ssid}")
             break
         # Ask NM to connect (it will rescan if needed)
+        subprocess.run(["nmcli", "dev", "disconnect", "wlan0"], check=False)
+        subprocess.run(["nmcli", "dev", "wifi", "rescan"], check=False)
         subprocess.run(["sudo","nmcli","dev","wifi","connect", host_ssid, "password", host_password],
                         check=False)
         time.sleep(1)
