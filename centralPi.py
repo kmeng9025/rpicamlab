@@ -57,7 +57,7 @@ def camera_clicked(port, name):
     global window
     print("Camera clicked", port, name)
     window = "c"
-    root_window.title("Camera", name)
+    root_window.title("Camera " + str(name))
     buttonStream = tkinter.Button(root_window, text="Stream camera", command=partial(start_video, port))
     buttonStream.pack()
 
@@ -81,7 +81,7 @@ def display_video(port):
     queue[port].pop(-1)
     queue[port] = []
     if(window == "v"):
-        root_window.after(10, display_video)
+        root_window.after(10, partial(display_video, port))
 
 
 def listener():
@@ -195,7 +195,7 @@ def open_port(port, client_address):
                 print(port, "Received Request To Close Streaming Port")
                 print(port, "Closing Port")
                 client_socket.close()
-                used_ports.remove(client_socket)
+                used_ports.pop(port)
                 print(port, "Closed Port")
                 break
     except:
