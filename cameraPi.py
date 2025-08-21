@@ -11,6 +11,8 @@ import threading
 print("Camera Program Started")
 print("Scanning for Network")
 def main():
+    global streaming
+    global stream
     host_ssid = "rpicamlab"
     host_password = "rpicamlab"
     ssids = []
@@ -41,18 +43,18 @@ def main():
     print("Closed Asking Port")
     print("Creating Socket for UDP")
     data_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    print("Creating Camera")
-    cam = Picamera2()
-    print("Camera Created")
-    print("Configuring Camera")
-    cam.preview_configuration.main.size = (3280, 2464)
-    # cam.preview_configuration.main.size = (2592, 1944)
-    cam.preview_configuration.main.format = "RGB888"
-    cam.configure("preview")
-    print("Camera Configured")
-    print("Starting Camera")
-    cam.start()
-    print("Camera Started")
+    # print("Creating Camera")
+    # cam = Picamera2()
+    # print("Camera Created")
+    # print("Configuring Camera")
+    # cam.preview_configuration.main.size = (3280, 2464)
+    # # cam.preview_configuration.main.size = (2592, 1944)
+    # cam.preview_configuration.main.format = "RGB888"
+    # cam.configure("preview")
+    # print("Camera Configured")
+    # print("Starting Camera")
+    # cam.start()
+    # print("Camera Started")
     time.sleep(0.5)
     threading.Thread(target=check_stop).start()
     blinking_time = datetime.datetime.now()
@@ -60,28 +62,35 @@ def main():
     subprocess.run("echo 1 | sudo tee /sys/class/leds/ACT/brightness", shell=True)
     try:
         while not stop:
+            if (streaming):
+                stream[0].stop()
+                stream[1].stop()
+                streaming = False
             while recording:
-                print("Capturing")
-                frame = cam.capture_array()
-                frame = frame[0:2464, 410:2870] 
-                # 0.75 2460 410 2870
-                # 0.75 1944 324 2268
-                # frame = frame[0:1944, 324:2268]
-                print("Encoding")
-                _, encoded = cv2.imencode(".jpg", cv2.cvtColor(frame, cv2.COLOR_RGB2BGR),  [int(cv2.IMWRITE_JPEG_QUALITY), 75])
-                encoded_bytes = encoded.tobytes() + b"end"
-                print("Sending\n")
-                for i in range(0, len(encoded_bytes), 1400):
-                    data_socket.sendto(encoded_bytes[i:i+1400], (Host_IP, port))
-                if((datetime.datetime.now()-blinking_time).total_seconds() > 1):
-                    if(led_on):
-                        subprocess.run("echo 0 | sudo tee /sys/class/leds/ACT/brightness", shell=True)
-                        led_on = False
-                        blinking_time = datetime.datetime.now()
-                    else:
-                        subprocess.run("echo 1 | sudo tee /sys/class/leds/ACT/brightness", shell=True)
-                        led_on = True
-                        blinking_time = datetime.datetime.now()
+                if (not streaming):
+                    stream = start_stream(Host_IP, port)
+                
+            #     print("Capturing")
+            #     frame = cam.capture_array()
+            #     frame = frame[0:2464, 410:2870] 
+            #     # 0.75 2460 410 2870
+            #     # 0.75 1944 324 2268
+            #     # frame = frame[0:1944, 324:2268]
+            #     print("Encoding")
+            #     _, encoded = cv2.imencode(".jpg", cv2.cvtColor(frame, cv2.COLOR_RGB2BGR),  [int(cv2.IMWRITE_JPEG_QUALITY), 75])
+            #     encoded_bytes = encoded.tobytes() + b"end"
+            #     print("Sending\n")
+            #     for i in range(0, len(encoded_bytes), 1400):
+            #         data_socket.sendto(encoded_bytes[i:i+1400], (Host_IP, port))
+            #     if((datetime.datetime.now()-blinking_time).total_seconds() > 1):
+            #         if(led_on):
+            #             subprocess.run("echo 0 | sudo tee /sys/class/leds/ACT/brightness", shell=True)
+            #             led_on = False
+            #             blinking_time = datetime.datetime.now()
+            #         else:
+            #             subprocess.run("echo 1 | sudo tee /sys/class/leds/ACT/brightness", shell=True)
+            #             led_on = True
+            #             blinking_time = datetime.datetime.now()
     except Exception as e:
         print("Capturing Got Error: ", e)
     data_socket.sendto(b"c", (Host_IP, port))
@@ -90,6 +99,38 @@ def main():
     data_socket.close()
     GPIO.cleanup()
     # subprocess.run(["sudo", "nmcli", "connection", "delete", "static_rpicamlab"], check=False)
+
+streaming = False
+stream = None
+def start_stream(central_ip, port):
+    global streaming
+    streaming = True
+    cmd = [
+        "libcamera-vid",
+        "-t", "0",
+        "--inline",
+        "--width", "3280",
+        "--height", "2464",
+        "--framerate", "20",
+        "--codec", "h264",
+        "-o", "-",  # output to stdout
+    ]
+    ffmpeg_cmd = [
+        "ffmpeg",
+        "-re",
+        "-i", "-",
+        "-c", "copy",
+        "-f", "mpegts",
+        f"udp://{central_ip}:{port}"
+    ]
+
+    # pipe libcamera into ffmpeg
+    libcamera = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    ffmpeg = subprocess.Popen(ffmpeg_cmd, stdin=libcamera.stdout)
+
+    return libcamera, ffmpeg
+
+
 
 recording = False
 stop = False
