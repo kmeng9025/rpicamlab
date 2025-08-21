@@ -267,7 +267,7 @@ def main():
         except Exception: pass
         try: udp.close()
         except Exception: pass
-        print("[camera] shutdown"])
+        print("[camera] shutdown")
 
 if __name__ == "__main__":
     print("Camera Program Started")
