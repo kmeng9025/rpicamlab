@@ -33,18 +33,37 @@ def main():
         
 
 def initialize_main_window():
+    global window
     clear_window()
+    window = "m"
     text_camera = tkinter.Label(root_window, text="Cameras")
     text_camera.place(x=10, y=30)
+    start_all_camera = tkinter.Button(root_window, text="Start All Cameras", command=start_all_cameras)
+    start_all_camera.place(x=10, y=50)
+    stop_all_camera = tkinter.Button(root_window, text="Stop All Cameras", command=stop_all_cameras)
+    stop_all_camera.place(x=10, y=80)
     for i in buttons.keys():
+        color = "green" if used_ports[i[0]][2] else "red"
+        buttons[i].config(background=color)
         buttons[i].pack()
     periodic_main_window()
+
+def start_all_cameras():
+    for i in used_ports:
+        i[1].send(b"start")
+        i[2] = True
+
+def stop_all_cameras():
+    for i in used_ports:
+        i[1].send(b"stop")
+        i[2] = False
 
 
 def periodic_main_window():
     for i in change_buttons:
         if(i[2]):
-            button = tkinter.Button(root_window, text=i[1], command=partial(camera_clicked, i[0], i[1]))
+            color = "green" if used_ports[i[0]][2] else "red"
+            button = tkinter.Button(root_window, text=i[1], background=color, command=partial(camera_clicked, i[0], i[1]))
             buttons[i[0]] = button
             button.pack()
             change_buttons.pop(0)
@@ -62,6 +81,18 @@ def camera_clicked(port, name):
     root_window.title("Camera " + str(name))
     buttonStream = tkinter.Button(root_window, text="Stream camera", command=partial(start_video, port))
     buttonStream.pack()
+    startCamera = tkinter.Button(root_window, text="Start Camera", command=partial(start_camera, port))
+    startCamera.pack()
+    stopCamera = tkinter.Button(root_window, text="Stop Camera", command=partial(stop_camera, port))
+    stopCamera.pack()
+
+def start_camera(port):
+    used_ports[port][1].send(b"start")
+    used_ports[port][2] = True
+
+def stop_camera(port):
+    used_ports[port][1].send(b"stop")
+    used_ports[port][2] = False
 
 
 def start_video(port):
@@ -73,6 +104,8 @@ def start_video(port):
     video_label.place(x=0, y=0)
     # cv2.imshow(" stream", queue[i][-1])
     streaming_cameras.append(port)
+    back_button = tkinter.Button(root_window, text="Back", command=initialize_main_window)
+    back_button.pack()
     display_video(port)
 
 
@@ -169,11 +202,11 @@ def open_port(port, client_address):
     print("Connected to Client Command Port")
     print("Receiving Name from Client")
     name = command_socket.recv(65535).decode()
-    used_ports[port] = (name)
+    used_ports[port] = (name, command_socket, False)
     change_buttons.append((port, name, True))
     print("Name Received")
-    print("DEBUGGING, SENDING START IMMEDIATELY")
-    command_socket.send(b"start")
+    # print("DEBUGGING, SENDING START IMMEDIATELY")
+    # command_socket.send(b"start")
     frame_data = bytearray()
     print(port, "Starting Receiving Loop")
     dropped = False
