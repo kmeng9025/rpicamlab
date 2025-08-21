@@ -190,7 +190,7 @@ def open_port(port, client_address):
                 if (image is not None):
                     print(port, "Frame Is Good")
                     if(streaming_cameras.count(port) != 0):
-                        queue[str(port)].append(image)
+                        queue[port].append(image)
                 else:
                     print(port, "Dropped Frame")
                 frame_data = bytearray()
