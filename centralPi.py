@@ -7,17 +7,19 @@ import numpy
 import cv2
 import tkinter
 from PIL import Image, ImageTk
+from functools import partial
 
 
 used_ports = {}
+change_buttons = []
+buttons = []
 server_socket = None
 stop = False
 
 queue = {}
 root_window = tkinter.Tk()
 root_window.title("Camera Control")
-# video_label = tkinter.Label(root_window)
-# video_label.place()
+root_window.geometry("600x600")
 
 def main():
     # threading.Thread(target=listen_for_exit).start()
@@ -34,8 +36,16 @@ def initialize_main_window():
 
 
 def periodic_main_window():
-    for i in used_ports:
-        print("hi")
+    for i in change_buttons:
+        try:
+            tkinter.Button(root_window, text=i[0], command=partial(camera_clicked, i[0], i[1]))
+            buttons.append(change_buttons[i])
+        except:
+            print(i)
+
+
+def camera_clicked(name, port):
+    print("Camera clicked", name, port)
 
 
 def display_video():
@@ -43,8 +53,10 @@ def display_video():
         if(queue[i] != []):
             image = Image.fromarray(queue[i][-1])
             image_tk = ImageTk.PhotoImage(image=image)
-            video_label.config(image=image_tk)
-            video_label.image = image_tk
+            # video_label = tkinter.Label(root_window)
+            # video_label.place()
+            # video_label.config(image=image_tk)
+            # video_label.image = image_tk
             # cv2.imshow(i + " stream", queue[i][-1])
             queue[i].pop(-1)
             queue[i] = []
