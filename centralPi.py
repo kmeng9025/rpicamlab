@@ -165,6 +165,7 @@ def open_port(port, client_address):
     print("Name Received")
     print("DEBUGGING, SENDING START IMMEDIATELY")
     try:
+        print("HASsd")
         command_socket.send(b"start")
     except:
         print("HASUHKH")
