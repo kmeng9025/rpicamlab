@@ -43,8 +43,8 @@ def initialize_main_window():
     stop_all_camera = tkinter.Button(root_window, text="Stop All Cameras", command=stop_all_cameras)
     stop_all_camera.place(x=10, y=80)
     for i in buttons.keys():
-        color = "green" if used_ports[i[0]][2] else "red"
-        buttons[i].config(background=color)
+        # color = "green" if used_ports[i[0]][2] else "red"
+        # buttons[i].config(background=color)
         buttons[i].pack()
     periodic_main_window()
 
