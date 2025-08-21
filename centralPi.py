@@ -54,6 +54,7 @@ def periodic_main_window():
     
 
 def camera_clicked(port, name):
+    global window
     print("Camera clicked", port, name)
     window = "c"
     root_window.title("Camera", name)
@@ -62,6 +63,7 @@ def camera_clicked(port, name):
 
 
 def start_video(port):
+    global window
     global video_label
     window = "v"
     video_label = tkinter.Label(root_window)
