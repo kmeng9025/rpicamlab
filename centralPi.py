@@ -81,8 +81,8 @@ def display_video(port):
         video_label.image = image_tk
         queue[port].pop(-1)
         queue[port] = []
-    except:
-        print("display video error")
+    except Exception as e:
+        print("display video error", e)
     if(window == "v"):
             root_window.after(10, partial(display_video, port))
 
@@ -168,7 +168,7 @@ def open_port(port, client_address):
     frame_data = bytearray()
     print(port, "Starting Receiving Loop")
     dropped = False
-    queue[str(port)] = []
+    queue[port] = []
     try:
         while not stop:
             print(port, "Waiting for Data")
