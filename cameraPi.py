@@ -101,6 +101,7 @@ def check_stop():
     command_listening_socket.listen(10)
     print("Waiting for Command From Server to Start")
     command_socket, server_adr = command_listening_socket.accept()
+    command_socket.send("namehi")
     while True:
         data, adr = command_socket.recv(65535).decode()
         if data == "start":
@@ -116,4 +117,5 @@ def check_stop():
 # while True:
 # while GPIO.input(3) != GPIO.HIGH:
 #     time.sleep(0.2)
-# print("Starting, Remove from Pin to Stop\n")
+# print("Starting, Remove from Pin to Stop\n")\
+main()
