@@ -81,22 +81,26 @@ def camera_clicked(port, name):
     print("Camera clicked", port, name)
     window = "c"
     root_window.title("Camera " + str(name))
-    buttonStream = tkinter.Button(root_window, text="Stream camera", command=partial(start_video, port))
-    buttonStream.pack()
-    startCamera = tkinter.Button(root_window, text="Start Camera", command=partial(start_camera, port))
-    startCamera.pack()
-    stopCamera = tkinter.Button(root_window, text="Stop Camera", command=partial(stop_camera, port))
-    stopCamera.pack()
+    if(used_ports[buttons[port][0]][2]):
+        buttonStream = tkinter.Button(root_window, text="Stream camera", command=partial(start_video, port, name))
+        buttonStream.pack()
+        stopCamera = tkinter.Button(root_window, text="Stop Camera", command=partial(stop_camera, port, name))
+        stopCamera.pack()
+    else:
+        startCamera = tkinter.Button(root_window, text="Start Camera", command=partial(start_camera, port, name))
+        startCamera.pack()
     back = tkinter.Button(root_window, text="Back", command=initialize_main_window)
     back.pack()
 
-def start_camera(port):
+def start_camera(port, name):
     used_ports[port][1].send(b"start")
     used_ports[port][2] = True
+    camera_clicked(port, name)
 
-def stop_camera(port):
+def stop_camera(port, name):
     used_ports[port][1].send(b"stop")
     used_ports[port][2] = False
+    camera_clicked(port, name)
 
 
 def start_video(port):
