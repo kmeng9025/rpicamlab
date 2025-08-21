@@ -55,12 +55,15 @@ def periodic_main_window():
 
 def camera_clicked(port, name):
     print("Camera clicked", port, name)
+    window = "c"
     root_window.title("Camera", name)
     buttonStream = tkinter.Button(root_window, text="Stream camera", command=partial(start_video, port))
+    buttonStream.pack()
 
 
 def start_video(port):
     global video_label
+    window = "v"
     video_label = tkinter.Label(root_window)
     video_label.place(x=0, y=0)
     # cv2.imshow(" stream", queue[i][-1])
@@ -75,7 +78,8 @@ def display_video(port):
     video_label.image = image_tk
     queue[port].pop(-1)
     queue[port] = []
-    root_window.after(10, display_video)
+    if(window == "v"):
+        root_window.after(10, display_video)
 
 
 def listener():
@@ -152,7 +156,7 @@ def open_port(port, client_address):
     print("Receiving Name from Client")
     name = command_socket.recv(65535).decode()
     used_ports[port] = (name)
-    change_buttons.append((port, name))
+    change_buttons.append((port, name, True))
     print("Name Received")
     print("DEBUGGING, SENDING START IMMEDIATELY")
     command_socket.send(b"start")
@@ -195,6 +199,7 @@ def open_port(port, client_address):
     except:
         print("Port disconnected")
     used_ports[port] = ""
+    change_buttons.append((port, name, False))
     command_socket.send(b"stop")
     command_socket.close()
     client_socket.close()
