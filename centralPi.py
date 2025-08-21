@@ -172,7 +172,7 @@ def open_port(port, client_address):
     try:
         while not stop:
             print(port, "Waiting for Data")
-            data, adr = client_socket.recvfrom(1024)
+            data, adr = client_socket.recvfrom(1400)
             print(port, "Data Received")
             print(port, "Data Length:", len(data))
             if not data:

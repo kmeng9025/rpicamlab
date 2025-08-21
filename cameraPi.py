@@ -71,8 +71,8 @@ def main():
                 _, encoded = cv2.imencode(".jpg", cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
                 encoded_bytes = encoded.tobytes() + b"end"
                 print("Sending\n")
-                for i in range(0, len(encoded_bytes), 1024):
-                    data_socket.sendto(encoded_bytes[i:i+1024], (Host_IP, port))
+                for i in range(0, len(encoded_bytes), 1400):
+                    data_socket.sendto(encoded_bytes[i:i+1400], (Host_IP, port))
                 if((datetime.datetime.now()-blinking_time).total_seconds() > 1):
                     if(led_on):
                         subprocess.run("echo 0 | sudo tee /sys/class/leds/ACT/brightness", shell=True)
