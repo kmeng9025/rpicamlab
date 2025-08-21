@@ -108,7 +108,7 @@ def check_stop():
     command_socket, server_adr = command_listening_socket.accept()
     command_socket.send(b"namehi")
     while True:
-        data, adr = command_socket.recv(65535).decode()
+        data = command_socket.recv(65535).decode()
         if data == "start":
             print("Received Command to Start Recording")
             recording = True
