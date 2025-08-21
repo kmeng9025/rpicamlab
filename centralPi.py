@@ -72,6 +72,7 @@ def periodic_main_window():
             change_buttons.pop(0)
         else:
             buttons.pop(i[0])
+            change_buttons.pop(0)
             initialize_main_window()
     if window == "m":
         root_window.after(10, periodic_main_window)
