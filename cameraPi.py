@@ -16,9 +16,12 @@ def main():
     ssids = []
     Host_IP = "10.42.0.1"
     while True:
-        if subprocess.check_output(["sudo", "iwgetid", "-r"], encoding="utf-8").strip() == host_ssid:
-            print(f"Connected to {host_ssid}")
-            break
+        try:
+            if subprocess.check_output(["sudo", "iwgetid", "-r"], encoding="utf-8").strip() == host_ssid:
+                print(f"Connected to {host_ssid}")
+                break
+        except:
+            print("Not Connected")
         # Ask NM to connect (it will rescan if needed)
         subprocess.run(["nmcli", "dev", "disconnect", "wlan0"], check=False)
         subprocess.run(["nmcli", "dev", "wifi", "rescan"], check=False)
