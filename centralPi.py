@@ -15,17 +15,27 @@ stop = False
 
 queue = {}
 root_window = tkinter.Tk()
-root_window.title("Stream")
+root_window.title("Camera Control")
 video_label = tkinter.Label(root_window)
-video_label.pack()
+video_label.place()
 
 def main():
     # threading.Thread(target=listen_for_exit).start()
     threading.Thread(target=listener).start()
     root_window.mainloop()
+    initialize_main_window()
     display_video()
         
 
+def initialize_main_window():
+    text_camera = tkinter.Label(root_window, text="Cameras")
+    text_camera.place(x=10, y=30)
+    root_window.after(10, periodic_main_window)
+
+
+# def periodic_main_window():
+    # for i in used_ports:
+        # if i[0].is
 
 def display_video():
     for i in queue.keys():
@@ -93,11 +103,6 @@ def clean_up():
         server_socket.close()
     except:
         pass
-    for i in used_ports:
-        try:
-            i.close()
-        except:
-            pass
     exit(0)
 
 
@@ -106,7 +111,6 @@ def open_port(port, client_address):
     print(port, "In New Streaming Thread Port")
     print(port, "Creating UDP Streaming Socket")
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    used_ports.append(client_socket)
     print(port, "Created UDP Streaming socket")
     print(port, "Binding Streaming Socket to Port")
     client_socket.bind(("0.0.0.0", port))
@@ -117,6 +121,10 @@ def open_port(port, client_address):
     print("Connecting to Host for Port")
     command_socket.connect((client_address, 7000))
     print("Connected to Client Command Port")
+    print("Receiving Name from Client")
+    name = command_socket.recv(65535).decode()
+    used_ports[port] = (name, threading.current_thread())
+    print("Name Received")
     print("DEBUGGING, SENDING START IMMEDIATELY")
     command_socket.send(b"start")
     frame_data = bytearray()
@@ -154,12 +162,9 @@ def open_port(port, client_address):
                 used_ports.remove(client_socket)
                 print(port, "Closed Port")
                 break
-            # elif(len(data) < 1024):
-            #     frame_data = bytearray()
-            #     dropped = True
-            #     print(port, "Dropped Frame")
     except:
         print("Port disconnected")
+    used_ports[port] = ""
     command_socket.send(b"stop")
     command_socket.close()
     client_socket.close()
