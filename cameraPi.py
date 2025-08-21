@@ -102,22 +102,22 @@ def main():
 
 streaming = False
 stream = None
-def start_stream(central_ip, port):
+def start_stream(ip, port):
     global streaming
     streaming = True
+    # Use the Raspberry Pi camera via v4l2 (check your device path, often /dev/video0)
     cmd = [
-        "bash", "-c",
-        f"rpicam-vid -t 0 --inline --codec h264 --width 3280 --height 2464 --framerate 30 -o - "
-        f"| ffmpeg -re -ar 44100 -ac 2 -f h264 -i - "
-        f"-c:v copy -f mpegts udp://{central_ip}:{port}"
+        "ffmpeg",
+        "-f", "v4l2",
+        "-framerate", "30",
+        "-video_size", "640x480",
+        "-i", "/dev/video0",
+        "-c:v", "h264_omx",   # hardware encoder on Pi
+        "-b:v", "2M",
+        "-f", "mpegts",
+        f"udp://{ip}:{port}?pkt_size=1316"
     ]
-    
-
-    # pipe libcamera into ffmpeg
-    libcamera = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    # ffmpeg = subprocess.Popen(ffmpeg_cmd, stdin=libcamera.stdout)
-
-    return libcamera
+    return subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
 
