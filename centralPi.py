@@ -44,10 +44,13 @@ def initialize_main_window():
     stop_all_camera.place(x=10, y=80)
     print(buttons.keys())
     for i in buttons.keys():
-        button = buttons[i]
-        color = "green" if used_ports[button[0]][2] else "red"
-        actual_button = tkinter.Button(root_window, text=button[1], background=color, highlightbackground=color, command=partial(camera_clicked, button[0], button[1]))
-        actual_button.pack()
+        try:
+            button = buttons[i]
+            color = "green" if used_ports[button[0]][2] else "red"
+            actual_button = tkinter.Button(root_window, text=button[1], background=color, highlightbackground=color, command=partial(camera_clicked, button[0], button[1]))
+            actual_button.pack()
+        except:
+            continue
     periodic_main_window()
 
 def start_all_cameras():
