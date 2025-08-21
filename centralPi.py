@@ -33,6 +33,7 @@ def main():
         
 
 def initialize_main_window():
+    clear_window()
     text_camera = tkinter.Label(root_window, text="Cameras")
     text_camera.place(x=10, y=30)
     for i in buttons.keys():
@@ -63,6 +64,7 @@ def camera_clicked(port, name):
 
 
 def start_video(port):
+    clear_window()
     global window
     global video_label
     window = "v"
@@ -74,6 +76,7 @@ def start_video(port):
 
 
 def display_video(port):
+    # clear_window()
     try:
         image = Image.fromarray(queue[port][-1]).resize((500, 500))
         image_tk = ImageTk.PhotoImage(image=image)
@@ -141,6 +144,10 @@ def clean_up():
         pass
     exit(0)
 
+
+def clear_window():
+    for widget in root_window.winfo_children():
+        widget.destroy()
 
 def open_port(port, client_address):
     global used_ports
