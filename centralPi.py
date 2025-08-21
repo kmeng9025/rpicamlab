@@ -165,12 +165,13 @@ def open_port(port, client_address):
     print("Name Received")
     print("DEBUGGING, SENDING START IMMEDIATELY")
     command_socket.send(b"start")
-    frame_data = bytearray()
-    print(port, "Starting Receiving Loop")
-    dropped = False
+    # frame_data = bytearray()
+    # print(port, "Starting Receiving Loop")
+    # dropped = False
     queue[port] = []
     try:
         cap = cv2.VideoCapture("udp://0.0.0.0:" + str(port))
+        print("hisd")
         while not stop:
             ret, frame = cap.read()
             print("hi")
@@ -216,7 +217,7 @@ def open_port(port, client_address):
     change_buttons.append((port, name, False))
     command_socket.send(b"stop")
     command_socket.close()
-    client_socket.close()
+    # client_socket.close()
 
 
 def is_port_in_use(port):
