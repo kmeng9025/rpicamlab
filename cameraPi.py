@@ -94,8 +94,8 @@ def main():
     except Exception as e:
         print("Capturing Got Error: ", e)
     data_socket.sendto(b"c", (Host_IP, port))
-    cam.stop()
-    cam.close()
+    # cam.stop()
+    # cam.close()
     data_socket.close()
     GPIO.cleanup()
     # subprocess.run(["sudo", "nmcli", "connection", "delete", "static_rpicamlab"], check=False)
@@ -106,7 +106,7 @@ def start_stream(central_ip, port):
     global streaming
     streaming = True
     cmd = [
-        "libcamera-vid",
+        "rpicam-vid",
         "-t", "0",
         "--inline",
         "--width", "3280",
