@@ -35,7 +35,12 @@ def main():
     print("Creating Socket")
     get_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     print("Connecting to Host for Port")
-    get_socket.connect((Host_IP, 7000))
+    while True:
+        try:
+            get_socket.connect((Host_IP, 7000))
+            break
+        except:
+            pass
     print("Connected to Port 7000")
     print("Asking for Port")
     port = int(get_socket.recv(65535).decode())
