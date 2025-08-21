@@ -90,6 +90,8 @@ def main():
                         blinking_time = datetime.datetime.now()
     except Exception as e:
         print("Capturing Got Error: ", e)
+    except KeyboardInterrupt as e:
+        print("capturing end")
     data_socket.sendto(b"c", (Host_IP, port))
     cam.stop()
     cam.close()
