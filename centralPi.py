@@ -74,14 +74,17 @@ def start_video(port):
 
 
 def display_video(port):
-    image = Image.fromarray(queue[port][-1])
-    image_tk = ImageTk.PhotoImage(image=image)
-    video_label.config(image=image_tk)
-    video_label.image = image_tk
-    queue[port].pop(-1)
-    queue[port] = []
+    try:
+        image = Image.fromarray(queue[port][-1])
+        image_tk = ImageTk.PhotoImage(image=image)
+        video_label.config(image=image_tk)
+        video_label.image = image_tk
+        queue[port].pop(-1)
+        queue[port] = []
+    except:
+        print("display video error")
     if(window == "v"):
-        root_window.after(10, partial(display_video, port))
+            root_window.after(10, partial(display_video, port))
 
 
 def listener():
