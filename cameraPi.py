@@ -88,8 +88,6 @@ def main():
                         subprocess.run("echo 1 | sudo tee /sys/class/leds/ACT/brightness", shell=True)
                         led_on = True
                         blinking_time = datetime.datetime.now()
-    except Exception as e:
-        print("Capturing Got Error: ", e)
     except KeyboardInterrupt as e:
         print("capturing end")
     data_socket.sendto(b"c", (Host_IP, port))
