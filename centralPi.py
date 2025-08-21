@@ -33,9 +33,10 @@ def initialize_main_window():
     root_window.after(10, periodic_main_window)
 
 
-# def periodic_main_window():
-    # for i in used_ports:
-        # if i[0].is
+def periodic_main_window():
+    for i in used_ports:
+        print("hi")
+
 
 def display_video():
     for i in queue.keys():
