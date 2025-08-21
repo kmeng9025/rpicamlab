@@ -45,8 +45,8 @@ def main():
     cam = Picamera2()
     print("Camera Created")
     print("Configuring Camera")
-    cam.preview_configuration.main.size = (3280, 2464)
-    # cam.preview_configuration.main.size = (2592, 1944)
+    # cam.preview_configuration.main.size = (3280, 2464)
+    cam.preview_configuration.main.size = (2592, 1944)
     cam.preview_configuration.main.format = "RGB888"
     cam.configure("preview")
     print("Camera Configured")
@@ -63,12 +63,12 @@ def main():
             while recording:
                 print("Capturing")
                 frame = cam.capture_array()
-                frame = frame[0:2464, 410:2870] 
+                # frame = frame[0:2464, 410:2870] 
                 # 0.75 2460 410 2870
                 # 0.75 1944 324 2268
-                # frame = frame[0:1944, 324:2268]
+                frame = frame[0:1944, 324:2268]
                 print("Encoding")
-                _, encoded = cv2.imencode(".jpg", cv2.cvtColor(frame, cv2.COLOR_RGB2BGR),  [int(cv2.IMWRITE_JPEG_QUALITY), 75])
+                _, encoded = cv2.imencode(".jpg", cv2.cvtColor(frame, cv2.COLOR_RGB2BGR),  [int(cv2.IMWRITE_JPEG_QUALITY), 85])
                 encoded_bytes = encoded.tobytes() + b"end"
                 print("Sending\n")
                 for i in range(0, len(encoded_bytes), 1400):
