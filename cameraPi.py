@@ -106,7 +106,7 @@ def check_stop():
     command_listening_socket.listen(10)
     print("Waiting for Command From Server to Start")
     command_socket, server_adr = command_listening_socket.accept()
-    command_socket.send("namehi")
+    command_socket.send(b"namehi")
     while True:
         data, adr = command_socket.recv(65535).decode()
         if data == "start":
