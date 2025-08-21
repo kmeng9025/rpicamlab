@@ -1,0 +1,1 @@
+roboflow import -w mouse-vadhq -p bmice-resla ./cropped_frames/video7

@@ -9,6 +9,7 @@ import cv2
 
 used_ports = []
 server_socket = None
+stop = False
 
 queue = {}
 
@@ -55,7 +56,7 @@ def listener():
         client_socket.close()
         print("Closed Camera Pi Assigning Socket")
         print("Creating New Thread for Port:", current_port)
-        client_thread = threading.Thread(target=open_port, args=(current_port,))
+        client_thread = threading.Thread(target=open_port, args=(current_port, client_address))
         # open_port(current_port)
         print("Created New Thread for Streaming")
         print("Starting Streaming Thread")
@@ -69,7 +70,9 @@ def listener():
 
 
 def clean_up():
+    global stop
     print("CLEANING UP")
+    stop = True
     try:
         server_socket.close()
     except:
@@ -82,7 +85,7 @@ def clean_up():
     exit(0)
 
 
-def open_port(port):
+def open_port(port, client_address):
     global used_ports
     print(port, "In New Streaming Thread Port")
     print(port, "Creating UDP Streaming Socket")
@@ -92,12 +95,20 @@ def open_port(port):
     print(port, "Binding Streaming Socket to Port")
     client_socket.bind(("0.0.0.0", port))
     print(port, "Binded Streaming to Port")
+    print("Binding to Camera Command Port")
+    command_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    print("Binded to Camera Command Port")
+    print("Connecting to Host for Port")
+    command_socket.connect((client_address, 7000))
+    print("Connected to Client Command Port")
+    print("DEBUGGING, SENDING START IMMEDIATELY")
+    command_socket.send(b"start")
     frame_data = bytearray()
     print(port, "Starting Receiving Loop")
     dropped = False
     queue[str(port)] = []
     try:
-        while True:
+        while not stop:
             print(port, "Waiting for Data")
             data, adr = client_socket.recvfrom(1024)
             print(port, "Data Received")
@@ -133,6 +144,9 @@ def open_port(port):
             #     print(port, "Dropped Frame")
     except:
         print("Port disconnected")
+    command_socket.send(b"stop")
+    command_socket.close()
+    client_socket.close()
 
 
 def is_port_in_use(port):

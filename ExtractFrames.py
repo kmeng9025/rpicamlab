@@ -53,7 +53,7 @@ import os
 import numpy as np
 
 # === Configuration ===
-video_path = "footage/raw3.mp4"            # <-- change this to your video filename
+video_path = "footage/raw7.mp4"            # <-- change this to your video filename
 output_dir = "cropped_frames/video1"
 while os.path.isdir(output_dir):
     output_dir = output_dir[:-1] + str(int(output_dir[-1])+1)
@@ -73,7 +73,7 @@ os.makedirs(output_dir, exist_ok=True)
 cap = cv2.VideoCapture(video_path)
 total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
-num_frames_to_extract = total_frames
+# num_frames_to_extract = total_frames
 
 if not cap.isOpened():
     print("❌ Failed to open video.")
