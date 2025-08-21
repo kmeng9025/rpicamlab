@@ -164,9 +164,13 @@ def listener():
     server_socket.listen(10)
     current_port = binding_socket + 1
     print("Starting Listener")
+    server_socket.settimeout(5)
     while not stop:
         print("Waiting for Camera Pi")
-        client_socket, client_address = server_socket.accept()
+        try:
+            client_socket, client_address = server_socket.accept()
+        except:
+            continue
         print("Received Connection")
         print("Assigning Port")
         while (is_port_in_use(current_port)):
