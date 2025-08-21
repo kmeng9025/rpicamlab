@@ -118,7 +118,7 @@ def start_stream(ip, port):
         "-framerate", "30",
         "-video_size", "640x480",
         "-i", "/dev/video0",
-        "-c:v", "h264_omx",   # hardware encoder on Pi
+        "-c:v", "h264_v4l2m2m",
         "-b:v", "2M",
         "-f", "mpegts",
         f"udp://{ip}:{port}?pkt_size=1316"
