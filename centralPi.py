@@ -49,12 +49,12 @@ def initialize_main_window():
     periodic_main_window()
 
 def start_all_cameras():
-    for i in used_ports.keys:
+    for i in used_ports.keys():
         used_ports[i][1].send(b"start")
         used_ports[i][2] = True
 
 def stop_all_cameras():
-    for i in used_ports.keys:
+    for i in used_ports.keys():
         used_ports[i][1].send(b"stop")
         used_ports[i][2] = False
 
