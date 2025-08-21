@@ -44,8 +44,8 @@ def initialize_main_window():
     stop_all_camera.place(x=10, y=80)
     print(buttons.keys())
     for i in buttons.keys():
-        # color = "green" if used_ports[i[0]][2] else "red"
-        # buttons[i].config(background=color)
+        color = "green" if used_ports[i[0]][2] else "red"
+        tkinter.Button(root_window, text=buttons[i], background=color, highlightbackground=color, command=partial(camera_clicked, i[0], i[1]))
         buttons[i].pack()
     periodic_main_window()
 
@@ -65,7 +65,7 @@ def periodic_main_window():
         if(i[2]):
             color = "green" if used_ports[i[0]][2] else "red"
             button = tkinter.Button(root_window, text=i[1], background=color, highlightbackground=color, command=partial(camera_clicked, i[0], i[1]))
-            buttons[i[0]] = button
+            buttons[i[0]] = i
             button.pack()
             change_buttons.pop(0)
         else:
@@ -182,7 +182,7 @@ def clean_up():
 
 def clear_window():
     for widget in root_window.winfo_children():
-        widget.pack_forget()
+        widget.destroy()
 
 
 def open_port(port, client_address):
@@ -203,8 +203,8 @@ def open_port(port, client_address):
     print("Connected to Client Command Port")
     print("Receiving Name from Client")
     name = command_socket.recv(65535).decode()
-    used_ports[port] = (name, command_socket, False)
-    change_buttons.append((port, name, True))
+    used_ports[port] = [name, command_socket, False]
+    change_buttons.append([port, name, True])
     print("Name Received")
     # print("DEBUGGING, SENDING START IMMEDIATELY")
     # command_socket.send(b"start")
@@ -247,7 +247,7 @@ def open_port(port, client_address):
     except:
         print("Port disconnected")
     used_ports[port] = ""
-    change_buttons.append((port, name, False))
+    change_buttons.append([port, name, False])
     command_socket.send(b"stop")
     command_socket.close()
     client_socket.close()
