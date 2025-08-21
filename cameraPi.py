@@ -171,10 +171,7 @@ def start_camera():
     config = cam.create_preview_configuration(main={"size": (1280, 720), "format": "RGB888"})
     cam.configure(config)
     cam.set_controls({
-        controls.AeEnable: True,
-        controls.AwbEnable: True,
-        # Optional: limit frame duration to target FPS
-        # controls.FrameDurationLimits: (int(1e6/FPS), int(1e6/FPS)),
+    "AeEnable": True
     })
     cam.start()
     time.sleep(0.2)
