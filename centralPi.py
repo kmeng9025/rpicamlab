@@ -173,8 +173,9 @@ def open_port(port, client_address):
         cap = cv2.VideoCapture("udp://0.0.0.0:" + str(port))
         while not stop:
             ret, frame = cap.read()
-            # print(frame)
+            print("hi")
             if ret:
+                print("hiagain")
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 # cv2.imshow("hi", frame)
                 if(streaming_cameras.count(port) != 0):
