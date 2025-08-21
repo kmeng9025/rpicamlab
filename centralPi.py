@@ -246,7 +246,7 @@ def open_port(port, client_address):
                 else:
                     print(port, "Dropped Frame")
                 frame_data = bytearray()
-            elif (frame_data.endswith(b"c") and len(frame_data) == 1):
+            elif (data == b"c"):
                 print(port, "Received Request To Close Streaming Port")
                 print(port, "Closing Port")
                 client_socket.close()
