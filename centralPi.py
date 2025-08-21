@@ -32,7 +32,7 @@ def main():
 def initialize_main_window():
     text_camera = tkinter.Label(root_window, text="Cameras")
     text_camera.place(x=10, y=30)
-    root_window.after(10, periodic_main_window)
+    periodic_main_window()
 
 
 def periodic_main_window():
@@ -41,12 +41,14 @@ def periodic_main_window():
             button = tkinter.Button(root_window, text=i[0], command=partial(camera_clicked, i[0], i[1]))
             buttons.append(button)
             button.pack()
+            change_buttons.pop(0)
         except:
             print(i)
+    root_window.after(10, periodic_main_window)
 
 
-def camera_clicked(name, port):
-    print("Camera clicked", name, port)
+def camera_clicked(port, name):
+    print("Camera clicked", port, name)
 
 
 def display_video():
@@ -137,7 +139,8 @@ def open_port(port, client_address):
     print("Connected to Client Command Port")
     print("Receiving Name from Client")
     name = command_socket.recv(65535).decode()
-    used_ports[port] = (name, threading.current_thread())
+    used_ports[port] = (name)
+    change_buttons.append((port, name))
     print("Name Received")
     print("DEBUGGING, SENDING START IMMEDIATELY")
     command_socket.send(b"start")
