@@ -163,7 +163,7 @@ def process_images(port, lock):
         session_changed = False
         next_time = time.time()
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        while not used_ports[port][2]:
+        while not used_ports[port][2] and not stop:
             time.sleep(0.2)
         if sessionStarted:
             print("session started recording")
