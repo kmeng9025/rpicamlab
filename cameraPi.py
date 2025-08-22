@@ -69,28 +69,28 @@ def main():
     subprocess.run("echo 1 | sudo tee /sys/class/leds/ACT/brightness", shell=True)
     try:
         while not stop:
-            while recording:
-                print("Capturing")
-                frame = cam.capture_array()
-                # frame = frame[0:2464, 410:2870] 
-                # 0.75 2460 410 2870
-                # 0.75 1944 324 2268
-                frame = frame[0:1944, 600:1992]
-                print("Encoding")
-                _, encoded = cv2.imencode(".jpg", cv2.cvtColor(frame, cv2.COLOR_RGB2BGR),  [int(cv2.IMWRITE_JPEG_QUALITY), 80])
-                encoded_bytes = encoded.tobytes() + b"end"
-                print("Sending\n")
-                for i in range(0, len(encoded_bytes), 1400):
-                    data_socket.sendto(encoded_bytes[i:i+1400], (Host_IP, port))
-                if((datetime.datetime.now()-blinking_time).total_seconds() > 1):
-                    if(led_on):
-                        subprocess.run("echo 0 | sudo tee /sys/class/leds/ACT/brightness", shell=True)
-                        led_on = False
-                        blinking_time = datetime.datetime.now()
-                    else:
-                        subprocess.run("echo 1 | sudo tee /sys/class/leds/ACT/brightness", shell=True)
-                        led_on = True
-                        blinking_time = datetime.datetime.now()
+            # while recording:
+            print("Capturing")
+            frame = cam.capture_array()
+            # frame = frame[0:2464, 410:2870] 
+            # 0.75 2460 410 2870
+            # 0.75 1944 324 2268
+            frame = frame[0:1944, 600:1992]
+            print("Encoding")
+            _, encoded = cv2.imencode(".jpg", cv2.cvtColor(frame, cv2.COLOR_RGB2BGR),  [int(cv2.IMWRITE_JPEG_QUALITY), 80])
+            encoded_bytes = encoded.tobytes() + b"end"
+            print("Sending\n")
+            for i in range(0, len(encoded_bytes), 1400):
+                data_socket.sendto(encoded_bytes[i:i+1400], (Host_IP, port))
+            if((datetime.datetime.now()-blinking_time).total_seconds() > 1):
+                if(led_on):
+                    subprocess.run("echo 0 | sudo tee /sys/class/leds/ACT/brightness", shell=True)
+                    led_on = False
+                    blinking_time = datetime.datetime.now()
+                else:
+                    subprocess.run("echo 1 | sudo tee /sys/class/leds/ACT/brightness", shell=True)
+                    led_on = True
+                    blinking_time = datetime.datetime.now()
     except KeyboardInterrupt as e:
         print("capturing end")
     data_socket.sendto(b"c", (Host_IP, port))
