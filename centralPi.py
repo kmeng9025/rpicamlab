@@ -166,6 +166,8 @@ def process_images(port, lock):
         print(name)
         out = cv2.VideoWriter(name, fourcc, 30, (1944, 1392))
     while not stop:
+        print(name)
+
         # print("hi")
         # for i in queue.keys():
             # next_time = time.time()
@@ -178,7 +180,7 @@ def process_images(port, lock):
             print("cam not started", e)
             continue
         # queue[port][1].write(current_image)
-        # out.write(current_image)
+        out.write(cv2.resize(current_image, (1944, 1392)))
         # last_time = queue[port][2]
         next_time += 1.0/30.0
         sleep_time = next_time - time.time()
