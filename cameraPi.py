@@ -20,7 +20,10 @@ def main():
             if subprocess.check_output(["sudo", "iwgetid", "-r"], encoding="utf-8").strip() == host_ssid:
                 print(f"Connected to {host_ssid}")
                 break
-            subprocess.run(["nmcli", "dev", "disconnect", "wlan0"], check=False)
+            try:
+                subprocess.run(["nmcli", "dev", "disconnect", "wlan0"], check=False)
+            except:
+                pass
             subprocess.run(["nmcli", "dev", "wifi", "rescan"], check=False)
             subprocess.run(["sudo","nmcli","dev","wifi","connect", host_ssid, "password", host_password],
                             check=False)
