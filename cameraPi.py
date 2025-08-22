@@ -27,8 +27,8 @@ def main():
             subprocess.run(["nmcli", "dev", "wifi", "rescan"], check=False)
             subprocess.run(["sudo","nmcli","dev","wifi","connect", host_ssid, "password", host_password],
                             check=False)
-        except:
-            print("Not Connected")
+        except Exception as e:
+            print("Not Connected", e)
         # Ask NM to connect (it will rescan if needed)
         
         time.sleep(1)
