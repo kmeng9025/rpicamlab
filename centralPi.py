@@ -20,6 +20,7 @@ window = "m"
 streaming_cameras = []
 sessionStarted = False
 sessionName = None
+session_changed = False
 
 queue = {}
 root_window = tkinter.Tk()
@@ -89,17 +90,20 @@ def start_new_session():
     name_submit.place(x=10, y=110)
     fail_label = tkinter.Label(root_window, text="can't have spaces or special characters. Must be under 20 characters")
     fail_label.pack()
+    # notify_recorders()
 
 
 def create_new_session(name):
     global sessionName
     global sessionStarted
+    global session_changed
     if(len(name) > 20):
         start_new_session()
     if(sessionStarted):
         return
     sessionName = name
     sessionStarted = True
+    session_changed = True
     start_all_cameras()
     
 
@@ -155,49 +159,52 @@ def periodic_main_window():
 def process_images(port, lock):
     # print("hola")
     # global current_image
-    next_time = time.time()
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    if sessionStarted:
-        name = "./output/" + sessionName + "/" + used_ports[port][0] + "/" + str(time.time()) + used_ports[port][0] + ".mp4"
-        print(name)
-        out = cv2.VideoWriter(name, fourcc, 30, (1944, 1392))
-    else:
-        name = "./output/" + used_ports[port][0] + "/" + str(time.time()) + used_ports[port][0] + ".mp4"
-        print(name)
-        out = cv2.VideoWriter(name, fourcc, 30, (1944, 1392))
     while not stop:
-        print(name)
-
-        # print("hi")
-        # for i in queue.keys():
-            # next_time = time.time()
-        try:
-            if(not used_ports[port][2]):
-                continue
-            with lock:
-                current_image = queue[port][0].copy()
-        except Exception as e:
-            print("cam not started", e)
-            continue
-        # queue[port][1].write(current_image)
-        out.write(cv2.resize(current_image, (1944, 1392)))
-        # last_time = queue[port][2]
-        next_time += 1.0/30.0
-        sleep_time = next_time - time.time()
-        if sleep_time > 0:
-            time.sleep(sleep_time)
+        next_time = time.time()
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        while not not used_ports[port][2]:
+            time.sleep(0.2)
+        if sessionStarted:
+            name = "./output/" + sessionName + "/" + used_ports[port][0] + "/" + str(time.time()) + used_ports[port][0] + ".mp4"
+            print(name)
+            out = cv2.VideoWriter(name, fourcc, 30, (1944, 1392))
         else:
-            out.write(current_image)
-            next_time += 1.0/30.0
-        # next_time = time.time()
-        # if sleep_time > 0:
-        #     time.sleep(sleep_time)
-                # continue
-                # continue
+            name = "./output/" + used_ports[port][0] + "/" + str(time.time()) + used_ports[port][0] + ".mp4"
+            print(name)
+            out = cv2.VideoWriter(name, fourcc, 30, (1944, 1392))
+        while not session_changed:
+            # print(name)
 
-            # if(len(current_list) != 1):
-            #     # current_list = 
-    out.release()
+            # print("hi")
+            # for i in queue.keys():
+                # next_time = time.time()
+            try:
+                if(not used_ports[port][2]):
+                    continue
+                with lock:
+                    current_image = queue[port][0].copy()
+            except Exception as e:
+                print("cam not started", e)
+                continue
+            # queue[port][1].write(current_image)
+            out.write(cv2.resize(current_image, (1944, 1392)))
+            # last_time = queue[port][2]
+            next_time += 1.0/30.0
+            sleep_time = next_time - time.time()
+            if sleep_time > 0:
+                time.sleep(sleep_time)
+            else:
+                out.write(current_image)
+                next_time += 1.0/30.0
+            # next_time = time.time()
+            # if sleep_time > 0:
+            #     time.sleep(sleep_time)
+                    # continue
+                    # continue
+
+                # if(len(current_list) != 1):
+                #     # current_list = 
+        out.release()
 
 
     
