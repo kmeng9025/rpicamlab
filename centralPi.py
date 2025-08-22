@@ -339,7 +339,7 @@ def open_port(port, client_address):
     
     # queue[port].append(out)
     # queue[port].append(time.time())
-    # queue[port].append(None)
+    queue[port].append(None)
     threading.Thread(target=process_images, args=(port, lock)).start()
     client_socket.settimeout(5)
     try:
