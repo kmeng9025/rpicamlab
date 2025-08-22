@@ -61,7 +61,7 @@ def initialize_main_window():
         export_data_button.place(x=10, y=140)
     else:
         start_session_button = tkinter.Button(root_window, text="Start New Session", command=start_new_session)
-    start_session_button.place(x=10, y=110)
+        start_session_button.place(x=10, y=110)
     print(buttons.keys())
     for i in buttons.keys():
         try:
