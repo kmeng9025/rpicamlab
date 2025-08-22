@@ -153,7 +153,7 @@ def periodic_main_window():
 
 
 def process_images(port, lock):
-    global current_image
+    # global current_image
     next_time = time.time()
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     out = cv2.VideoWriter("out.mp4", fourcc, 30, (1944, 1392))
@@ -167,6 +167,7 @@ def process_images(port, lock):
                 current_image = queue[port][0].copy()
         except:
             print("cam not started")
+            continue
         # queue[port][1].write(current_image)
         out.write(current_image)
         # last_time = queue[port][2]
