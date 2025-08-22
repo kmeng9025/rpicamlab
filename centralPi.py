@@ -153,6 +153,7 @@ def periodic_main_window():
 
 
 def process_images(port, lock):
+    global current_image
     next_time = time.time()
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     out = cv2.VideoWriter("out.mp4", fourcc, 30, (1944, 1392))
