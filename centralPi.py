@@ -180,7 +180,7 @@ def process_images(port, lock):
             print(name)
             out = cv2.VideoWriter(name, fourcc, 20, (1392, 1944))
         # while not used_ports[port][2]:
-
+        print("recording")
         while not session_changed and not stop and used_ports[port][2]:
             # print(name)
 
