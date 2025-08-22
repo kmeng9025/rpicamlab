@@ -361,8 +361,8 @@ def open_port(port, client_address):
                     frame_data = bytearray()
                     dropped = False
                     continue
-                np_data = numpy.frombuffer(frame_data.removesuffix(b"end"), dtype=numpy.uint8)
                 try:
+                    np_data = numpy.frombuffer(frame_data.removesuffix(b"end"), dtype=numpy.uint8)
                     image = cv2.imdecode(np_data, cv2.IMREAD_COLOR)
                 except:
                     print("ohoh")
