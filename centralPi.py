@@ -170,13 +170,13 @@ def process_images(port, lock):
             os.makedirs(os.path.dirname(name), exist_ok=True)
             name += used_ports[port][0] + ".mp4"
             print(name)
-            out = cv2.VideoWriter(name, fourcc, 30, (1944, 1392))
+            out = cv2.VideoWriter(name, fourcc, 20, (1944, 1392))
         else:
             name = "./output/" + used_ports[port][0] + "/" + str(time.time())
             os.makedirs(os.path.dirname(name), exist_ok=True)
             name += used_ports[port][0] + ".mp4"
             print(name)
-            out = cv2.VideoWriter(name, fourcc, 30, (1944, 1392))
+            out = cv2.VideoWriter(name, fourcc, 20, (1944, 1392))
         while not session_changed and not stop:
             # print(name)
 
@@ -194,13 +194,13 @@ def process_images(port, lock):
             # queue[port][1].write(current_image)
             out.write(cv2.resize(current_image, (1944, 1392)))
             # last_time = queue[port][2]
-            next_time += 1.0/30.0
+            next_time += 1.0/20.0
             sleep_time = next_time - time.time()
             if sleep_time > 0:
                 time.sleep(sleep_time)
             else:
                 out.write(current_image)
-                next_time += 1.0/30.0
+                next_time += 1.0/20.0
             # next_time = time.time()
             # if sleep_time > 0:
             #     time.sleep(sleep_time)
