@@ -325,7 +325,6 @@ def open_port(port, client_address):
     print("Connected to Client Command Port")
     print("Receiving Name from Client")
     name = command_socket.recv(65535).decode()
-    used_ports[port] = [name, command_socket, False]
     change_buttons.append([port, name, True])
     print("Name Received")
     # print("DEBUGGING, SENDING START IMMEDIATELY")
@@ -335,6 +334,7 @@ def open_port(port, client_address):
     dropped = False
     queue[port] = []
     lock = threading.Lock()
+    used_ports[port] = [name, command_socket, False, lock]
     # queue[port].append(threading.Lock())
     
     # queue[port].append(out)
