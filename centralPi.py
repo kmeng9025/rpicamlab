@@ -112,7 +112,8 @@ def stop_session():
     stop_all_cameras()
 
 
-# def export_data():
+def export_data():
+    pass
 
 
 
