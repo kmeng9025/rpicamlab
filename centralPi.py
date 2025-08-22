@@ -45,7 +45,7 @@ def initialize_main_window():
     clear_window()
     window = "m"
     if(sessionStarted):
-        root_window.title("Session:", sessionName)
+        root_window.title("Session: " + sessionName)
     else:
         root_window.title("NOT IN SESSION")
     text_camera = tkinter.Label(root_window, text="Cameras")
