@@ -17,10 +17,10 @@ def main():
     Host_IP = "10.42.0.1"
     while True:
         try:
-            if subprocess.check_output(["sudo", "iwgetid", "-r"], encoding="utf-8").strip() == host_ssid:
-                print(f"Connected to {host_ssid}")
-                break
             try:
+                if subprocess.check_output(["sudo", "iwgetid", "-r"], encoding="utf-8").strip() == host_ssid:
+                    print(f"Connected to {host_ssid}")
+                    break
                 subprocess.run(["nmcli", "dev", "disconnect", "wlan0"], check=False)
             except:
                 pass
