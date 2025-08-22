@@ -43,7 +43,7 @@ data_vol = modal.Volume.from_name("miceAugmentedFinal")
 @app.function(
     # gpu="B200",
     cpu=20, memory=65536,
-    timeout=0,
+    timeout=60*60*12,
     # secrets=[roboflow_secret],
     volumes={
         "/checkpoints": ckpt_vol,

@@ -156,7 +156,10 @@ def process_images(port, lock):
     # global current_image
     next_time = time.time()
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    out = cv2.VideoWriter("out.mp4", fourcc, 30, (1944, 1392))
+    if sessionStarted:
+        out = cv2.VideoWriter("./output/" + sessionName + "/" + used_ports[port][0] + "/" + str(time.time()) + used_ports[port][0] + ".mp4", fourcc, 30, (1944, 1392))
+    else:
+        out = cv2.VideoWriter("./output/" + used_ports[port][0] + "/" + str(time.time()) + used_ports[port][0] + ".mp4", fourcc, 30, (1944, 1392))
     while not stop:
         # for i in queue.keys():
             # next_time = time.time()
