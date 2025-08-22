@@ -170,13 +170,13 @@ def process_images(port, lock):
             os.makedirs(os.path.dirname(name), exist_ok=True)
             name += used_ports[port][0] + ".mp4"
             print(name)
-            out = cv2.VideoWriter(name, fourcc, 20, (1944, 1392))
+            out = cv2.VideoWriter(name, fourcc, 20, (1392, 1944))
         else:
             name = "./output/" + used_ports[port][0] + "/" + str(time.time())
             os.makedirs(os.path.dirname(name), exist_ok=True)
             name += used_ports[port][0] + ".mp4"
             print(name)
-            out = cv2.VideoWriter(name, fourcc, 20, (1944, 1392))
+            out = cv2.VideoWriter(name, fourcc, 20, (1392, 1944))
         while not session_changed and not stop:
             # print(name)
 
