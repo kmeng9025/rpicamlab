@@ -157,7 +157,7 @@ def periodic_main_window():
 
 
 def process_images(port, lock):
-    # print("hola")
+    print("hola")
     # global current_image
     while not stop:
         session_changed = False
@@ -166,17 +166,20 @@ def process_images(port, lock):
         while not not used_ports[port][2]:
             time.sleep(0.2)
         if sessionStarted:
+            print("session started recording")
             name = "./output/" + sessionName + "/" + used_ports[port][0] + "/" + str(time.time())
             os.makedirs(os.path.dirname(name), exist_ok=True)
             name += used_ports[port][0] + ".mp4"
             print(name)
             out = cv2.VideoWriter(name, fourcc, 20, (1392, 1944))
         else:
+            print("recording without session")
             name = "./output/" + used_ports[port][0] + "/" + str(time.time())
             os.makedirs(os.path.dirname(name), exist_ok=True)
             name += used_ports[port][0] + ".mp4"
             print(name)
             out = cv2.VideoWriter(name, fourcc, 20, (1392, 1944))
+        print("recording")
         while not session_changed and not stop and not used_ports[port][2]:
             # print(name)
 
@@ -207,6 +210,7 @@ def process_images(port, lock):
 
                 # if(len(current_list) != 1):
                 #     # current_list = 
+        print("stoppped recording")
         out.release()
 
 
