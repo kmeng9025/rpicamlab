@@ -157,9 +157,13 @@ def process_images(port, lock):
     next_time = time.time()
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     if sessionStarted:
-        out = cv2.VideoWriter("./output/" + sessionName + "/" + used_ports[port][0] + "/" + str(time.time()) + used_ports[port][0] + ".mp4", fourcc, 30, (1944, 1392))
+        name = "./output/" + sessionName + "/" + used_ports[port][0] + "/" + str(time.time()) + used_ports[port][0] + ".mp4"
+        print(name)
+        out = cv2.VideoWriter(name, fourcc, 30, (1944, 1392))
     else:
-        out = cv2.VideoWriter("./output/" + used_ports[port][0] + "/" + str(time.time()) + used_ports[port][0] + ".mp4", fourcc, 30, (1944, 1392))
+        name = "./output/" + used_ports[port][0] + "/" + str(time.time()) + used_ports[port][0] + ".mp4"
+        print(name)
+        out = cv2.VideoWriter(name, fourcc, 30, (1944, 1392))
     while not stop:
         # for i in queue.keys():
             # next_time = time.time()
@@ -370,7 +374,7 @@ def open_port(port, client_address):
                 except:
                     print("ohoh")
                 if (image is not None):
-                    print(port, "Frame Is Good")
+                    # print(port, "Frame Is Good")
                     # if(streaming_cameras.count(port) != 0):
                     with lock:
                         queue[port][0] = (image)
