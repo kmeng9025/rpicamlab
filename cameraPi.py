@@ -118,13 +118,13 @@ def check_stop():
     command_socket.send(b"namehi")
     while True:
         data = command_socket.recv(65535).decode()
-        if data == "start":
-            print("Received Command to Start Recording")
-            recording = True
-        elif data == "stop":
-            print("Received Command to Stop Recording")
-            recording = False
-        else:
+        # if data == "start":
+        #     print("Received Command to Start Recording")
+        #     recording = True
+        # elif data == "stop":
+        #     print("Received Command to Stop Recording")
+        #     recording = False
+        if data == "stop":
             print("Received Command to Stop Program")
             stop = True
             time.sleep(0.5)

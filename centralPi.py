@@ -123,7 +123,7 @@ def export_data():
 
 def start_all_cameras():
     for i in used_ports.keys():
-        used_ports[i][1].send(b"start")
+        # used_ports[i][1].send(b"start")
         used_ports[i][2] = True
     initialize_main_window()
 
@@ -136,7 +136,7 @@ def kill_all_cameras():
 
 def stop_all_cameras():
     for i in used_ports.keys():
-        used_ports[i][1].send(b"stop")
+        # used_ports[i][1].send(b"stop")
         used_ports[i][2] = False
     initialize_main_window()
 
@@ -177,15 +177,13 @@ def process_images(port, lock):
             name += used_ports[port][0] + ".mp4"
             print(name)
             out = cv2.VideoWriter(name, fourcc, 20, (1392, 1944))
-        while not session_changed and not stop:
+        while not session_changed and not stop and not used_ports[port][2]:
             # print(name)
 
             # print("hi")
             # for i in queue.keys():
                 # next_time = time.time()
             try:
-                if(not used_ports[port][2]):
-                    continue
                 with lock:
                     current_image = queue[port][0].copy()
             except Exception as e:
@@ -220,24 +218,24 @@ def camera_clicked(port, name):
     print("Camera clicked", port, name)
     window = "c"
     root_window.title("Camera " + str(name))
+    buttonStream = tkinter.Button(root_window, text="Stream camera", command=partial(start_video, port, name))
+    buttonStream.pack()
     if(used_ports[buttons[port][0]][2]):
-        buttonStream = tkinter.Button(root_window, text="Stream camera", command=partial(start_video, port, name))
-        buttonStream.pack()
-        stopCamera = tkinter.Button(root_window, text="Stop Camera", command=partial(stop_camera, port, name))
+        stopCamera = tkinter.Button(root_window, text="Stop Recordin", command=partial(stop_camera, port, name))
         stopCamera.pack()
     else:
-        startCamera = tkinter.Button(root_window, text="Start Camera", command=partial(start_camera, port, name))
+        startCamera = tkinter.Button(root_window, text="Start Recording", command=partial(start_camera, port, name))
         startCamera.pack()
     back = tkinter.Button(root_window, text="Back", command=initialize_main_window)
     back.pack()
 
 def start_camera(port, name):
-    used_ports[port][1].send(b"start")
+    # used_ports[port][1].send(b"start")
     used_ports[port][2] = True
     camera_clicked(port, name)
 
 def stop_camera(port, name):
-    used_ports[port][1].send(b"stop")
+    # used_ports[port][1].send(b"stop")
     used_ports[port][2] = False
     camera_clicked(port, name)
 
