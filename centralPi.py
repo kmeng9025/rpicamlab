@@ -51,15 +51,15 @@ def initialize_main_window():
         root_window.title("NOT IN SESSION")
     text_camera = tkinter.Label(root_window, text="Cameras")
     text_camera.place(x=10, y=30)
-    start_all_camera = tkinter.Button(root_window, text="Start All Cameras", command=start_all_cameras)
+    start_all_camera = tkinter.Button(root_window, text="Start Recording on All Cameras", command=start_all_cameras)
     start_all_camera.place(x=10, y=50)
-    stop_all_camera = tkinter.Button(root_window, text="Stop All Cameras", command=stop_all_cameras)
+    stop_all_camera = tkinter.Button(root_window, text="Stop Recording on All Cameras", command=stop_all_cameras)
     stop_all_camera.place(x=10, y=80)
     if(sessionStarted):
         stop_session_button = tkinter.Button(root_window, text="Stop Session and Export Data", command=stop_session)
         stop_session_button.place(x=10, y=110)
-        export_data_button = tkinter.Button(root_window, text="Export Data", command=export_data)
-        export_data_button.place(x=10, y=140)
+        # export_data_button = tkinter.Button(root_window, text="Export Data", command=export_data)
+        # export_data_button.place(x=10, y=140)
     else:
         start_session_button = tkinter.Button(root_window, text="Start New Session", command=start_new_session)
         start_session_button.place(x=10, y=110)
@@ -92,6 +92,15 @@ def start_new_session():
     fail_label.pack()
     # notify_recorders()
 
+def start_inference(port):
+    used_ports[port][3] = True
+
+def stop_inference(port):
+    used_ports[port][3] = False
+
+def start_inference_recording(port):
+    used_ports[port][3] = False
+    used_ports[port][2] = True
 
 def create_new_session(name):
     global sessionName
@@ -228,9 +237,15 @@ def camera_clicked(port, name):
     if(used_ports[buttons[port][0]][2]):
         stopCamera = tkinter.Button(root_window, text="Stop Recordin", command=partial(stop_camera, port, name))
         stopCamera.pack()
+        stopInference = tkinter.Button(root_window, text="Stop Inference", command=partial(stop_inference, port))
+        stopInference.pack()
     else:
         startCamera = tkinter.Button(root_window, text="Start Recording", command=partial(start_camera, port, name))
         startCamera.pack()
+        startInference = tkinter.Button(root_window, text="Start Inference", command=partial(start_inference, port))
+        startInference.pack()
+        startInferenceRecording = tkinter.Button(root_window, text="Start Inference With Recording", command=partial(start_inference_recording, port))
+        startInferenceRecording.pack()
     back = tkinter.Button(root_window, text="Back", command=initialize_main_window)
     back.pack()
 
@@ -324,6 +339,9 @@ def clean_up():
     print("CLEANING UP")
     stop = True
     try:
+        kill_all_cameras()
+        kill_all_cameras()
+        kill_all_cameras()
         server_socket.close()
     except:
         pass
@@ -360,7 +378,7 @@ def open_port(port, client_address):
     dropped = False
     queue[port] = []
     lock = threading.Lock()
-    used_ports[port] = [name, command_socket, False, lock]
+    used_ports[port] = [name, command_socket, False, lock, False]
     # queue[port].append(threading.Lock())
     
     # queue[port].append(out)
