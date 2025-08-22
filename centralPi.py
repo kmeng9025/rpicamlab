@@ -153,6 +153,7 @@ def periodic_main_window():
 
 
 def process_images(port, lock):
+    print("hola")
     # global current_image
     next_time = time.time()
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
@@ -165,6 +166,7 @@ def process_images(port, lock):
         print(name)
         out = cv2.VideoWriter(name, fourcc, 30, (1944, 1392))
     while not stop:
+        print("hi")
         # for i in queue.keys():
             # next_time = time.time()
         try:
