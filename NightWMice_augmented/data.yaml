@@ -1,0 +1,6 @@
+path: C:\Users\ftmen\Documents\rpicamlab\NightWMice_augmented
+train: train/images
+val: valid/images
+names:
+- mouse
+- mouse_group

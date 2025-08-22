@@ -18,6 +18,8 @@ server_socket = None
 stop = False
 window = "m"
 streaming_cameras = []
+sessionStarted = False
+sessionName = None
 
 queue = {}
 root_window = tkinter.Tk()
@@ -42,12 +44,24 @@ def initialize_main_window():
     global window
     clear_window()
     window = "m"
+    if(sessionStarted):
+        root_window.title("Session:", sessionName)
+    else:
+        root_window.title("NOT IN SESSION")
     text_camera = tkinter.Label(root_window, text="Cameras")
     text_camera.place(x=10, y=30)
     start_all_camera = tkinter.Button(root_window, text="Start All Cameras", command=start_all_cameras)
     start_all_camera.place(x=10, y=50)
     stop_all_camera = tkinter.Button(root_window, text="Stop All Cameras", command=stop_all_cameras)
     stop_all_camera.place(x=10, y=80)
+    if(sessionStarted):
+        stop_session_button = tkinter.Button(root_window, text="Stop Session and Export Data", command=stop_session)
+        stop_session_button.place(x=10, y=110)
+        export_data_button = tkinter.Button(root_window, text="Export Data", command=export_data)
+        export_data_button.place(x=10, y=140)
+    else:
+        start_session_button = tkinter.Button(root_window, text="Start New Session", command=start_new_session)
+    start_session_button.place(x=10, y=110)
     print(buttons.keys())
     for i in buttons.keys():
         try:
@@ -58,6 +72,49 @@ def initialize_main_window():
         except:
             continue
     periodic_main_window()
+
+def validate_input(char):
+    return char.isalnum() or char == ""
+
+def start_new_session():
+    global window
+    clear_window()
+    window = "s"
+    name_label = tkinter.Label(root_window, text="Enter Session Name:")
+    name_label.place(x=10, y=50)
+    vcmd = (root_window.register(validate_input), "%P")
+    name = tkinter.Entry(root_window, width=80, validate="key", validatecommand=vcmd)
+    name.place(x=10, y=80)
+    name_submit = tkinter.Button(root_window, text="Start Session", command=partial(create_new_session, name.get()))
+    name_submit.place(x=10, y=110)
+    fail_label = tkinter.Label(root_window, text="can't have spaces or special characters. Must be under 20 characters")
+    fail_label.pack()
+
+
+def create_new_session(name):
+    global sessionName
+    global sessionStarted
+    if(len(name) > 20):
+        start_new_session()
+    if(sessionStarted):
+        return
+    sessionName = name
+    sessionStarted = True
+    start_all_cameras()
+    
+
+def stop_session():
+    global sessionName
+    global sessionStarted
+    sessionName = None
+    sessionStarted = False
+    # export_data()
+    stop_all_cameras()
+
+
+# def export_data():
+
+
 
 def start_all_cameras():
     for i in used_ports.keys():
@@ -92,6 +149,43 @@ def periodic_main_window():
             initialize_main_window()
     if window == "m":
         root_window.after(10, periodic_main_window)
+
+
+def process_images(port, lock):
+    next_time = time.time()
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    out = cv2.VideoWriter("out.mp4", fourcc, 30, (1944, 1392))
+    while not stop:
+        # for i in queue.keys():
+            # next_time = time.time()
+        try:
+            if(not used_ports[port][2]):
+                continue
+            with lock:
+                current_image = queue[port][0].copy()
+        except:
+            print("cam not started")
+        # queue[port][1].write(current_image)
+        out.write(current_image)
+        # last_time = queue[port][2]
+        next_time += 1.0/30.0
+        sleep_time = next_time - time.time()
+        if sleep_time > 0:
+            time.sleep(sleep_time)
+        else:
+            queue[port][1].write(current_image)
+            next_time += 1.0/30.0
+        # next_time = time.time()
+        # if sleep_time > 0:
+        #     time.sleep(sleep_time)
+                # continue
+                # continue
+
+            # if(len(current_list) != 1):
+            #     # current_list = 
+    out.release()
+
+
     
 
 def camera_clicked(port, name):
@@ -130,7 +224,7 @@ def start_video(port, name):
     video_label = tkinter.Label(root_window)
     video_label.place(x=0, y=0)
     # cv2.imshow(" stream", queue[i][-1])
-    streaming_cameras.append(port)
+    # streaming_cameras.append(port)
     back_button = tkinter.Button(root_window, text="Back", command=partial(camera_clicked, port, name))
     back_button.pack()
     display_video(port)
@@ -139,12 +233,14 @@ def start_video(port, name):
 def display_video(port):
     # clear_window()
     try:
-        image = Image.fromarray(queue[port][-1]).resize((500, 500))
+        with used_ports[port][3]:
+            image_npy = queue[port][0].copy()
+        image = Image.fromarray(image_npy).resize((500, 500))
         image_tk = ImageTk.PhotoImage(image=image)
         video_label.config(image=image_tk)
         video_label.image = image_tk
-        queue[port].pop(-1)
-        queue[port] = []
+        # queue[port].pop(-1)
+        # queue[port] = []
     except Exception as e:
         print("display video error", e)
     if(window == "v"):
@@ -194,11 +290,6 @@ def listener():
         print("Started Streaming Thread")
 
 
-# def listen_for_exit():
-#     while True:
-        
-
-
 def clean_up():
     global stop
     print("CLEANING UP")
@@ -240,6 +331,13 @@ def open_port(port, client_address):
     print(port, "Starting Receiving Loop")
     dropped = False
     queue[port] = []
+    lock = threading.Lock()
+    # queue[port].append(threading.Lock())
+    
+    # queue[port].append(out)
+    # queue[port].append(time.time())
+    # queue[port].append(None)
+    threading.Thread(target=process_images, args=(port, lock)).start()
     client_socket.settimeout(5)
     try:
         while not stop:
@@ -264,8 +362,9 @@ def open_port(port, client_address):
                 image = cv2.imdecode(np_data, cv2.IMREAD_COLOR)
                 if (image is not None):
                     print(port, "Frame Is Good")
-                    if(streaming_cameras.count(port) != 0):
-                        queue[port].append(image)
+                    # if(streaming_cameras.count(port) != 0):
+                    with lock:
+                        queue[port][0] = (image)
                 else:
                     print(port, "Dropped Frame")
                 frame_data = bytearray()

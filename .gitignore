@@ -10,3 +10,10 @@
 # /Clean Mouse.v11i.coco-segmentation/augmented_dataset_adaptive_final
 /cropped_frames
 !pythonEnv
+/augmented
+/BMice
+/BMice_augmented
+/BMiceNotNight
+/BMiceNotNight_augmented
+/CleanMouse
+/CleanMouse_augmented
