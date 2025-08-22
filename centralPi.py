@@ -169,7 +169,7 @@ def process_images(port, lock):
             # print("cam not started")
             continue
         # queue[port][1].write(current_image)
-        out.write(current_image)
+        # out.write(current_image)
         # last_time = queue[port][2]
         next_time += 1.0/30.0
         sleep_time = next_time - time.time()
