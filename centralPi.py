@@ -165,13 +165,15 @@ def process_images(port, lock):
         while not not used_ports[port][2]:
             time.sleep(0.2)
         if sessionStarted:
-            name = "./output/" + sessionName + "/" + used_ports[port][0] + "/" + str(time.time()) + used_ports[port][0] + ".mp4"
+            name = "./output/" + sessionName + "/" + used_ports[port][0] + "/" + str(time.time())
             os.makedirs(os.path.dirname(name), exist_ok=True)
+            name += used_ports[port][0] + ".mp4"
             print(name)
             out = cv2.VideoWriter(name, fourcc, 30, (1944, 1392))
         else:
-            name = "./output/" + used_ports[port][0] + "/" + str(time.time()) + used_ports[port][0] + ".mp4"
+            name = "./output/" + used_ports[port][0] + "/" + str(time.time())
             os.makedirs(os.path.dirname(name), exist_ok=True)
+            name += used_ports[port][0] + ".mp4"
             print(name)
             out = cv2.VideoWriter(name, fourcc, 30, (1944, 1392))
         while not session_changed:
