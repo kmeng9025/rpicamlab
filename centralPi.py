@@ -176,7 +176,7 @@ def process_images(port, lock):
         if sleep_time > 0:
             time.sleep(sleep_time)
         else:
-            queue[port][1].write(current_image)
+            out.write(current_image)
             next_time += 1.0/30.0
         # next_time = time.time()
         # if sleep_time > 0:
@@ -362,7 +362,10 @@ def open_port(port, client_address):
                     dropped = False
                     continue
                 np_data = numpy.frombuffer(frame_data.removesuffix(b"end"), dtype=numpy.uint8)
-                image = cv2.imdecode(np_data, cv2.IMREAD_COLOR)
+                try:
+                    image = cv2.imdecode(np_data, cv2.IMREAD_COLOR)
+                except:
+                    print("ohoh")
                 if (image is not None):
                     print(port, "Frame Is Good")
                     # if(streaming_cameras.count(port) != 0):
