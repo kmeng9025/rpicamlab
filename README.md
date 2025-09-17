@@ -14,6 +14,7 @@ After joining the wifi, open a terminal and run the following command:
 git clone https://github.com/kmeng9025/rpicamlab
 ```
 After it finishes downloading the code, you have a decision to make.
+
 If it is a CAMERA pi, run the following command: 
 ```
 cd rpicamlab; chmod +x ./setUpCamera.sh; ./setUpCamera.sh
@@ -23,4 +24,4 @@ If it is a CENTRAL pi, run the following command:
 cd rpicamlab; chmod +x ./setUpCentral.sh; ./setUpCentral.sh
 ```
 
-You're done :)
+It should now be good, and it will start the script every time on its own as soon as it powers on, so you don't need to worry about starting the script :).
