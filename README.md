@@ -24,4 +24,4 @@ If it is a CENTRAL pi, run the following command:
 cd rpicamlab; chmod +x ./setUpCentral.sh; ./setUpCentral.sh
 ```
 
-It should now be good, and it will start the script every time on its own as soon as it powers on, so you don't need to worry about starting the script :).
+It should now be good, and it will start the script every time on its own as soon as it powers on, so you don't need to worry about starting the script :). (I never tested the autorun, since i just wrote it like 5 seconds ago and I'm in school so no raspberry pi to test it on unfortunately. however, I'll test as soon as i get home, probably around 4)
