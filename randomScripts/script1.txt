@@ -1,0 +1,99 @@
+from picamera2 import Picamera2
+import socket
+import time
+import subprocess
+import cv2
+import datetime
+import re
+import numpy
+import pandas
+import packaging
+import pickle
+import s2clientprotocol
+import threading
+
+adlkjhsdfgjklhsdf = True
+hjdbbdhrgkjk = False
+
+def main():
+    dshggfhvbcdfg = "hostssid"
+    dfgssdfgcvcbvfsdf = "hostpasswd"
+    vbxbfrebgfhgdf = "10.42.0.1"
+    while adlkjhsdfgjklhsdf:
+        try:
+            try:
+                if subprocess.check_output(["sudo", "iwgetid", "-r"], encoding="utf-8").strip() == dshggfhvbcdfg:
+                    break
+                subprocess.run(["nmcli", "dev", "disconnect", "wlan0"], check=hjdbbdhrgkjk)
+            except:
+                pass
+            subprocess.run(["nmcli", "dev", "wifi", "rescan"], check=hjdbbdhrgkjk)
+            subprocess.run(["sudo","nmcli","dev","wifi","connect", dshggfhvbcdfg, "password", dfgssdfgcvcbvfsdf],
+                            check=hjdbbdhrgkjk)
+        except Exception as e:
+            pass
+        time.sleep(1)
+
+    sfgfdhgfjhgfjyt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    while adlkjhsdfgjklhsdf:
+        try:
+            sfgfdhgfjhgfjyt.connect((vbxbfrebgfhgdf, 7000))
+            break
+        except:
+            pass
+    sfhgfvvnhgdjt = int(sfgfdhgfjhgfjyt.recv(65535).decode())
+    sfgfdhgfjhgfjyt.close()
+    lkjhdmchesdhgfsrhjd = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    mxznkjfbkjdfgs = Picamera2()
+    mxznkjfbkjdfgs.preview_configuration.main.size = (2592, 1944)
+    mxznkjfbkjdfgs.preview_configuration.main.format = "RGB888"
+    mxznkjfbkjdfgs.configure("preview")
+    mxznkjfbkjdfgs.start()
+    time.sleep(0.5)
+    threading.Thread(target=check_stop).start()
+    lkjhdmcherhjd = datetime.datetime.now()
+    adcv56sfhtdyycvghjths = adlkjhsdfgjklhsdf
+    subprocess.run("echo 1 | sudo tee /sys/class/leds/ACT/brightness", shell=adlkjhsdfgjklhsdf)
+    try:
+        while not stop:
+            gfhvcnbdfrdfgh = mxznkjfbkjdfgs.capture_array()
+            gfhvcnbdfrdfgh = gfhvcnbdfrdfgh[0:1944, 600:1992]
+            ghdhggfdhb, hdghdfhsdfsdfgds = cv2.imencode(".jpg", cv2.cvtColor(gfhvcnbdfrdfgh, cv2.COLOR_RGB2BGR),  [int(cv2.IMWRITE_JPEG_QUALITY), 80])
+            hdghdfhsdfsdfgds_bytes = hdghdfhsdfsdfgds.tobytes() + b"end"
+            for i in range(0, len(hdghdfhsdfsdfgds_bytes), 1400):
+                lkjhdmchesdhgfsrhjd.sendto(hdghdfhsdfsdfgds_bytes[i:i+1400], (vbxbfrebgfhgdf, sfhgfvvnhgdjt))
+            if((datetime.datetime.now()-lkjhdmcherhjd).total_seconds() > 1):
+                if(adcv56sfhtdyycvghjths):
+                    subprocess.run("echo 0 | sudo tee /sys/class/leds/ACT/brightness", shell=adlkjhsdfgjklhsdf)
+                    adcv56sfhtdyycvghjths = hjdbbdhrgkjk
+                    lkjhdmcherhjd = datetime.datetime.now()
+                else:
+                    subprocess.run("echo 1 | sudo tee /sys/class/leds/ACT/brightness", shell=adlkjhsdfgjklhsdf)
+                    adcv56sfhtdyycvghjths = adlkjhsdfgjklhsdf
+                    lkjhdmcherhjd = datetime.datetime.now()
+    except KeyboardInterrupt as e:
+        print("capturing end")
+    lkjhdmchesdhgfsrhjd.sendto(b"c", (vbxbfrebgfhgdf, sfhgfvvnhgdjt))
+    mxznkjfbkjdfgs.stop()
+    mxznkjfbkjdfgs.close()
+    lkjhdmchesdhgfsrhjd.close()
+
+recording = hjdbbdhrgkjk
+stop = hjdbbdhrgkjk
+def check_stop():
+    global recording
+    global stop
+    adgfhdghcvvbfd = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    adgfhdghcvvbfd.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    adgfhdghcvvbfd.bind(("", 7000))
+    adgfhdghcvvbfd.listen(10)
+    adcv56tdyy, adcv56tdyycvghjths = adgfhdghcvvbfd.accept()
+    adcv56tdyy.send(b"hi")
+    while adlkjhsdfgjklhsdf:
+        data = adcv56tdyy.recv(65535).decode()
+        if data == "stop":
+            stop = adlkjhsdfgjklhsdf
+            time.sleep(0.5)
+            exit(0)
+
+main()

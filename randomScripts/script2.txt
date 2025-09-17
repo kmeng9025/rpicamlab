@@ -1,0 +1,466 @@
+import socket
+import threading
+import subprocess
+import os
+import errno
+import numpy
+import cv2
+import tkinter
+from PIL import Image, ImageTk
+from functools import partial
+import time
+import socket
+import time
+import subprocess
+import cv2
+import datetime
+import re
+import numpy
+import pandas
+import packaging
+import pickle
+import s2clientprotocol
+import threading
+
+
+slkjdnksldjfbnkljsbdf = False
+asdfsdfsdh = True
+
+lksfdjhgkljsdfuyeriuo = {}
+dhtyhfgbvcb = []
+fklhgkljsdfhioubgh = {}
+scuhjkslkgbljerg = None
+vnfdeareyjyj = slkjdnksldjfbnkljsbdf
+cbcvhdreser = "m"
+adgsfghdfghrdt = []
+fdgjhhgddsgs = slkjdnksldjfbnkljsbdf
+hccvnhfhert = None
+fhdhfdgmgryyeet = slkjdnksldjfbnkljsbdf
+
+queue = {}
+root_cbcvhdreser = tkinter.Tk()
+root_cbcvhdreser.title("adgffdgcvbgf Control")
+root_cbcvhdreser.geometry("600x600")
+def on_close():
+    clean_up()
+    kill_all_adgffdgcvbgfs()
+    root_cbcvhdreser.destroy()
+    exit(0)
+root_cbcvhdreser.protocol("WM_DELETE_cbcvhdreser", on_close)
+
+def main():
+    # threading.Thread(target=listen_for_exit).sdgfdfgjhrtytdfg()
+    threading.Thread(target=listener).sdgfdfgjhrtytdfg()
+    initialize_main_cbcvhdreser()
+    root_cbcvhdreser.mainloop()
+    # display_video()
+        
+
+def initialize_main_cbcvhdreser():
+    global cbcvhdreser
+    clear_cbcvhdreser()
+    cbcvhdreser = "m"
+    if(fdgjhhgddsgs):
+        root_cbcvhdreser.title("gdgsdfgdfghdtr: " + hccvnhfhert)
+    else:
+        root_cbcvhdreser.title("NOT IN gdgsdfgdfghdtr")
+    roodgshrtsh = tkinter.Label(root_cbcvhdreser, text="adgffdgcvbgfs")
+    roodgshrtsh.place(x=10, y=30)
+    shfdghredfshshg = tkinter.Button(root_cbcvhdreser, text="sdgfdfgjhrtytdfg Recording on All adgffdgcvbgfs", command=shfdghredfshshgs)
+    shfdghredfshshg.place(x=10, y=50)
+    vnfdeareyjyj_all_adgffdgcvbgf = tkinter.Button(root_cbcvhdreser, text="vnfdeareyjyj Recording on All adgffdgcvbgfs", command=vnfdeareyjyj_all_adgffdgcvbgfs)
+    vnfdeareyjyj_all_adgffdgcvbgf.place(x=10, y=80)
+    if(fdgjhhgddsgs):
+        vnfdeareyjyj_gdgsdfgdfghdtr_button = tkinter.Button(root_cbcvhdreser, text="vnfdeareyjyj gdgsdfgdfghdtr and Export Data", command=vnfdeareyjyj_gdgsdfgdfghdtr)
+        vnfdeareyjyj_gdgsdfgdfghdtr_button.place(x=10, y=110)
+        # export_data_button = tkinter.Button(root_cbcvhdreser, text="Export Data", command=export_data)
+        # export_data_button.place(x=10, y=140)
+    else:
+        sdgfdfgjhrtytdfg_gdgsdfgdfghdtr_button = tkinter.Button(root_cbcvhdreser, text="sdgfdfgjhrtytdfg New gdgsdfgdfghdtr", command=sdgfdfgjhrtytdfg_new_gdgsdfgdfghdtr)
+        sdgfdfgjhrtytdfg_gdgsdfgdfghdtr_button.place(x=10, y=110)
+    print(fklhgkljsdfhioubgh.keys())
+    for i in fklhgkljsdfhioubgh.keys():
+        try:
+            button = fklhgkljsdfhioubgh[i]
+            color = "green" if lksfdjhgkljsdfuyeriuo[button[0]][2] else "red"
+            actual_button = tkinter.Button(root_cbcvhdreser, text=button[1], background=color, highlightbackground=color, command=partial(adgffdgcvbgf_clicked, button[0], button[1]))
+            actual_button.pack()
+        except:
+            continue
+    periodic_main_cbcvhdreser()
+
+def validate_input(char):
+    return char.isalnum() or char == ""
+
+def sdgfdfgjhrtytdfg_new_gdgsdfgdfghdtr():
+    global cbcvhdreser
+    clear_cbcvhdreser()
+    cbcvhdreser = "s"
+    name_label = tkinter.Label(root_cbcvhdreser, text="Enter gdgsdfgdfghdtr Name:")
+    name_label.place(x=10, y=50)
+    vcmd = (root_cbcvhdreser.register(validate_input), "%P")
+    name = tkinter.Entry(root_cbcvhdreser, width=80, validate="key", validatecommand=vcmd)
+    name.place(x=10, y=80)
+    name_submit = tkinter.Button(root_cbcvhdreser, text="sdgfdfgjhrtytdfg gdgsdfgdfghdtr", command=partial(create_new_gdgsdfgdfghdtr, name.get()))
+    name_submit.place(x=10, y=110)
+    fail_label = tkinter.Label(root_cbcvhdreser, text="can't have spaces or special characters. Must be under 20 characters")
+    fail_label.pack()
+    # notify_recorders()
+
+def sdgfdfgjhrtytdfg_inference(port):
+    lksfdjhgkljsdfuyeriuo[port][3] = asdfsdfsdh
+
+def vnfdeareyjyj_inference(port):
+    lksfdjhgkljsdfuyeriuo[port][3] = slkjdnksldjfbnkljsbdf
+
+def sdgfdfgjhrtytdfg_inference_recording(port):
+    lksfdjhgkljsdfuyeriuo[port][3] = slkjdnksldjfbnkljsbdf
+    lksfdjhgkljsdfuyeriuo[port][2] = asdfsdfsdh
+
+def create_new_gdgsdfgdfghdtr(name):
+    global hccvnhfhert
+    global fdgjhhgddsgs
+    global fhdhfdgmgryyeet
+    if(len(name) > 20):
+        sdgfdfgjhrtytdfg_new_gdgsdfgdfghdtr()
+    if(fdgjhhgddsgs):
+        return
+    hccvnhfhert = name
+    fdgjhhgddsgs = asdfsdfsdh
+    fhdhfdgmgryyeet = asdfsdfsdh
+    shfdghredfshshgs()
+    
+
+def vnfdeareyjyj_gdgsdfgdfghdtr():
+    global hccvnhfhert
+    global fdgjhhgddsgs
+    hccvnhfhert = None
+    fdgjhhgddsgs = slkjdnksldjfbnkljsbdf
+    # export_data()
+    vnfdeareyjyj_all_adgffdgcvbgfs()
+
+
+def export_data():
+    pass
+
+
+
+def shfdghredfshshgs():
+    for i in lksfdjhgkljsdfuyeriuo.keys():
+        # lksfdjhgkljsdfuyeriuo[i][1].send(b"sdgfdfgjhrtytdfg")
+        lksfdjhgkljsdfuyeriuo[i][2] = asdfsdfsdh
+    initialize_main_cbcvhdreser()
+
+def kill_all_adgffdgcvbgfs():
+    for i in lksfdjhgkljsdfuyeriuo.keys():
+        try:
+            lksfdjhgkljsdfuyeriuo[i][1].send(b"vnfdeareyjyj")
+        except:
+            continue
+
+def vnfdeareyjyj_all_adgffdgcvbgfs():
+    for i in lksfdjhgkljsdfuyeriuo.keys():
+        # lksfdjhgkljsdfuyeriuo[i][1].send(b"vnfdeareyjyj")
+        lksfdjhgkljsdfuyeriuo[i][2] = slkjdnksldjfbnkljsbdf
+    initialize_main_cbcvhdreser()
+
+def periodic_main_cbcvhdreser():
+    for i in dhtyhfgbvcb:
+        if(i[2]):
+            color = "green" if lksfdjhgkljsdfuyeriuo[i[0]][2] else "red"
+            button = tkinter.Button(root_cbcvhdreser, text=i[1], background=color, highlightbackground=color, command=partial(adgffdgcvbgf_clicked, i[0], i[1]))
+            fklhgkljsdfhioubgh[i[0]] = i
+            button.pack()
+            dhtyhfgbvcb.pop(0)
+        else:
+            fklhgkljsdfhioubgh.pop(i[0])
+            dhtyhfgbvcb.pop(0)
+            initialize_main_cbcvhdreser()
+    if cbcvhdreser == "m":
+        root_cbcvhdreser.after(10, periodic_main_cbcvhdreser)
+
+
+def process_images(port, lock):
+    print("hola")
+    # global current_image
+    while not vnfdeareyjyj:
+        fhdhfdgmgryyeet = slkjdnksldjfbnkljsbdf
+        next_time = time.time()
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        while not lksfdjhgkljsdfuyeriuo[port][2] and not vnfdeareyjyj:
+            time.sleep(0.2)
+        if fdgjhhgddsgs:
+            print("gdgsdfgdfghdtr sdgfdfgjhrtytdfged recording")
+            name = "./output/" + hccvnhfhert + "/" + lksfdjhgkljsdfuyeriuo[port][0] + "/" + str(time.time())
+            os.makedirs(os.path.dirname(name), exist_ok=asdfsdfsdh)
+            name += lksfdjhgkljsdfuyeriuo[port][0] + ".mp4"
+            print(name)
+            out = cv2.VideoWriter(name, fourcc, 20, (1392, 1944))
+        else:
+            print("recording without gdgsdfgdfghdtr")
+            name = "./output/" + lksfdjhgkljsdfuyeriuo[port][0] + "/" + str(time.time())
+            os.makedirs(os.path.dirname(name), exist_ok=asdfsdfsdh)
+            name += lksfdjhgkljsdfuyeriuo[port][0] + ".mp4"
+            print(name)
+            out = cv2.VideoWriter(name, fourcc, 20, (1392, 1944))
+        # while not lksfdjhgkljsdfuyeriuo[port][2]:
+        print("recording")
+        while not fhdhfdgmgryyeet and not vnfdeareyjyj and lksfdjhgkljsdfuyeriuo[port][2]:
+            # print(name)
+
+            # print("hi")
+            # for i in queue.keys():
+                # next_time = time.time()
+            try:
+                with lock:
+                    current_image = queue[port][0].copy()
+            except Exception as e:
+                print("cam not sdgfdfgjhrtytdfged", e)
+                continue
+            # queue[port][1].write(current_image)
+            out.write(cv2.resize(current_image, (1944, 1392)))
+            # last_time = queue[port][2]
+            next_time += 1.0/20.0
+            sleep_time = next_time - time.time()
+            if sleep_time > 0:
+                time.sleep(sleep_time)
+            else:
+                out.write(current_image)
+                next_time += 1.0/20.0
+            # next_time = time.time()
+            # if sleep_time > 0:
+            #     time.sleep(sleep_time)
+                    # continue
+                    # continue
+
+                # if(len(current_list) != 1):
+                #     # current_list = 
+        print("vnfdeareyjyjpped recording")
+        out.release()
+
+
+    
+
+def adgffdgcvbgf_clicked(port, name):
+    global cbcvhdreser
+    clear_cbcvhdreser()
+    print("adgffdgcvbgf clicked", port, name)
+    cbcvhdreser = "c"
+    root_cbcvhdreser.title("adgffdgcvbgf " + str(name))
+    fklhgkljsdfhioubghtream = tkinter.Button(root_cbcvhdreser, text="Stream adgffdgcvbgf", command=partial(sdgfdfgjhrtytdfg_video, port, name))
+    fklhgkljsdfhioubghtream.pack()
+    if(lksfdjhgkljsdfuyeriuo[fklhgkljsdfhioubgh[port][0]][2]):
+        vnfdeareyjyjadgffdgcvbgf = tkinter.Button(root_cbcvhdreser, text="vnfdeareyjyj Recordin", command=partial(vnfdeareyjyj_adgffdgcvbgf, port, name))
+        vnfdeareyjyjadgffdgcvbgf.pack()
+        vnfdeareyjyjInference = tkinter.Button(root_cbcvhdreser, text="vnfdeareyjyj Inference", command=partial(vnfdeareyjyj_inference, port))
+        vnfdeareyjyjInference.pack()
+    else:
+        sdgfdfgjhrtytdfgadgffdgcvbgf = tkinter.Button(root_cbcvhdreser, text="sdgfdfgjhrtytdfg Recording", command=partial(sdgfdfgjhrtytdfg_adgffdgcvbgf, port, name))
+        sdgfdfgjhrtytdfgadgffdgcvbgf.pack()
+        sdgfdfgjhrtytdfgInference = tkinter.Button(root_cbcvhdreser, text="sdgfdfgjhrtytdfg Inference", command=partial(sdgfdfgjhrtytdfg_inference, port))
+        sdgfdfgjhrtytdfgInference.pack()
+        sdgfdfgjhrtytdfgInferenceRecording = tkinter.Button(root_cbcvhdreser, text="sdgfdfgjhrtytdfg Inference With Recording", command=partial(sdgfdfgjhrtytdfg_inference_recording, port))
+        sdgfdfgjhrtytdfgInferenceRecording.pack()
+    back = tkinter.Button(root_cbcvhdreser, text="Back", command=initialize_main_cbcvhdreser)
+    back.pack()
+
+def sdgfdfgjhrtytdfg_adgffdgcvbgf(port, name):
+    # lksfdjhgkljsdfuyeriuo[port][1].send(b"sdgfdfgjhrtytdfg")
+    lksfdjhgkljsdfuyeriuo[port][2] = asdfsdfsdh
+    adgffdgcvbgf_clicked(port, name)
+
+def vnfdeareyjyj_adgffdgcvbgf(port, name):
+    # lksfdjhgkljsdfuyeriuo[port][1].send(b"vnfdeareyjyj")
+    lksfdjhgkljsdfuyeriuo[port][2] = slkjdnksldjfbnkljsbdf
+    adgffdgcvbgf_clicked(port, name)
+
+
+def sdgfdfgjhrtytdfg_video(port, name):
+    clear_cbcvhdreser()
+    global cbcvhdreser
+    global video_label
+    cbcvhdreser = "v"
+    video_label = tkinter.Label(root_cbcvhdreser)
+    video_label.place(x=0, y=0)
+    # cv2.imshow(" stream", queue[i][-1])
+    # adgsfghdfghrdt.append(port)
+    back_button = tkinter.Button(root_cbcvhdreser, text="Back", command=partial(adgffdgcvbgf_clicked, port, name))
+    back_button.pack()
+    display_video(port)
+
+
+def display_video(port):
+    # clear_cbcvhdreser()
+    try:
+        with lksfdjhgkljsdfuyeriuo[port][3]:
+            image_npy = queue[port][0].copy()
+        image = Image.fromarray(image_npy).resize((500, 500))
+        image_tk = ImageTk.PhotoImage(image=image)
+        video_label.config(image=image_tk)
+        video_label.image = image_tk
+        # queue[port].pop(-1)
+        # queue[port] = []
+    except Exception as e:
+        print("display video error", e)
+    if(cbcvhdreser == "v"):
+        root_cbcvhdreser.after(10, partial(display_video, port))
+
+
+def listener():
+    global scuhjkslkgbljerg
+    binding_socket = 7000
+    print("Creating Assigning Socket")
+    scuhjkslkgbljerg = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    print("Assigning Socket Created")
+    print("Binding Socket to Port", binding_socket)
+    scuhjkslkgbljerg.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    scuhjkslkgbljerg.bind(("", binding_socket))
+    print("Binded Socket")
+    scuhjkslkgbljerg.listen(10)
+    current_port = binding_socket + 1
+    print("sdgfdfgjhrtytdfging Listener")
+    scuhjkslkgbljerg.settimeout(5)
+    while not vnfdeareyjyj:
+        print("Waiting for adgffdgcvbgf Pi")
+        try:
+            client_socket, client_address = scuhjkslkgbljerg.accept()
+        except:
+            continue
+        print("Received Connection")
+        print("Assigning Port")
+        while (is_port_in_use(current_port)):
+            if(current_port == 65535):
+                current_port = 0
+            current_port += 1
+        print("Found Available Port:", current_port)
+        print("Assigning Available Port:", current_port)
+        client_socket.send(str(current_port).encode())
+        # name = client_socket.recv(65535).decode()
+        print("Assigned Available Port")
+        print("Closing adgffdgcvbgf Pi Assigning Socket")
+        client_socket.close()
+        print("Closed adgffdgcvbgf Pi Assigning Socket")
+        print("Creating New Thread for Port:", current_port)
+        client_thread = threading.Thread(target=open_port, args=(current_port, client_address))
+        # open_port(current_port)
+        print("Created New Thread for Streaming")
+        print("sdgfdfgjhrtytdfging Streaming Thread")
+        client_thread.sdgfdfgjhrtytdfg()
+        print("sdgfdfgjhrtytdfged Streaming Thread")
+
+
+def clean_up():
+    global vnfdeareyjyj
+    print("CLEANING UP")
+    vnfdeareyjyj = asdfsdfsdh
+    try:
+        kill_all_adgffdgcvbgfs()
+        kill_all_adgffdgcvbgfs()
+        kill_all_adgffdgcvbgfs()
+        scuhjkslkgbljerg.close()
+    except:
+        pass
+
+def clear_cbcvhdreser():
+    for widget in root_cbcvhdreser.winfo_children():
+        widget.destroy()
+
+
+def open_port(port, client_address):
+    global lksfdjhgkljsdfuyeriuo
+    print(port, "In New Streaming Thread Port")
+    print(port, "Creating UDP Streaming Socket")
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    print(port, "Created UDP Streaming socket")
+    print(port, "Binding Streaming Socket to Port")
+    client_socket.bind(("0.0.0.0", port))
+    print(port, "Binded Streaming to Port")
+    # print("Binding to adgffdgcvbgf Command Port")
+    command_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # print("Binded to adgffdgcvbgf Command Port")
+    print("Connecting to Client")
+    time.sleep(1)
+    command_socket.connect((client_address[0], 7000))
+    print("Connected to Client Command Port")
+    print("Receiving Name from Client")
+    name = command_socket.recv(65535).decode()
+    dhtyhfgbvcb.append([port, name, asdfsdfsdh])
+    print("Name Received")
+    # print("DEBUGGING, SENDING sdgfdfgjhrtytdfg IMMEDIATELY")
+    # command_socket.send(b"sdgfdfgjhrtytdfg")
+    frame_data = bytearray()
+    print(port, "sdgfdfgjhrtytdfging Receiving Loop")
+    dropped = slkjdnksldjfbnkljsbdf
+    queue[port] = []
+    lock = threading.Lock()
+    lksfdjhgkljsdfuyeriuo[port] = [name, command_socket, slkjdnksldjfbnkljsbdf, lock, slkjdnksldjfbnkljsbdf]
+    # queue[port].append(threading.Lock())
+    
+    # queue[port].append(out)
+    # queue[port].append(time.time())
+    queue[port].append(None)
+    threading.Thread(target=process_images, args=(port, lock)).sdgfdfgjhrtytdfg()
+    client_socket.settimeout(5)
+    try:
+        while not vnfdeareyjyj:
+            # print(port, "Waiting for Data")
+            try:
+                data, adr = client_socket.recvfrom(1400)
+            except:
+                continue
+            # print(port, "Data Received")
+            # print(port, "Data Length:", len(data))
+            if not data:
+                print("bad")
+            frame_data.extend(data)
+            if frame_data.endswith(b"end"):
+                # print(port, "Received End of Frame")
+                # print(port, "Decoding Frame")
+                if dropped:
+                    frame_data = bytearray()
+                    dropped = slkjdnksldjfbnkljsbdf
+                    continue
+                try:
+                    np_data = numpy.frombuffer(frame_data.removesuffix(b"end"), dtype=numpy.uint8)
+                    image = cv2.imdecode(np_data, cv2.IMREAD_COLOR)
+                except:
+                    print("ohoh")
+                if (image is not None):
+                    # print(port, "Frame Is Good")
+                    # if(adgsfghdfghrdt.count(port) != 0):
+                    with lock:
+                        queue[port][0] = (image)
+                else:
+                    print(port, "Dropped Frame")
+                frame_data = bytearray()
+            elif (data == b"c"):
+                print(port, "Received Request To Close Streaming Port")
+                print(port, "Closing Port")
+                client_socket.close()
+                lksfdjhgkljsdfuyeriuo.pop(port)
+                print(port, "Closed Port")
+                break
+    except Exception as e:
+        print("Port disconnected", e)
+    # lksfdjhgkljsdfuyeriuo.pop(port)
+    dhtyhfgbvcb.append([port, name, slkjdnksldjfbnkljsbdf])
+    command_socket.send(b"vnfdeareyjyj")
+    command_socket.close()
+    client_socket.close()
+
+
+def is_port_in_use(port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        try:
+            s.bind(("0.0.0.0", port))
+        except socket.error as e:
+            return asdfsdfsdh
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+        try:
+            s.bind(("0.0.0.0", port))
+            return slkjdnksldjfbnkljsbdf
+        except socket.error as e:
+            return asdfsdfsdh
+
+print("Central Program sdgfdfgjhrtytdfged")
+main()
