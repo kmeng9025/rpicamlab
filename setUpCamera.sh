@@ -1,52 +1,22 @@
 #!/bin/bash
-# sudo su
-# cd ~/Documents
-# git clone https://github.com/kmeng9025/rpicamlab.git
-# sudo echo "country=US
-# network={
-#     ssid="rpicamlab"
-#     psk="rpicamlab"
-#     key_mgmt=WPA-PSK
-# }" > /etc/wpa_supplicant/wpa_supplicant.conf
-# cd ./rpicamlab
-git pull
-sudo chmod +x ./startCameraPi.sh
+chmod +x ./startCameraPi.sh
 
-
+# Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-TARGET_SCRIPT="$SCRIPT_DIR/startCameraPi.sh"
-SERVICE_NAME="autoStartCentral"
 
-if [ ! -f "$TARGET_SCRIPT" ]; then
-  echo "❌ Error: Target script not found: $TARGET_SCRIPT"
-  exit 1
-fi
+# Make sure LXDE autostart folder exists
+AUTOSTART_DIR="/home/pi/.config/lxsession/LXDE-pi"
+mkdir -p "$AUTOSTART_DIR"
 
-SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME.service"
+AUTOSTART_FILE="$AUTOSTART_DIR/autostart"
 
-sudo bash -c "cat > $SERVICE_FILE" <<EOF
-[Unit]
-Description=Autostart My Script
-After=network.target
+# Remove any old entry for startCameraPi.sh
+sed -i '/startCameraPi.sh/d' "$AUTOSTART_FILE"
 
-[Service]
-ExecStart=$TARGET_SCRIPT
-WorkingDirectory=$SCRIPT_DIR
-StandardOutput=append:/var/log/$SERVICE_NAME.log
-StandardError=append:/var/log/$SERVICE_NAME.log
-Restart=on-failure
-User=pi
+# Add a line to start script in lxterminal from this directory
+echo "@lxterminal -e \"bash -c 'cd $SCRIPT_DIR && ./startCameraPi.sh; exec bash'\"" >> "$AUTOSTART_FILE"
 
-[Install]
-WantedBy=multi-user.target
-EOF
+echo "✅ Setup complete! A terminal window will open at login and run ./startCameraPi.sh from $SCRIPT_DIR."
 
-# Reload, enable, and start the service
-sudo systemctl daemon-reload
-sudo systemctl enable $SERVICE_NAME.service
-sudo systemctl start $SERVICE_NAME.service
-
-echo "✅ Setup complete! $TARGET_SCRIPT will run at every boot."
-
-
-sudo ./startCameraPi.sh
+# Optionally run it right now
+./startCameraPi.sh
