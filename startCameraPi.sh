@@ -1,3 +1,2 @@
 #!/bin/bash
-source ./pythonEnv/Scripts/activate
-python cameraPi.py
+lxterminal -e "bash -c 'source ./pythonEnv/Scripts/activate; python cameraPi.py'"

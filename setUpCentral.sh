@@ -1,25 +1,42 @@
 #!/bin/bash
-chmod +x ./startCentralPi.sh
+# sudo su
+cd ~/Documents
+sudo chmod +x ./startCentralPi.sh
 
-# Get the directory where this script is located
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+TARGET_SCRIPT="$SCRIPT_DIR/startCentralPi.sh"
+SERVICE_NAME="autoStartCentral"
 
-# Detect current user’s home
-USER_HOME="$HOME"
+if [ ! -f "$TARGET_SCRIPT" ]; then
+  echo "❌ Error: Target script not found: $TARGET_SCRIPT"
+  exit 1
+fi
 
-# Use LXDE autostart path
-AUTOSTART_DIR="$USER_HOME/.config/lxsession/LXDE"
-mkdir -p "$AUTOSTART_DIR"
+SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME.service"
 
-AUTOSTART_FILE="$AUTOSTART_DIR/autostart"
+sudo bash -c "cat > $SERVICE_FILE" <<EOF
+[Unit]
+Description=Autostart My Script
+After=network.target
 
-# Remove any old entry for startCentralPi.sh
-sed -i '/startCentralPi.sh/d' "$AUTOSTART_FILE" 2>/dev/null || true
+[Service]
+ExecStart=$TARGET_SCRIPT
+WorkingDirectory=$SCRIPT_DIR
+StandardOutput=append:/var/log/$SERVICE_NAME.log
+StandardError=append:/var/log/$SERVICE_NAME.log
+Restart=on-failure
+User=pi
 
-# Add a line to start script in lxterminal from this directory
-echo "@lxterminal -e \"bash -c 'cd $SCRIPT_DIR && ./startCentralPi.sh; exec bash'\"" >> "$AUTOSTART_FILE"
+[Install]
+WantedBy=multi-user.target
+EOF
 
-echo "✅ Setup complete! A terminal window will open at login and run ./startCentralPi.sh from $SCRIPT_DIR."
+# Reload, enable, and start the service
+sudo systemctl daemon-reload
+sudo systemctl enable $SERVICE_NAME.service
+sudo systemctl start $SERVICE_NAME.service
 
-# Optionally run it right now
-./startCentralPi.sh
+echo "✅ Setup complete! $TARGET_SCRIPT will run at every boot."
+
+sudo ./startCentralPi.sh
