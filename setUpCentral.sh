@@ -2,7 +2,9 @@
 # sudo su
 sudo chmod +x ./startUpCentral.sh
 sudo chmod +x ./startCentralPi.sh
-
+sudo apt-get install python3-picamera2
+source ./pythonEnv/Scripts/activate
+pip install -r requirements.txt
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 TARGET_SCRIPT="$SCRIPT_DIR/startUpCentral.sh"
