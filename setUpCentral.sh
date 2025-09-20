@@ -1,6 +1,5 @@
 #!/bin/bash
 # sudo su
-cd ~/Documents
 sudo chmod +x ./startCentralPi.sh
 
 
