@@ -1,2 +1,2 @@
 #!/bin/bash
-lxterminal -e "bash -c './startCamperaPi.sh'"
+lxterminal -e "bash -c './startCentralPi.sh'"
