@@ -1,10 +1,10 @@
 #!/bin/bash
 # sudo su
-sudo chmod +x ./startCentralPi.sh
+sudo chmod +x ./startUpCentral.sh
 
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-TARGET_SCRIPT="$SCRIPT_DIR/startCentralPi.sh"
+TARGET_SCRIPT="$SCRIPT_DIR/startUpCentral.sh"
 SERVICE_NAME="autoStartCentral"
 
 if [ ! -f "$TARGET_SCRIPT" ]; then
@@ -38,4 +38,4 @@ sudo systemctl start $SERVICE_NAME.service
 
 echo "✅ Setup complete! $TARGET_SCRIPT will run at every boot."
 
-sudo ./startCentralPi.sh
+sudo ./startUpCentral.sh
