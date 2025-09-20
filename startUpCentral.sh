@@ -1,1 +1,1 @@
-lxterminal -e "bash -c '/path/to/your/project/directory/startCamperaPi.sh'"
+lxterminal -e "bash -c './startCamperaPi.sh'"
