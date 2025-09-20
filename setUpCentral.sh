@@ -1,6 +1,7 @@
 #!/bin/bash
 # sudo su
 sudo chmod +x ./startUpCentral.sh
+sudo chmod +x ./startCentralPi.sh
 
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
